@@ -29,9 +29,9 @@ static const NSUInteger kNumberOfEscAndFunctionKeycodes = sizeof (kEscAndFunctio
 static const int64_t kTouchbarKeyboardType = 198;
 
 static CGEventRef eventCallback(CGEventTapProxy proxy, CGEventType type,  CGEventRef event, void *refcon) {
-    int64_t keycode = CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
-    int64_t autorepeat = CGEventGetIntegerValueField(event, kCGKeyboardEventAutorepeat);
-    int64_t keyboardType = CGEventGetIntegerValueField(event, kCGKeyboardEventKeyboardType);
+    const int64_t keycode = CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
+    const int64_t autorepeat = CGEventGetIntegerValueField(event, kCGKeyboardEventAutorepeat);
+    const int64_t keyboardType = CGEventGetIntegerValueField(event, kCGKeyboardEventKeyboardType);
 
     if (keyboardType == kTouchbarKeyboardType && autorepeat != 1) {
         for (NSUInteger index = 0; index < kNumberOfEscAndFunctionKeycodes; index += 1) {
@@ -64,9 +64,9 @@ static CGEventRef eventCallback(CGEventTapProxy proxy, CGEventType type,  CGEven
     [self.statusItem setMenu:self.statusMenu];
 
     if (AXIsProcessTrusted()) {
-        CFMachPortRef eventTap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, 0, CGEventMaskBit(kCGEventKeyDown)|CGEventMaskBit(kCGEventKeyUp), eventCallback, NULL);
+        const CFMachPortRef eventTap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, 0, CGEventMaskBit(kCGEventKeyDown)|CGEventMaskBit(kCGEventKeyUp), eventCallback, NULL);
         if (eventTap) {
-            CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
+            const CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
             CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopCommonModes);
             CGEventTapEnable(eventTap, true);
         }

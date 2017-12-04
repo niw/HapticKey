@@ -43,7 +43,7 @@ CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
 - (void)dealloc
 {
     if (_actuatorRef) {
-        IOReturn error = MTActuatorClose(_actuatorRef);
+        const IOReturn error = MTActuatorClose(_actuatorRef);
         if (error != kIOReturnSuccess) {
             // TODO: Logging.
         }
@@ -57,14 +57,14 @@ CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
         // By using IORegistoryExploere, which is in Additional Tools for Xcode,
         // Find `AppleMultitouchDevice` which has `Multitouch ID`.
         // Probably this is a fixed value.
-        CFTypeRef actuatorRef = MTActuatorCreateFromDeviceID(0x200000001000000);
+        const CFTypeRef actuatorRef = MTActuatorCreateFromDeviceID(0x200000001000000);
         if (!actuatorRef) {
             // TODO: Logging.
             return nil;
         }
         _actuatorRef = actuatorRef;
 
-        IOReturn error = MTActuatorOpen(actuatorRef);
+        const IOReturn error = MTActuatorOpen(actuatorRef);
         if (error != kIOReturnSuccess) {
             // TODO: Logging.
             CFRelease(_actuatorRef);
@@ -76,7 +76,7 @@ CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
 
 - (BOOL)actuateActuationID:(SInt32)actuationID unknown1:(UInt32)unknown1 unknown2:(Float32)unknown2 unknown3:(Float32)unknown3
 {
-    IOReturn error = MTActuatorActuate(_actuatorRef, actuationID, unknown1, unknown2, unknown3);
+    const IOReturn error = MTActuatorActuate(_actuatorRef, actuationID, unknown1, unknown2, unknown3);
     if (error != kIOReturnSuccess) {
         // TODO: Logging.
         return NO;
