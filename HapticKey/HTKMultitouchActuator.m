@@ -1,12 +1,12 @@
 //
-//  HTKMultiTouchActuator.m
+//  HTKMultitouchActuator.m
 //  HapticKey
 //
 //  Created by Yoshimasa Niwa on 12/3/17.
 //  Copyright © 2017 Yoshimasa Niwa. All rights reserved.
 //
 
-#import "HTKMultiTouchActuator.h"
+#import "HTKMultitouchActuator.h"
 
 @import IOKit;
 
@@ -22,20 +22,20 @@ CF_EXPORT IOReturn MTActuatorClose(CFTypeRef actuatorRef);
 CF_EXPORT IOReturn MTActuatorActuate(CFTypeRef actuatorRef, SInt32 actuationID, UInt32 unknown1, Float32 unknown2, Float32 unknown3);
 CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
 
-@interface HTKMultiTouchActuator ()
+@interface HTKMultitouchActuator ()
 
 @end
 
-@implementation HTKMultiTouchActuator {
+@implementation HTKMultitouchActuator {
     CFTypeRef _actuatorRef;
 }
 
 + (instancetype)sharedActuator
 {
     static dispatch_once_t onceToken;
-    static HTKMultiTouchActuator *sharedActuator;
+    static HTKMultitouchActuator *sharedActuator;
     dispatch_once(&onceToken, ^{
-        sharedActuator = [[HTKMultiTouchActuator alloc] init];
+        sharedActuator = [[HTKMultitouchActuator alloc] init];
     });
     return sharedActuator;
 }

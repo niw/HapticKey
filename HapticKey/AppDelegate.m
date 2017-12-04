@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "HTKMultiTouchActuator.h"
+#import "HTKMultitouchActuator.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -38,10 +38,10 @@ static CGEventRef eventCallback(CGEventTapProxy proxy, CGEventType type,  CGEven
             if (kEscAndFunctionKeycodes[index] == keycode) {
                 switch (type) {
                     case kCGEventKeyDown:
-                        [[HTKMultiTouchActuator sharedActuator] actuateActuationID:6 unknown1:0 unknown2:0.0 unknown3:2.0];
+                        [[HTKMultitouchActuator sharedActuator] actuateActuationID:6 unknown1:0 unknown2:0.0 unknown3:2.0];
                         break;
                     case kCGEventKeyUp:
-                        [[HTKMultiTouchActuator sharedActuator] actuateActuationID:6 unknown1:0 unknown2:0.0 unknown3:0.0];
+                        [[HTKMultitouchActuator sharedActuator] actuateActuationID:6 unknown1:0 unknown2:0.0 unknown3:0.0];
                         break;
                     default:
                         break;

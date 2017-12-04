@@ -1,5 +1,5 @@
 //
-//  HTKMultiTouchActuator.h
+//  HTKMultitouchActuator.h
 //  HapticKey
 //
 //  Created by Yoshimasa Niwa on 12/3/17.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HTKMultiTouchActuator : NSObject
+@interface HTKMultitouchActuator : NSObject
 
 + (instancetype)sharedActuator;
 
