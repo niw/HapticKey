@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AppDelegate ()
 
 @property (nonatomic, nullable) NSStatusItem *statusItem;
-@property (nonatomic, nullable) IBOutlet NSMenu *statusMenu;
 
 @end
 
@@ -55,13 +54,7 @@ static CGEventRef eventCallback(CGEventTapProxy proxy, CGEventType type,  CGEven
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    NSStatusBar * const statusBar = [NSStatusBar systemStatusBar];
-    self.statusItem = [statusBar statusItemWithLength:NSVariableStatusItemLength];
-    [self.statusItem setHighlightMode:YES];
-    NSImage * const statusItemImage = [NSImage imageNamed:@"StatusItem"];
-    statusItemImage.template = YES;
-    [self.statusItem setImage:statusItemImage];
-    [self.statusItem setMenu:self.statusMenu];
+    [self _main_loadStatusItem];
 
     if (AXIsProcessTrusted()) {
         const CFMachPortRef eventTap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, 0, CGEventMaskBit(kCGEventKeyDown)|CGEventMaskBit(kCGEventKeyUp), eventCallback, NULL);
@@ -80,6 +73,30 @@ static CGEventRef eventCallback(CGEventTapProxy proxy, CGEventType type,  CGEven
         [alert runModal];
         [[NSApplication sharedApplication] terminate:nil];
     }
+}
+
+- (void)_main_loadStatusItem
+{
+    NSStatusBar * const statusBar = [NSStatusBar systemStatusBar];
+    NSStatusItem * const statusItem = [statusBar statusItemWithLength:NSVariableStatusItemLength];
+    [statusItem setHighlightMode:YES];
+
+    NSImage * const statusItemImage = [NSImage imageNamed:@"StatusItem"];
+    statusItemImage.template = YES;
+    [statusItem setImage:statusItemImage];
+
+    NSMenu * const statusMenu = [[NSMenu alloc] init];
+
+    NSMenuItem * const quitMenuItem = [[NSMenuItem alloc] init];
+    quitMenuItem.title = @"Quit";
+    quitMenuItem.keyEquivalent = @"q";
+    quitMenuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
+    quitMenuItem.action = @selector(terminate:);
+    [statusMenu addItem:quitMenuItem];
+
+    [statusItem setMenu:statusMenu];
+
+    self.statusItem = statusItem;
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
