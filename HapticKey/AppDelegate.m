@@ -7,62 +7,30 @@
 //
 
 #import "AppDelegate.h"
+#import "HTKEventTap.h"
 #import "HTKMultitouchActuator.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AppDelegate ()
+@interface AppDelegate () <HTKEventTapDelegate>
 
 @property (nonatomic, nullable) NSStatusItem *statusItem;
+@property (nonatomic, nullable) HTKEventTap *eventTap;
 
 @end
 
 @implementation AppDelegate
-
-// A lsit of key code ESC and F1 to F12.
-static int64_t const kEscAndFunctionKeycodes[] = {
-    53, // ESC
-    122, 120, 99, 118, 96, 97, 98, 100, 101, 109, 103, 111 // F1 to F12
-};
-static const NSUInteger kNumberOfEscAndFunctionKeycodes = sizeof (kEscAndFunctionKeycodes) / sizeof (int64_t);
-static const int64_t kTouchbarKeyboardType = 198;
-
-static CGEventRef eventCallback(CGEventTapProxy proxy, CGEventType type,  CGEventRef event, void *refcon) {
-    const int64_t keycode = CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
-    const int64_t autorepeat = CGEventGetIntegerValueField(event, kCGKeyboardEventAutorepeat);
-    const int64_t keyboardType = CGEventGetIntegerValueField(event, kCGKeyboardEventKeyboardType);
-
-    if (keyboardType == kTouchbarKeyboardType && autorepeat != 1) {
-        for (NSUInteger index = 0; index < kNumberOfEscAndFunctionKeycodes; index += 1) {
-            if (kEscAndFunctionKeycodes[index] == keycode) {
-                switch (type) {
-                    case kCGEventKeyDown:
-                        [[HTKMultitouchActuator sharedActuator] actuateActuationID:6 unknown1:0 unknown2:0.0 unknown3:2.0];
-                        break;
-                    case kCGEventKeyUp:
-                        [[HTKMultitouchActuator sharedActuator] actuateActuationID:6 unknown1:0 unknown2:0.0 unknown3:0.0];
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            }
-        }
-    }
-    return event;
-}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     [self _main_loadStatusItem];
 
     if (AXIsProcessTrusted()) {
-        const CFMachPortRef eventTap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, 0, CGEventMaskBit(kCGEventKeyDown)|CGEventMaskBit(kCGEventKeyUp), eventCallback, NULL);
-        if (eventTap) {
-            const CFRunLoopSourceRef runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
-            CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopCommonModes);
-            CGEventTapEnable(eventTap, true);
-        }
+        const CGEventMask eventMask = CGEventMaskBit(kCGEventKeyDown) | CGEventMaskBit(kCGEventKeyUp);
+        HTKEventTap * const tap = [[HTKEventTap alloc] initWithEventMask:eventMask];
+        tap.delegate = self;
+        tap.enabled = YES;
+        self.eventTap = tap;
     } else {
         NSAlert * const alert = [[NSAlert alloc] init];
         [alert addButtonWithTitle:@"OK"];
@@ -102,6 +70,39 @@ static CGEventRef eventCallback(CGEventTapProxy proxy, CGEventType type,  CGEven
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
 {
     return NO;
+}
+
+// MARK: - HTKEventTapDelegate
+
+// A lsit of key code ESC and F1 to F12.
+static int64_t const kEscAndFunctionKeycodes[] = {
+    53, // ESC
+    122, 120, 99, 118, 96, 97, 98, 100, 101, 109, 103, 111 // F1 to F12
+};
+static const NSUInteger kNumberOfEscAndFunctionKeycodes = sizeof (kEscAndFunctionKeycodes) / sizeof (int64_t);
+static const int64_t kTouchbarKeyboardType = 198;
+
+- (void)eventTap:(HTKEventTap *)eventTap didTapEvent:(NSEvent *)event
+{
+    const int64_t keyboardType = CGEventGetIntegerValueField(event.CGEvent, kCGKeyboardEventKeyboardType);
+    if (keyboardType == kTouchbarKeyboardType && !event.ARepeat) {
+        for (NSUInteger index = 0; index < kNumberOfEscAndFunctionKeycodes; index += 1) {
+            if (kEscAndFunctionKeycodes[index] == event.keyCode) {
+                switch (event.type) {
+                    case NSEventTypeKeyDown:
+                        [[HTKMultitouchActuator sharedActuator] actuateActuationID:6 unknown1:0 unknown2:0.0 unknown3:2.0];
+                        break;
+                    case NSEventTypeKeyUp:
+                        [[HTKMultitouchActuator sharedActuator] actuateActuationID:6 unknown1:0 unknown2:0.0 unknown3:0.0];
+                        break;
+                    default:
+                        // Should not reach here.
+                        break;
+                }
+                break;
+            }
+        }
+    }
 }
 
 @end

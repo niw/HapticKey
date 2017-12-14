@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		546E62F71FE24A1D00F287C9 /* HTKEventTap.m in Sources */ = {isa = PBXBuildFile; fileRef = 546E62F61FE24A1D00F287C9 /* HTKEventTap.m */; };
 		548E153B1FD00412001C0D4C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 548E153A1FD00412001C0D4C /* AppDelegate.m */; };
 		548E15401FD00412001C0D4C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 548E153E1FD00412001C0D4C /* MainMenu.xib */; };
 		548E15431FD00412001C0D4C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 548E15421FD00412001C0D4C /* main.m */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		546E62F51FE24A1D00F287C9 /* HTKEventTap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEventTap.h; sourceTree = "<group>"; };
+		546E62F61FE24A1D00F287C9 /* HTKEventTap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKEventTap.m; sourceTree = "<group>"; };
 		548E15361FD00412001C0D4C /* HapticKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HapticKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		548E15391FD00412001C0D4C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		548E153A1FD00412001C0D4C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -64,6 +67,8 @@
 			children = (
 				548E15391FD00412001C0D4C /* AppDelegate.h */,
 				548E153A1FD00412001C0D4C /* AppDelegate.m */,
+				546E62F51FE24A1D00F287C9 /* HTKEventTap.h */,
+				546E62F61FE24A1D00F287C9 /* HTKEventTap.m */,
 				54FBCF271FD4CDE0000EB4D3 /* HTKMultitouchActuator.h */,
 				54FBCF281FD4CDE0000EB4D3 /* HTKMultitouchActuator.m */,
 				548E15421FD00412001C0D4C /* main.m */,
@@ -163,6 +168,7 @@
 			files = (
 				548E15431FD00412001C0D4C /* main.m in Sources */,
 				548E153B1FD00412001C0D4C /* AppDelegate.m in Sources */,
+				546E62F71FE24A1D00F287C9 /* HTKEventTap.m in Sources */,
 				54FBCF291FD4CDE0000EB4D3 /* HTKMultitouchActuator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
