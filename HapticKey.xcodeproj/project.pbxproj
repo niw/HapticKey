@@ -81,6 +81,26 @@
 		548E15381FD00412001C0D4C /* HapticKey */ = {
 			isa = PBXGroup;
 			children = (
+				54CDDBF11FE44F33005F35A1 /* Classes */,
+				548E15411FD00412001C0D4C /* Info.plist */,
+				548E15421FD00412001C0D4C /* main.m */,
+				548E153E1FD00412001C0D4C /* MainMenu.xib */,
+				54FBCF2F1FD52469000EB4D3 /* Resources */,
+			);
+			path = HapticKey;
+			sourceTree = "<group>";
+		};
+		54A310B61FD390EA002DE7BC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		54CDDBF11FE44F33005F35A1 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
 				548E15391FD00412001C0D4C /* HTKAppDelegate.h */,
 				548E153A1FD00412001C0D4C /* HTKAppDelegate.m */,
 				5443CEFD1FE38F6C002D4086 /* HTKEvent.h */,
@@ -98,20 +118,8 @@
 				5443CF061FE39293002D4086 /* HTKTapGestureEventListener.h */,
 				5443CF071FE39293002D4086 /* HTKTapGestureEventListener.m */,
 				546E62F41FE2449600F287C9 /* NSTouchDevice.h */,
-				548E15421FD00412001C0D4C /* main.m */,
-				548E153E1FD00412001C0D4C /* MainMenu.xib */,
-				548E15411FD00412001C0D4C /* Info.plist */,
-				54FBCF2F1FD52469000EB4D3 /* Resources */,
 			);
-			path = HapticKey;
-			sourceTree = "<group>";
-		};
-		54A310B61FD390EA002DE7BC /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */,
-			);
-			name = Frameworks;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		54FBCF2F1FD52469000EB4D3 /* Resources */ = {
