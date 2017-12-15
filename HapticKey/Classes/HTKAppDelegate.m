@@ -118,9 +118,9 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 - (void)_htk_main_presentAccessibilityPermissionAlertAndTerminate
 {
     NSAlert * const alert = [[NSAlert alloc] init];
-    [alert addButtonWithTitle:@"OK"];
-    alert.messageText = @"Please allow to use Accessibility on Privacy settings in the System Preferences.";
-    alert.informativeText = @"To listen keyboard events, the application needs to have a permission to use Accessibility.";
+    [alert addButtonWithTitle:NSLocalizedString(@"ACCESSIBILITY_PERMISSION_ALERT_OK_BUTTON_TITLE", @"A title for OK button for the accessibility permission alert.")];
+    alert.messageText = NSLocalizedString(@"ACCESSIBILITY_PERMISSION_ALERT_MESSAGE_TEXT", @"A message text for the accessibility permission alert.");
+    alert.informativeText = NSLocalizedString(@"ACCESSIBILITY_PERMISSION_ALERT_INFORMATIVE_TEXT", @"A informative text for the accessibility permission alert.");
     alert.alertStyle = NSAlertStyleCritical;
     // Surprisingly, this is a blocking call.
     [alert runModal];
@@ -142,28 +142,28 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
     NSMenu * const eventTypeMenu = [[NSMenu alloc] init];
 
     NSMenuItem * const functionKeyEventTypeMenuItem = [[NSMenuItem alloc] init];
-    functionKeyEventTypeMenuItem.title = @"ESC and F1, F2, etc. Keys";
+    functionKeyEventTypeMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_EVENT_TYPE_MENU_FUNCTION_KEY_EVENT_TYPE_MENU_ITEM", @"A event type menu item for function key event type.");
     functionKeyEventTypeMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
     functionKeyEventTypeMenuItem.target = self;
     [eventTypeMenu addItem:functionKeyEventTypeMenuItem];
     self.functionKeyEventTypeMenuItem = functionKeyEventTypeMenuItem;
 
     NSMenuItem * const tapGestureEventTypeMenuItem = [[NSMenuItem alloc] init];
-    tapGestureEventTypeMenuItem.title = @"All Taps on Touch Bar";
+    tapGestureEventTypeMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_EVENT_TYPE_MENU_TAP_GESTURE_EVENT_TYPE_MENU_ITEM", @"A event type menu item for tap gesture event type.");
     tapGestureEventTypeMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
     tapGestureEventTypeMenuItem.target = self;
     [eventTypeMenu addItem:tapGestureEventTypeMenuItem];
     self.tapGestureEventTypeMenuItem = tapGestureEventTypeMenuItem;
 
     NSMenuItem * const listeningEventTypeMenuItem = [[NSMenuItem alloc] init];
-    listeningEventTypeMenuItem.title = @"Event";
+    listeningEventTypeMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_EVENT_TYPE_MENU_ITEM", @"A status menu item that has a submenu to select one of event types.");
     listeningEventTypeMenuItem.submenu = eventTypeMenu;
     [statusMenu addItem:listeningEventTypeMenuItem];
 
     [statusMenu addItem:[NSMenuItem separatorItem]];
 
     NSMenuItem * const quitMenuItem = [[NSMenuItem alloc] init];
-    quitMenuItem.title = @"Quit";
+    quitMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_QUIT_MENU_ITEM", @"A status menu item to terminate the application.");
     quitMenuItem.keyEquivalent = @"q";
     quitMenuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
     quitMenuItem.action = @selector(terminate:);
