@@ -20,8 +20,9 @@ To run application in Xcode, allow `Xcode.app` instead.
 Overview
 --------
 
-This applicatin is using `CGEventTap` to listen key down and up events.
+This application is using `CGEventTap` to listen key down and up events.
 
-Then, it triggers haptic feedbacks by using private APIs in `MultitouchSupport.framework` when the event meets the conditions (It is sent from Touch Bar, The keycode is ESC or F1~F12, It is not repeating)
+Then, it triggers haptic feedbacks by using private APIs in `MultitouchSupport.framework` when the event meets the conditions.
 
-You can add extra keycodes or modify the conditions to trigger haptic feedbacks as you like.
+Currently, the application is listening either ESC and F1, F2, etc. keys or tap gestures on Touch Bar.
+You can implement your own `HTKEventListener` to extend the application to trigger haptic feedbacks on arbitrary events.
