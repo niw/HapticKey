@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HTKAppDelegate : NSObject <NSApplicationDelegate>
+@interface HTKAppDelegate : NSObject
 
 @end
 
