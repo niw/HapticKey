@@ -9,9 +9,7 @@ By adding a haptic feedback, which is vibrating track pad not Touch Bar itself, 
 Usage
 -----
 
-The application is only tested on MacBook Pro (2017) and it may not work on the other environments.
-
-To build the application, you need to use Xcode 9.
+Download a prebuild application binary from [Releases](https://github.com/niw/HapticKey/releases) page.
 
 The application requires a permission to use Accessibility, as like the other applications that are listening system events.
 To run application as a standalone, allow `HapticKey.app` in the Privacy panel of System Preferences.app under the Security & Privacy section.
@@ -19,6 +17,8 @@ To run application in Xcode, allow `Xcode.app` instead.
 
 Overview
 --------
+
+To build the application, you need to use Xcode 9.
 
 This application is using `CGEventTap` to listen key down and up events.
 
