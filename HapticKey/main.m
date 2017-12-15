@@ -6,7 +6,7 @@
 //  Copyright © 2017 Yoshimasa Niwa. All rights reserved.
 //
 
-@import Cocoa;
+@import AppKit;
 
 int main(int argc, const char * argv[]) {
     return NSApplicationMain(argc, argv);

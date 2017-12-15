@@ -6,7 +6,7 @@
 //  Copyright © 2017 Yoshimasa Niwa. All rights reserved.
 //
 
-@import Cocoa;
+@import AppKit;
 
 NS_ASSUME_NONNULL_BEGIN
 

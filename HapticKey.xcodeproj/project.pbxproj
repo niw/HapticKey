@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5443CEFC1FE38EA8002D4086 /* HTKEventListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CEFB1FE38EA8002D4086 /* HTKEventListener.m */; };
+		5443CEFF1FE38F6C002D4086 /* HTKEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CEFE1FE38F6C002D4086 /* HTKEvent.m */; };
+		5443CF051FE39049002D4086 /* HTKFunctionKeyEventListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CF041FE39049002D4086 /* HTKFunctionKeyEventListener.m */; };
+		5443CF0D1FE394BB002D4086 /* HTKHapticFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CF0C1FE394BB002D4086 /* HTKHapticFeedback.m */; };
 		546E62F71FE24A1D00F287C9 /* HTKEventTap.m in Sources */ = {isa = PBXBuildFile; fileRef = 546E62F61FE24A1D00F287C9 /* HTKEventTap.m */; };
 		548E153B1FD00412001C0D4C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 548E153A1FD00412001C0D4C /* AppDelegate.m */; };
 		548E15401FD00412001C0D4C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 548E153E1FD00412001C0D4C /* MainMenu.xib */; };
@@ -18,6 +22,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5443CEFA1FE38EA8002D4086 /* HTKEventListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEventListener.h; sourceTree = "<group>"; };
+		5443CEFB1FE38EA8002D4086 /* HTKEventListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKEventListener.m; sourceTree = "<group>"; };
+		5443CEFD1FE38F6C002D4086 /* HTKEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEvent.h; sourceTree = "<group>"; };
+		5443CEFE1FE38F6C002D4086 /* HTKEvent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKEvent.m; sourceTree = "<group>"; };
+		5443CF031FE39049002D4086 /* HTKFunctionKeyEventListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKFunctionKeyEventListener.h; sourceTree = "<group>"; };
+		5443CF041FE39049002D4086 /* HTKFunctionKeyEventListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKFunctionKeyEventListener.m; sourceTree = "<group>"; };
+		5443CF0B1FE394BB002D4086 /* HTKHapticFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKHapticFeedback.h; sourceTree = "<group>"; };
+		5443CF0C1FE394BB002D4086 /* HTKHapticFeedback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKHapticFeedback.m; sourceTree = "<group>"; };
 		546E62F51FE24A1D00F287C9 /* HTKEventTap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEventTap.h; sourceTree = "<group>"; };
 		546E62F61FE24A1D00F287C9 /* HTKEventTap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKEventTap.m; sourceTree = "<group>"; };
 		548E15361FD00412001C0D4C /* HapticKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HapticKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,8 +79,16 @@
 			children = (
 				548E15391FD00412001C0D4C /* AppDelegate.h */,
 				548E153A1FD00412001C0D4C /* AppDelegate.m */,
+				5443CEFD1FE38F6C002D4086 /* HTKEvent.h */,
+				5443CEFE1FE38F6C002D4086 /* HTKEvent.m */,
+				5443CEFA1FE38EA8002D4086 /* HTKEventListener.h */,
+				5443CEFB1FE38EA8002D4086 /* HTKEventListener.m */,
 				546E62F51FE24A1D00F287C9 /* HTKEventTap.h */,
 				546E62F61FE24A1D00F287C9 /* HTKEventTap.m */,
+				5443CF031FE39049002D4086 /* HTKFunctionKeyEventListener.h */,
+				5443CF041FE39049002D4086 /* HTKFunctionKeyEventListener.m */,
+				5443CF0B1FE394BB002D4086 /* HTKHapticFeedback.h */,
+				5443CF0C1FE394BB002D4086 /* HTKHapticFeedback.m */,
 				54FBCF271FD4CDE0000EB4D3 /* HTKMultitouchActuator.h */,
 				54FBCF281FD4CDE0000EB4D3 /* HTKMultitouchActuator.m */,
 				548E15421FD00412001C0D4C /* main.m */,
@@ -166,9 +186,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5443CF0D1FE394BB002D4086 /* HTKHapticFeedback.m in Sources */,
+				5443CEFF1FE38F6C002D4086 /* HTKEvent.m in Sources */,
 				548E15431FD00412001C0D4C /* main.m in Sources */,
 				548E153B1FD00412001C0D4C /* AppDelegate.m in Sources */,
+				5443CEFC1FE38EA8002D4086 /* HTKEventListener.m in Sources */,
 				546E62F71FE24A1D00F287C9 /* HTKEventTap.m in Sources */,
+				5443CF051FE39049002D4086 /* HTKFunctionKeyEventListener.m in Sources */,
 				54FBCF291FD4CDE0000EB4D3 /* HTKMultitouchActuator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
