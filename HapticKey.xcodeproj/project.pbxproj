@@ -46,6 +46,7 @@
 		54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultitouchSupport.framework; path = ../../../../../../../System/Library/PrivateFrameworks/MultitouchSupport.framework; sourceTree = "<group>"; };
 		54E1E0951FE4613F007F2EE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54E1E0971FE4614F007F2EE0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		54E1E0981FE4621E007F2EE0 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54FBCF271FD4CDE0000EB4D3 /* HTKMultitouchActuator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKMultitouchActuator.h; sourceTree = "<group>"; };
 		54FBCF281FD4CDE0000EB4D3 /* HTKMultitouchActuator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKMultitouchActuator.m; sourceTree = "<group>"; };
 		54FBCF301FD52483000EB4D3 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
@@ -176,6 +177,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 548E152D1FD00412001C0D4C;
 			productRefGroup = 548E15371FD00412001C0D4C /* Products */;
@@ -234,6 +236,7 @@
 			children = (
 				54E1E0951FE4613F007F2EE0 /* en */,
 				54E1E0971FE4614F007F2EE0 /* Base */,
+				54E1E0981FE4621E007F2EE0 /* ja */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -300,6 +304,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
