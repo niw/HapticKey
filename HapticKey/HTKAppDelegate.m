@@ -1,38 +1,38 @@
 //
-//  AppDelegate.m
+//  HTKAppDelegate.m
 //  HapticKey
 //
 //  Created by Yoshimasa Niwa on 11/30/17.
 //  Copyright © 2017 Yoshimasa Niwa. All rights reserved.
 //
 
-#import "AppDelegate.h"
+#import "HTKAppDelegate.h"
 #import "HTKHapticFeedback.h"
 #import "HTKFunctionKeyEventListener.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AppDelegate ()
+@interface HTKAppDelegate ()
 
 @property (nonatomic, nullable) NSStatusItem *statusItem;
 @property (nonatomic, nullable) HTKHapticFeedback *hapticFeedback;
 
 @end
 
-@implementation AppDelegate
+@implementation HTKAppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    [self _main_loadStatusItem];
+    [self _htk_main_loadStatusItem];
 
     if (AXIsProcessTrusted()) {
-        [self _main_loadHapticFeedback];
+        [self _htk_main_loadHapticFeedback];
     } else {
-        [self _main_presentAccessibilityPermissionAlert];
+        [self _htk_main_presentAccessibilityPermissionAlert];
     }
 }
 
-- (void)_main_presentAccessibilityPermissionAlert
+- (void)_htk_main_presentAccessibilityPermissionAlert
 {
     NSAlert * const alert = [[NSAlert alloc] init];
     [alert addButtonWithTitle:@"OK"];
@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
     [[NSApplication sharedApplication] terminate:nil];
 }
 
-- (void)_main_loadStatusItem
+- (void)_htk_main_loadStatusItem
 {
     NSStatusBar * const statusBar = [NSStatusBar systemStatusBar];
     NSStatusItem * const statusItem = [statusBar statusItemWithLength:NSVariableStatusItemLength];
@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
     self.statusItem = statusItem;
 }
 
-- (void)_main_loadHapticFeedback
+- (void)_htk_main_loadHapticFeedback
 {
     HTKHapticFeedback * const hapticFeedback = [[HTKHapticFeedback alloc] initWithEventListener:[[HTKFunctionKeyEventListener alloc] init]];
     hapticFeedback.enabled = YES;

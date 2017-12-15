@@ -1,5 +1,5 @@
 //
-//  AppDelegate.h
+//  HTKAppDelegate.h
 //  HapticKey
 //
 //  Created by Yoshimasa Niwa on 11/30/17.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface HTKAppDelegate : NSObject <NSApplicationDelegate>
 
 @end
 

@@ -12,7 +12,7 @@
 		5443CF051FE39049002D4086 /* HTKFunctionKeyEventListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CF041FE39049002D4086 /* HTKFunctionKeyEventListener.m */; };
 		5443CF0D1FE394BB002D4086 /* HTKHapticFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CF0C1FE394BB002D4086 /* HTKHapticFeedback.m */; };
 		546E62F71FE24A1D00F287C9 /* HTKEventTap.m in Sources */ = {isa = PBXBuildFile; fileRef = 546E62F61FE24A1D00F287C9 /* HTKEventTap.m */; };
-		548E153B1FD00412001C0D4C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 548E153A1FD00412001C0D4C /* AppDelegate.m */; };
+		548E153B1FD00412001C0D4C /* HTKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 548E153A1FD00412001C0D4C /* HTKAppDelegate.m */; };
 		548E15401FD00412001C0D4C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 548E153E1FD00412001C0D4C /* MainMenu.xib */; };
 		548E15431FD00412001C0D4C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 548E15421FD00412001C0D4C /* main.m */; };
 		54A310B81FD390EB002DE7BC /* MultitouchSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */; };
@@ -33,8 +33,8 @@
 		546E62F51FE24A1D00F287C9 /* HTKEventTap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEventTap.h; sourceTree = "<group>"; };
 		546E62F61FE24A1D00F287C9 /* HTKEventTap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKEventTap.m; sourceTree = "<group>"; };
 		548E15361FD00412001C0D4C /* HapticKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HapticKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		548E15391FD00412001C0D4C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		548E153A1FD00412001C0D4C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		548E15391FD00412001C0D4C /* HTKAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKAppDelegate.h; sourceTree = "<group>"; };
+		548E153A1FD00412001C0D4C /* HTKAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKAppDelegate.m; sourceTree = "<group>"; };
 		548E153F1FD00412001C0D4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		548E15411FD00412001C0D4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		548E15421FD00412001C0D4C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -77,8 +77,8 @@
 		548E15381FD00412001C0D4C /* HapticKey */ = {
 			isa = PBXGroup;
 			children = (
-				548E15391FD00412001C0D4C /* AppDelegate.h */,
-				548E153A1FD00412001C0D4C /* AppDelegate.m */,
+				548E15391FD00412001C0D4C /* HTKAppDelegate.h */,
+				548E153A1FD00412001C0D4C /* HTKAppDelegate.m */,
 				5443CEFD1FE38F6C002D4086 /* HTKEvent.h */,
 				5443CEFE1FE38F6C002D4086 /* HTKEvent.m */,
 				5443CEFA1FE38EA8002D4086 /* HTKEventListener.h */,
@@ -189,7 +189,7 @@
 				5443CF0D1FE394BB002D4086 /* HTKHapticFeedback.m in Sources */,
 				5443CEFF1FE38F6C002D4086 /* HTKEvent.m in Sources */,
 				548E15431FD00412001C0D4C /* main.m in Sources */,
-				548E153B1FD00412001C0D4C /* AppDelegate.m in Sources */,
+				548E153B1FD00412001C0D4C /* HTKAppDelegate.m in Sources */,
 				5443CEFC1FE38EA8002D4086 /* HTKEventListener.m in Sources */,
 				546E62F71FE24A1D00F287C9 /* HTKEventTap.m in Sources */,
 				5443CF051FE39049002D4086 /* HTKFunctionKeyEventListener.m in Sources */,
