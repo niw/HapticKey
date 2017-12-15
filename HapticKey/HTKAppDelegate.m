@@ -143,14 +143,14 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
     NSMenuItem * const functionKeyEventTypeMenuItem = [[NSMenuItem alloc] init];
     functionKeyEventTypeMenuItem.title = @"ESC and F1, F2, etc. Keys";
-    functionKeyEventTypeMenuItem.action = @selector(_htk_action_didSelectModeMenuItem:);
+    functionKeyEventTypeMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
     functionKeyEventTypeMenuItem.target = self;
     [eventTypeMenu addItem:functionKeyEventTypeMenuItem];
     self.functionKeyEventTypeMenuItem = functionKeyEventTypeMenuItem;
 
     NSMenuItem * const tapGestureEventTypeMenuItem = [[NSMenuItem alloc] init];
     tapGestureEventTypeMenuItem.title = @"All Taps on Touch Bar";
-    tapGestureEventTypeMenuItem.action = @selector(_htk_action_didSelectModeMenuItem:);
+    tapGestureEventTypeMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
     tapGestureEventTypeMenuItem.target = self;
     [eventTypeMenu addItem:tapGestureEventTypeMenuItem];
     self.tapGestureEventTypeMenuItem = tapGestureEventTypeMenuItem;
@@ -181,7 +181,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
 // MARK: - Actions
 
-- (void)_htk_action_didSelectModeMenuItem:(id)sender
+- (void)_htk_action_didSelectEventTypeMenuItem:(id)sender
 {
     if (sender == self.functionKeyEventTypeMenuItem) {
         self.listeningEventType = HTKAppDelegateListeningEventTypeFunctionKey;
