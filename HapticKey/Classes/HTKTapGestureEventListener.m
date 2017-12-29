@@ -66,6 +66,11 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+- (void)eventTapDisabled:(HTKEventTap *)eventTap
+{
+    self.eventTap.enabled = YES;
+}
+
 - (void)_htk_main_didListenEvent:(HTKEvent *)event
 {
     id<HTKEventListenerDelegate> const delegate = self.delegate;
