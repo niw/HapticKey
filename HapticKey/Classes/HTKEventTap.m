@@ -8,15 +8,35 @@
 
 #import "HTKEventTap.h"
 
+@import os.log;
+
 NS_ASSUME_NONNULL_BEGIN
 
 static CGEventRef eventTapCallback(CGEventTapProxy proxy, CGEventType type,  CGEventRef eventRef, void * _Nullable userInfo) {
     __unsafe_unretained HTKEventTap * const eventTap = (__bridge HTKEventTap *)userInfo;
-    NSEvent * const event = [NSEvent eventWithCGEvent:eventRef];
 
-    id<HTKEventTapDelegate> const delegate = eventTap.delegate;
-    if ([delegate respondsToSelector:@selector(eventTap:didTapEvent:)]) {
-        [delegate eventTap:eventTap didTapEvent:event];
+    switch (type) {
+        case kCGEventTapDisabledByTimeout:
+        case kCGEventTapDisabledByUserInput: {
+            eventTap.enabled = NO;
+
+            os_log_error(OS_LOG_DEFAULT, "Event tap disabled by type: %d", type);
+
+            id<HTKEventTapDelegate> const delegate = eventTap.delegate;
+            if ([delegate respondsToSelector:@selector(eventTapDisabled:)]) {
+                [delegate eventTapDisabled:eventTap];
+            }
+            break;
+        }
+        default: {
+            NSEvent * const event = [NSEvent eventWithCGEvent:eventRef];
+
+            id<HTKEventTapDelegate> const delegate = eventTap.delegate;
+            if ([delegate respondsToSelector:@selector(eventTap:didTapEvent:)]) {
+                [delegate eventTap:eventTap didTapEvent:event];
+            }
+            break;
+        }
     }
 
     return eventRef;
@@ -71,6 +91,9 @@ static CGEventRef eventTapCallback(CGEventTapProxy proxy, CGEventType type,  CGE
         if (_runLoopSource) {
             CFRunLoopAddSource(CFRunLoopGetMain(), _runLoopSource, kCFRunLoopCommonModes);
             CGEventTapEnable(_eventTap, true);
+
+            os_log_info(OS_LOG_DEFAULT, "Event tap enabled: %p", _eventTap);
+
             _enabled = YES;
         } else {
             CFRelease(_eventTap);
@@ -88,6 +111,9 @@ static CGEventRef eventTapCallback(CGEventTapProxy proxy, CGEventType type,  CGE
     }
     if (_eventTap) {
         CGEventTapEnable(_eventTap, false);
+
+        os_log_info(OS_LOG_DEFAULT, "Event tap disabled: %p", _eventTap);
+
         CFRelease(_eventTap);
         _eventTap = NULL;
     }

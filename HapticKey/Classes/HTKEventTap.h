@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 - (void)eventTap:(HTKEventTap *)eventTap didTapEvent:(NSEvent *)event;
+- (void)eventTapDisabled:(HTKEventTap *)eventTap;
 
 @end
 
