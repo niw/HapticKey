@@ -9,6 +9,7 @@
 #import "HTKMultitouchActuator.h"
 
 @import IOKit;
+@import os.log;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -42,43 +43,68 @@ CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
 
 - (void)dealloc
 {
-    if (_actuatorRef) {
-        const IOReturn error = MTActuatorClose(_actuatorRef);
-        if (error != kIOReturnSuccess) {
-            // TODO: Logging.
-        }
-        CFRelease(_actuatorRef);
-    }
-}
-
-- (instancetype)init
-{
-    if (self = [super init]) {
-        // By using IORegistoryExploere, which is in Additional Tools for Xcode,
-        // Find `AppleMultitouchDevice` which has `Multitouch ID`.
-        // Probably this is a fixed value.
-        const CFTypeRef actuatorRef = MTActuatorCreateFromDeviceID(0x200000001000000);
-        if (!actuatorRef) {
-            // TODO: Logging.
-            return nil;
-        }
-        _actuatorRef = actuatorRef;
-
-        const IOReturn error = MTActuatorOpen(actuatorRef);
-        if (error != kIOReturnSuccess) {
-            // TODO: Logging.
-            CFRelease(_actuatorRef);
-            return nil;
-        }
-    }
-    return self;
+    [self _htk_main_closeActuator];
 }
 
 - (BOOL)actuateActuationID:(SInt32)actuationID unknown1:(UInt32)unknown1 unknown2:(Float32)unknown2 unknown3:(Float32)unknown3
 {
+    [self _htk_main_openActuator];
+    BOOL result = [self _htk_main_actuateActuationID:actuationID unknown1:unknown1 unknown2:unknown2 unknown3:unknown3];
+
+    // In case we failed to actuate with existing actuator, reopen it and try again.
+    if (!result) {
+        [self _htk_main_closeActuator];
+        [self _htk_main_openActuator];
+        result = [self _htk_main_actuateActuationID:actuationID unknown1:unknown1 unknown2:unknown2 unknown3:unknown3];
+    }
+
+    return result;
+}
+
+- (void)_htk_main_openActuator
+{
+    if (_actuatorRef) {
+        return;
+    }
+
+    // By using IORegistoryExploere, which is in Additional Tools for Xcode,
+    // Find `AppleMultitouchDevice` which has `Multitouch ID`.
+    // Probably this is a fixed value.
+    const CFTypeRef actuatorRef = MTActuatorCreateFromDeviceID(0x200000001000000);
+    if (!actuatorRef) {
+        os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorCreateFromDeviceID");
+        return;
+    }
+    _actuatorRef = actuatorRef;
+
+    const IOReturn error = MTActuatorOpen(actuatorRef);
+    if (error != kIOReturnSuccess) {
+        os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorOpen: %p error: %d", _actuatorRef, error);
+        CFRelease(_actuatorRef);
+        _actuatorRef = nil;
+        return;
+    }
+}
+
+- (void)_htk_main_closeActuator
+{
+    if (!_actuatorRef) {
+        return;
+    }
+
+    const IOReturn error = MTActuatorClose(_actuatorRef);
+    if (error != kIOReturnSuccess) {
+        os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorClose: %p error: %d", _actuatorRef, error);
+    }
+    CFRelease(_actuatorRef);
+    _actuatorRef = nil;
+}
+
+- (BOOL)_htk_main_actuateActuationID:(SInt32)actuationID unknown1:(UInt32)unknown1 unknown2:(Float32)unknown2 unknown3:(Float32)unknown3
+{
     const IOReturn error = MTActuatorActuate(_actuatorRef, actuationID, unknown1, unknown2, unknown3);
     if (error != kIOReturnSuccess) {
-        // TODO: Logging.
+        os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorActuate: %p, %d, %d, %f, %f error: %d", _actuatorRef, actuationID, unknown1, unknown2, unknown3, error);
         return NO;
     } else {
         return YES;
