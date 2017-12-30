@@ -102,7 +102,12 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 - (void)_htk_main_restoreUserDefaults
 {
     NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
-    self.listeningEventType = [defaults integerForKey:kListeningEventTypeUserDefaultsKey];
+    if ([defaults objectForKey:kListeningEventTypeUserDefaultsKey]) {
+        self.listeningEventType = [defaults integerForKey:kListeningEventTypeUserDefaultsKey];
+    } else {
+        // Default to function key event.
+        self.listeningEventType = HTKAppDelegateListeningEventTypeFunctionKey;
+    }
 }
 
 // MARK: - NSApplicationDelegate
