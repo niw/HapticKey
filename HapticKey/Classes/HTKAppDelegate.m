@@ -181,7 +181,9 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
 - (void)_htk_action_didSelectEventTypeMenuItem:(id)sender
 {
-    if (sender == self.functionKeyEventTypeMenuItem) {
+    if (sender == self.noneEventTypeMenuItem) {
+        self.listeningEventType = HTKAppDelegateListeningEventTypeNone;
+    } else if (sender == self.functionKeyEventTypeMenuItem) {
         self.listeningEventType = HTKAppDelegateListeningEventTypeFunctionKey;
     } else if (sender == self.tapGestureEventTypeMenuItem) {
         self.listeningEventType = HTKAppDelegateListeningEventTypeTapGesture;
