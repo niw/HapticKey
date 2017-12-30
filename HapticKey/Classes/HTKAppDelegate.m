@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 static NSString * const kListeningEventTypeUserDefaultsKey = @"ListeningEventType";
 
 typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
+    HTKAppDelegateListeningEventTypeNone,
     HTKAppDelegateListeningEventTypeFunctionKey,
     HTKAppDelegateListeningEventTypeTapGesture
 };
@@ -30,6 +31,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
 @property (nonatomic, nullable) NSStatusItem *statusItem;
 
+@property (nonatomic, nullable) NSMenuItem *noneEventTypeMenuItem;
 @property (nonatomic, nullable) NSMenuItem *functionKeyEventTypeMenuItem;
 @property (nonatomic, nullable) NSMenuItem *tapGestureEventTypeMenuItem;
 
@@ -41,6 +43,13 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 {
     if (_listeningEventType != listeningEventType) {
         _listeningEventType = listeningEventType;
+
+        if (_listeningEventType != HTKAppDelegateListeningEventTypeNone) {
+            CFDictionaryRef options = (__bridge CFDictionaryRef)@{(__bridge NSString *)kAXTrustedCheckOptionPrompt: @YES};
+            if (!AXIsProcessTrustedWithOptions(options)) {
+                _listeningEventType = HTKAppDelegateListeningEventTypeNone;
+            }
+        }
 
         [self _htk_main_updateStatusItemMenuItems];
         [self _htk_main_updateHapticFeedback];
@@ -55,6 +64,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
         return;
     }
 
+    self.noneEventTypeMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeNone) ? NSControlStateValueOn : NSControlStateValueOff;
     self.functionKeyEventTypeMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeFunctionKey) ? NSControlStateValueOn : NSControlStateValueOff;
     self.tapGestureEventTypeMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeTapGesture) ? NSControlStateValueOn : NSControlStateValueOff;
 }
@@ -65,12 +75,10 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
         return;
     }
 
-    if (!AXIsProcessTrusted()) {
-        return;
-    }
-
     HTKEventListener *eventListener;
     switch (self.listeningEventType) {
+        case HTKAppDelegateListeningEventTypeNone:
+            return;
         case HTKAppDelegateListeningEventTypeFunctionKey:
             eventListener = [[HTKFunctionKeyEventListener alloc] init];
             break;
@@ -97,7 +105,6 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
     self.listeningEventType = [defaults integerForKey:kListeningEventTypeUserDefaultsKey];
 }
 
-
 // MARK: - NSApplicationDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
@@ -109,22 +116,6 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
     [self _htk_main_updateStatusItemMenuItems];
     [self _htk_main_updateHapticFeedback];
-
-    if (!AXIsProcessTrusted()) {
-        [self _htk_main_presentAccessibilityPermissionAlertAndTerminate];
-    }
-}
-
-- (void)_htk_main_presentAccessibilityPermissionAlertAndTerminate
-{
-    NSAlert * const alert = [[NSAlert alloc] init];
-    [alert addButtonWithTitle:NSLocalizedString(@"ACCESSIBILITY_PERMISSION_ALERT_OK_BUTTON_TITLE", @"A title for OK button for the accessibility permission alert.")];
-    alert.messageText = NSLocalizedString(@"ACCESSIBILITY_PERMISSION_ALERT_MESSAGE_TEXT", @"A message text for the accessibility permission alert.");
-    alert.informativeText = NSLocalizedString(@"ACCESSIBILITY_PERMISSION_ALERT_INFORMATIVE_TEXT", @"A informative text for the accessibility permission alert.");
-    alert.alertStyle = NSAlertStyleCritical;
-    // Surprisingly, this is a blocking call.
-    [alert runModal];
-    [[NSApplication sharedApplication] terminate:nil];
 }
 
 - (void)_htk_main_loadStatusItem
@@ -140,6 +131,13 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
     NSMenu * const statusMenu = [[NSMenu alloc] init];
 
     NSMenu * const eventTypeMenu = [[NSMenu alloc] init];
+
+    NSMenuItem * const noneEventTypeMenuItem = [[NSMenuItem alloc] init];
+    noneEventTypeMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_EVENT_TYPE_MENU_NONE_EVENT_TYPE_MENU_ITEM", @"A event type menu item for none.");
+    noneEventTypeMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
+    noneEventTypeMenuItem.target = self;
+    [eventTypeMenu addItem:noneEventTypeMenuItem];
+    self.noneEventTypeMenuItem = noneEventTypeMenuItem;
 
     NSMenuItem * const functionKeyEventTypeMenuItem = [[NSMenuItem alloc] init];
     functionKeyEventTypeMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_EVENT_TYPE_MENU_FUNCTION_KEY_EVENT_TYPE_MENU_ITEM", @"A event type menu item for function key event type.");
