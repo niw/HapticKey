@@ -51,18 +51,20 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
             }
         }
 
-        [self _htk_main_updateStatusItemMenuItems];
+        [self _htk_main_updateStatusItem];
         [self _htk_main_updateHapticFeedback];
 
         [self _htk_main_preserveUserDefaults];
     }
 }
 
-- (void)_htk_main_updateStatusItemMenuItems
+- (void)_htk_main_updateStatusItem
 {
     if (!self.finishedLaunching) {
         return;
     }
+
+    self.statusItem.button.appearsDisabled = self.listeningEventType == HTKAppDelegateListeningEventTypeNone;
 
     self.noneEventTypeMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeNone) ? NSControlStateValueOn : NSControlStateValueOff;
     self.functionKeyEventTypeMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeFunctionKey) ? NSControlStateValueOn : NSControlStateValueOff;
@@ -119,7 +121,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
     self.finishedLaunching = YES;
 
-    [self _htk_main_updateStatusItemMenuItems];
+    [self _htk_main_updateStatusItem];
     [self _htk_main_updateHapticFeedback];
 }
 
