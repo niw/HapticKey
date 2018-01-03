@@ -31,9 +31,9 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
 @property (nonatomic, nullable) NSStatusItem *statusItem;
 
-@property (nonatomic, nullable) NSMenuItem *noneEventTypeMenuItem;
-@property (nonatomic, nullable) NSMenuItem *functionKeyEventTypeMenuItem;
-@property (nonatomic, nullable) NSMenuItem *tapGestureEventTypeMenuItem;
+@property (nonatomic, nullable) NSMenuItem *disabledMenuItem;
+@property (nonatomic, nullable) NSMenuItem *useFunctionKeyEventMenuItem;
+@property (nonatomic, nullable) NSMenuItem *useTapGestureEventMenuItem;
 
 @end
 
@@ -66,9 +66,9 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
     self.statusItem.button.appearsDisabled = self.listeningEventType == HTKAppDelegateListeningEventTypeNone;
 
-    self.noneEventTypeMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeNone) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.functionKeyEventTypeMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeFunctionKey) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.tapGestureEventTypeMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeTapGesture) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.disabledMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeNone) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.useFunctionKeyEventMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeFunctionKey) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.useTapGestureEventMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeTapGesture) ? NSControlStateValueOn : NSControlStateValueOff;
 }
 
 - (void)_htk_main_updateHapticFeedback
@@ -137,33 +137,26 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
     NSMenu * const statusMenu = [[NSMenu alloc] init];
 
-    NSMenu * const eventTypeMenu = [[NSMenu alloc] init];
+    NSMenuItem * const disabledMenuItem = [[NSMenuItem alloc] init];
+    disabledMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_DISABLED_ITEM", @"A status menu item selected when it is disabled.");
+    disabledMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
+    disabledMenuItem.target = self;
+    [statusMenu addItem:disabledMenuItem];
+    self.disabledMenuItem = disabledMenuItem;
 
-    NSMenuItem * const noneEventTypeMenuItem = [[NSMenuItem alloc] init];
-    noneEventTypeMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_EVENT_TYPE_MENU_NONE_EVENT_TYPE_MENU_ITEM", @"A event type menu item for none.");
-    noneEventTypeMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
-    noneEventTypeMenuItem.target = self;
-    [eventTypeMenu addItem:noneEventTypeMenuItem];
-    self.noneEventTypeMenuItem = noneEventTypeMenuItem;
+    NSMenuItem * const useFunctionKeyEventMenuItem = [[NSMenuItem alloc] init];
+    useFunctionKeyEventMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_FUNCTION_KEY_EVENT_MENU_ITEM", @"A status menu item to use function key events.");
+    useFunctionKeyEventMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
+    useFunctionKeyEventMenuItem.target = self;
+    [statusMenu addItem:useFunctionKeyEventMenuItem];
+    self.useFunctionKeyEventMenuItem = useFunctionKeyEventMenuItem;
 
-    NSMenuItem * const functionKeyEventTypeMenuItem = [[NSMenuItem alloc] init];
-    functionKeyEventTypeMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_EVENT_TYPE_MENU_FUNCTION_KEY_EVENT_TYPE_MENU_ITEM", @"A event type menu item for function key event type.");
-    functionKeyEventTypeMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
-    functionKeyEventTypeMenuItem.target = self;
-    [eventTypeMenu addItem:functionKeyEventTypeMenuItem];
-    self.functionKeyEventTypeMenuItem = functionKeyEventTypeMenuItem;
-
-    NSMenuItem * const tapGestureEventTypeMenuItem = [[NSMenuItem alloc] init];
-    tapGestureEventTypeMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_EVENT_TYPE_MENU_TAP_GESTURE_EVENT_TYPE_MENU_ITEM", @"A event type menu item for tap gesture event type.");
-    tapGestureEventTypeMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
-    tapGestureEventTypeMenuItem.target = self;
-    [eventTypeMenu addItem:tapGestureEventTypeMenuItem];
-    self.tapGestureEventTypeMenuItem = tapGestureEventTypeMenuItem;
-
-    NSMenuItem * const listeningEventTypeMenuItem = [[NSMenuItem alloc] init];
-    listeningEventTypeMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_EVENT_TYPE_MENU_ITEM", @"A status menu item that has a submenu to select one of event types.");
-    listeningEventTypeMenuItem.submenu = eventTypeMenu;
-    [statusMenu addItem:listeningEventTypeMenuItem];
+    NSMenuItem * const useTapGestureEventMenuItem = [[NSMenuItem alloc] init];
+    useTapGestureEventMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_TAP_GESTURE_EVENT_MENU_ITEM", @"A status menu item to use tap gesture events.");
+    useTapGestureEventMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
+    useTapGestureEventMenuItem.target = self;
+    [statusMenu addItem:useTapGestureEventMenuItem];
+    self.useTapGestureEventMenuItem = useTapGestureEventMenuItem;
 
     [statusMenu addItem:[NSMenuItem separatorItem]];
 
@@ -188,11 +181,11 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
 - (void)_htk_action_didSelectEventTypeMenuItem:(id)sender
 {
-    if (sender == self.noneEventTypeMenuItem) {
+    if (sender == self.disabledMenuItem) {
         self.listeningEventType = HTKAppDelegateListeningEventTypeNone;
-    } else if (sender == self.functionKeyEventTypeMenuItem) {
+    } else if (sender == self.useFunctionKeyEventMenuItem) {
         self.listeningEventType = HTKAppDelegateListeningEventTypeFunctionKey;
-    } else if (sender == self.tapGestureEventTypeMenuItem) {
+    } else if (sender == self.useTapGestureEventMenuItem) {
         self.listeningEventType = HTKAppDelegateListeningEventTypeTapGesture;
     }
 }
