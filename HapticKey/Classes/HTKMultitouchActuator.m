@@ -81,7 +81,7 @@ CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
     if (error != kIOReturnSuccess) {
         os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorOpen: %p error: %d", _actuatorRef, error);
         CFRelease(_actuatorRef);
-        _actuatorRef = nil;
+        _actuatorRef = NULL;
         return;
     }
 }
@@ -97,7 +97,7 @@ CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
         os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorClose: %p error: %d", _actuatorRef, error);
     }
     CFRelease(_actuatorRef);
-    _actuatorRef = nil;
+    _actuatorRef = NULL;
 }
 
 - (BOOL)_htk_main_actuateActuationID:(SInt32)actuationID unknown1:(UInt32)unknown1 unknown2:(Float32)unknown2 unknown3:(Float32)unknown3
