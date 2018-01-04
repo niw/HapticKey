@@ -44,9 +44,9 @@
 		548E15411FD00412001C0D4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		548E15421FD00412001C0D4C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultitouchSupport.framework; path = ../../../../../../../System/Library/PrivateFrameworks/MultitouchSupport.framework; sourceTree = "<group>"; };
-		54E1E0951FE4613F007F2EE0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		54E1E0971FE4614F007F2EE0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
-		54E1E0981FE4621E007F2EE0 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		54E1E0951FE4613F007F2EE0 /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		54E1E0971FE4614F007F2EE0 /* Base */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		54E1E0981FE4621E007F2EE0 /* ja */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54FBCF271FD4CDE0000EB4D3 /* HTKMultitouchActuator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKMultitouchActuator.h; sourceTree = "<group>"; };
 		54FBCF281FD4CDE0000EB4D3 /* HTKMultitouchActuator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKMultitouchActuator.m; sourceTree = "<group>"; };
 		54FBCF301FD52483000EB4D3 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
