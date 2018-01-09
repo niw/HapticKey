@@ -21,11 +21,20 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
     HTKAppDelegateListeningEventTypeTapGesture
 };
 
+static NSString * const kFeedbackTypeUserDefaultsKey = @"FeedbackType";
+
+typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
+    HTKAppDelegateFeedbackTypeWeak = 0,
+    HTKAppDelegateFeedbackTypeMedium,
+    HTKAppDelegateFeedbackTypeStrong
+};
+
 @interface HTKAppDelegate () <NSApplicationDelegate>
 
 @property (nonatomic, getter=isFinishedLaunching) BOOL finishedLaunching;
 
 @property (nonatomic) HTKAppDelegateListeningEventType listeningEventType;
+@property (nonatomic) HTKAppDelegateFeedbackType feedbackType;
 
 @property (nonatomic, nullable) HTKHapticFeedback *hapticFeedback;
 
@@ -34,6 +43,10 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 @property (nonatomic, nullable) NSMenuItem *disabledMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useFunctionKeyEventMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useTapGestureEventMenuItem;
+
+@property (nonatomic, nullable) NSMenuItem *useWeekFeedbackMenuItem;
+@property (nonatomic, nullable) NSMenuItem *useMediumFeedbackMenuItem;
+@property (nonatomic, nullable) NSMenuItem *useStrongFeedbackMenuItem;
 
 @end
 
@@ -58,6 +71,18 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
     }
 }
 
+- (void)setFeedbackType:(HTKAppDelegateFeedbackType)feedbackType
+{
+    if (_feedbackType != feedbackType) {
+        _feedbackType = feedbackType;
+
+        [self _htk_main_updateStatusItem];
+        [self _htk_main_updateHapticFeedbackType];
+
+        [self _htk_main_preserveUserDefaults];
+    }
+}
+
 - (void)_htk_main_updateStatusItem
 {
     if (!self.finishedLaunching) {
@@ -69,6 +94,10 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
     self.disabledMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeNone) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useFunctionKeyEventMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeFunctionKey) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useTapGestureEventMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeTapGesture) ? NSControlStateValueOn : NSControlStateValueOff;
+
+    self.useWeekFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeWeak) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.useMediumFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeMedium) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.useStrongFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeStrong) ? NSControlStateValueOn : NSControlStateValueOff;
 }
 
 - (void)_htk_main_updateHapticFeedback
@@ -91,6 +120,27 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
     HTKHapticFeedback * const hapticFeedback = [[HTKHapticFeedback alloc] initWithEventListener:eventListener];
     hapticFeedback.enabled = YES;
     self.hapticFeedback = hapticFeedback;
+
+    [self _htk_main_updateHapticFeedbackType];
+}
+
+- (void)_htk_main_updateHapticFeedbackType
+{
+    if (!self.hapticFeedback) {
+        return;
+    }
+
+    switch (self.feedbackType) {
+        case HTKAppDelegateFeedbackTypeWeak:
+            self.hapticFeedback.type = HTKHapticFeedbackTypeWeak;
+            break;
+        case HTKAppDelegateFeedbackTypeMedium:
+            self.hapticFeedback.type = HTKHapticFeedbackTypeMedium;
+            break;
+        case HTKAppDelegateFeedbackTypeStrong:
+            self.hapticFeedback.type = HTKHapticFeedbackTypeStrong;
+            break;
+    }
 }
 
 // MARK: - User defaults
@@ -98,18 +148,36 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 - (void)_htk_main_preserveUserDefaults
 {
     NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
+
     [defaults setInteger:self.listeningEventType forKey:kListeningEventTypeUserDefaultsKey];
+    [defaults setInteger:self.feedbackType forKey:kFeedbackTypeUserDefaultsKey];
 }
 
 - (void)_htk_main_restoreUserDefaults
 {
     NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
+
+    // Read values from user defaults first.
+    // Each property setter _MAY_ update user defaults.
+
+    HTKAppDelegateListeningEventType listeningEventType;
     if ([defaults objectForKey:kListeningEventTypeUserDefaultsKey]) {
-        self.listeningEventType = [defaults integerForKey:kListeningEventTypeUserDefaultsKey];
+        listeningEventType = [defaults integerForKey:kListeningEventTypeUserDefaultsKey];
     } else {
         // Default to function key event.
-        self.listeningEventType = HTKAppDelegateListeningEventTypeFunctionKey;
+        listeningEventType = HTKAppDelegateListeningEventTypeFunctionKey;
     }
+
+    HTKAppDelegateFeedbackType feedbackType;
+    if ([defaults objectForKey:kFeedbackTypeUserDefaultsKey]) {
+        feedbackType = [defaults integerForKey:kFeedbackTypeUserDefaultsKey];
+    } else {
+        // Default to medium feedback.
+        feedbackType = HTKAppDelegateFeedbackTypeMedium;
+    }
+
+    self.listeningEventType = listeningEventType;
+    self.feedbackType = feedbackType;
 }
 
 // MARK: - NSApplicationDelegate
@@ -160,6 +228,29 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
     [statusMenu addItem:[NSMenuItem separatorItem]];
 
+    NSMenuItem * const useWeekFeedbackMenuItem = [[NSMenuItem alloc] init];
+    useWeekFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_WEEK_FEEDBACK_MENU_ITEM", @"A status menu item to use weak feedback.");
+    useWeekFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
+    useWeekFeedbackMenuItem.target = self;
+    [statusMenu addItem:useWeekFeedbackMenuItem];
+    self.useWeekFeedbackMenuItem = useWeekFeedbackMenuItem;
+
+    NSMenuItem * const useMediumFeedbackMenuItem = [[NSMenuItem alloc] init];
+    useMediumFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_MEDIUM_FEEDBACK_MENU_ITEM", @"A status menu item to use medium feedback.");
+    useMediumFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
+    useMediumFeedbackMenuItem.target = self;
+    [statusMenu addItem:useMediumFeedbackMenuItem];
+    self.useMediumFeedbackMenuItem = useMediumFeedbackMenuItem;
+
+    NSMenuItem * const useStrongFeedbackMenuItem = [[NSMenuItem alloc] init];
+    useStrongFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_STRONG_FEEDBACK_MENU_ITEM", @"A status menu item to use strong feedback.");
+    useStrongFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
+    useStrongFeedbackMenuItem.target = self;
+    [statusMenu addItem:useStrongFeedbackMenuItem];
+    self.useStrongFeedbackMenuItem = useStrongFeedbackMenuItem;
+
+    [statusMenu addItem:[NSMenuItem separatorItem]];
+
     NSMenuItem * const quitMenuItem = [[NSMenuItem alloc] init];
     quitMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_QUIT_MENU_ITEM", @"A status menu item to terminate the application.");
     quitMenuItem.keyEquivalent = @"q";
@@ -187,6 +278,17 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
         self.listeningEventType = HTKAppDelegateListeningEventTypeFunctionKey;
     } else if (sender == self.useTapGestureEventMenuItem) {
         self.listeningEventType = HTKAppDelegateListeningEventTypeTapGesture;
+    }
+}
+
+- (void)_htk_action_didSelectFeedbackTypeMenuItem:(id)sender
+{
+    if (sender == self.useWeekFeedbackMenuItem) {
+        self.feedbackType = HTKAppDelegateFeedbackTypeWeak;
+    } else if (sender == self.useMediumFeedbackMenuItem) {
+        self.feedbackType = HTKAppDelegateFeedbackTypeMedium;
+    } else if (sender == self.useStrongFeedbackMenuItem) {
+        self.feedbackType = HTKAppDelegateFeedbackTypeStrong;
     }
 }
 
