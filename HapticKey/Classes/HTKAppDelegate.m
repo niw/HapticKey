@@ -139,21 +139,21 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
     NSMenuItem * const disabledMenuItem = [[NSMenuItem alloc] init];
     disabledMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_DISABLED_ITEM", @"A status menu item selected when it is disabled.");
-    disabledMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
+    disabledMenuItem.action = @selector(_htk_action_didSelectListeningEventTypeMenuItem:);
     disabledMenuItem.target = self;
     [statusMenu addItem:disabledMenuItem];
     self.disabledMenuItem = disabledMenuItem;
 
     NSMenuItem * const useFunctionKeyEventMenuItem = [[NSMenuItem alloc] init];
     useFunctionKeyEventMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_FUNCTION_KEY_EVENT_MENU_ITEM", @"A status menu item to use function key events.");
-    useFunctionKeyEventMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
+    useFunctionKeyEventMenuItem.action = @selector(_htk_action_didSelectListeningEventTypeMenuItem:);
     useFunctionKeyEventMenuItem.target = self;
     [statusMenu addItem:useFunctionKeyEventMenuItem];
     self.useFunctionKeyEventMenuItem = useFunctionKeyEventMenuItem;
 
     NSMenuItem * const useTapGestureEventMenuItem = [[NSMenuItem alloc] init];
     useTapGestureEventMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_TAP_GESTURE_EVENT_MENU_ITEM", @"A status menu item to use tap gesture events.");
-    useTapGestureEventMenuItem.action = @selector(_htk_action_didSelectEventTypeMenuItem:);
+    useTapGestureEventMenuItem.action = @selector(_htk_action_didSelectListeningEventTypeMenuItem:);
     useTapGestureEventMenuItem.target = self;
     [statusMenu addItem:useTapGestureEventMenuItem];
     self.useTapGestureEventMenuItem = useTapGestureEventMenuItem;
@@ -179,7 +179,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
 
 // MARK: - Actions
 
-- (void)_htk_action_didSelectEventTypeMenuItem:(id)sender
+- (void)_htk_action_didSelectListeningEventTypeMenuItem:(id)sender
 {
     if (sender == self.disabledMenuItem) {
         self.listeningEventType = HTKAppDelegateListeningEventTypeNone;
