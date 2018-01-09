@@ -106,10 +106,10 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
         return;
     }
 
-    HTKEventListener *eventListener;
+    HTKEventListener *eventListener = nil;
     switch (self.listeningEventType) {
         case HTKAppDelegateListeningEventTypeNone:
-            return;
+            break;
         case HTKAppDelegateListeningEventTypeFunctionKey:
             eventListener = [[HTKFunctionKeyEventListener alloc] init];
             break;
@@ -117,9 +117,14 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
             eventListener = [[HTKTapGestureEventListener alloc] init];
             break;
     }
-    HTKHapticFeedback * const hapticFeedback = [[HTKHapticFeedback alloc] initWithEventListener:eventListener];
-    hapticFeedback.enabled = YES;
-    self.hapticFeedback = hapticFeedback;
+
+    if (eventListener) {
+        HTKHapticFeedback * const hapticFeedback = [[HTKHapticFeedback alloc] initWithEventListener:eventListener];
+        hapticFeedback.enabled = YES;
+        self.hapticFeedback = hapticFeedback;
+    } else {
+        self.hapticFeedback = nil;
+    }
 
     [self _htk_main_updateHapticFeedbackType];
 }
