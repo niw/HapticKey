@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 static NSString * const kListeningEventTypeUserDefaultsKey = @"ListeningEventType";
 
 typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
-    HTKAppDelegateListeningEventTypeNone,
+    HTKAppDelegateListeningEventTypeNone = 0,
     HTKAppDelegateListeningEventTypeFunctionKey,
     HTKAppDelegateListeningEventTypeTapGesture
 };
