@@ -12,10 +12,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class HTKEventListener;
 
+typedef NS_ENUM(NSUInteger, HTKHapticFeedbackType) {
+    HTKHapticFeedbackTypeWeak,
+    HTKHapticFeedbackTypeMedium,
+    HTKHapticFeedbackTypeStrong
+};
+
 @interface HTKHapticFeedback : NSObject
 
 @property (nonatomic, readonly) HTKEventListener *eventListener;
 @property (nonatomic, getter=isEnabled) BOOL enabled;
+@property (nonatomic) HTKHapticFeedbackType type;
 
 - (instancetype)initWithEventListener:(HTKEventListener *)eventListener;
 
