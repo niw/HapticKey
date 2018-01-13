@@ -24,6 +24,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		17DB7DCD200A4F4600947159 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		17DB7DCE200A4F4D00947159 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		5443CEFA1FE38EA8002D4086 /* HTKEventListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEventListener.h; sourceTree = "<group>"; };
 		5443CEFB1FE38EA8002D4086 /* HTKEventListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKEventListener.m; sourceTree = "<group>"; };
 		5443CEFD1FE38F6C002D4086 /* HTKEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEvent.h; sourceTree = "<group>"; };
@@ -178,6 +180,8 @@
 				en,
 				Base,
 				ja,
+				"zh-Hans",
+				"zh-Hant",
 			);
 			mainGroup = 548E152D1FD00412001C0D4C;
 			productRefGroup = 548E15371FD00412001C0D4C /* Products */;
@@ -237,6 +241,8 @@
 				54E1E0951FE4613F007F2EE0 /* en */,
 				54E1E0971FE4614F007F2EE0 /* Base */,
 				54E1E0981FE4621E007F2EE0 /* ja */,
+				17DB7DCD200A4F4600947159 /* zh-Hans */,
+				17DB7DCE200A4F4D00947159 /* zh-Hant */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
