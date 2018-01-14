@@ -61,16 +61,18 @@ CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
     return result;
 }
 
+// By using IORegistoryExploere, which is in Additional Tools for Xcode,
+// Find `AppleMultitouchDevice` which has `Multitouch ID`.
+// Probably this is a fixed value.
+static const UInt64 kAppleMultitouchDeviceMultitouchID = 0x200000001000000;
+
 - (void)_htk_main_openActuator
 {
     if (_actuatorRef) {
         return;
     }
 
-    // By using IORegistoryExploere, which is in Additional Tools for Xcode,
-    // Find `AppleMultitouchDevice` which has `Multitouch ID`.
-    // Probably this is a fixed value.
-    const CFTypeRef actuatorRef = MTActuatorCreateFromDeviceID(0x200000001000000);
+    const CFTypeRef actuatorRef = MTActuatorCreateFromDeviceID(kAppleMultitouchDeviceMultitouchID);
     if (!actuatorRef) {
         os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorCreateFromDeviceID");
         return;
