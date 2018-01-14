@@ -8,6 +8,10 @@
 
 #import "HTKEventListener.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation HTKEventListener
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -8,6 +8,8 @@
 
 #import "HTKEvent.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation HTKEvent
 
 - (instancetype)initWithPhase:(HTKEventPhase)phase
@@ -19,3 +21,5 @@
 }
 
 @end
+
+NS_ASSUME_NONNULL_END
