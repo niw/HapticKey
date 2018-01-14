@@ -19,7 +19,7 @@ typedef NS_ENUM(NSUInteger, HTKEventPhase) {
 
 @property (nonatomic, readonly) HTKEventPhase phase;
 
-- (instancetype)initWithPhase:(HTKEventPhase)phase;
+- (instancetype)initWithPhase:(HTKEventPhase)phase NS_DESIGNATED_INITIALIZER;
 
 @end
 

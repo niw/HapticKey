@@ -19,6 +19,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation HTKHapticFeedback
 
+- (instancetype)init
+{
+    [self doesNotRecognizeSelector:_cmd];
+    abort();
+}
+
 - (instancetype)initWithEventListener:(HTKEventListener *)eventListener
 {
     if (self = [super init]) {

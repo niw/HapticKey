@@ -12,6 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation HTKEvent
 
+- (instancetype)init
+{
+    return [self initWithPhase:HTKEventPhaseBegin];
+}
+
 - (instancetype)initWithPhase:(HTKEventPhase)phase
 {
     if (self = [super init]) {

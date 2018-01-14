@@ -24,7 +24,10 @@ typedef NS_ENUM(NSUInteger, HTKHapticFeedbackType) {
 @property (nonatomic, getter=isEnabled) BOOL enabled;
 @property (nonatomic) HTKHapticFeedbackType type;
 
-- (instancetype)initWithEventListener:(HTKEventListener *)eventListener;
++ (instancetype)new NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
+
+- (instancetype)initWithEventListener:(HTKEventListener *)eventListener NS_DESIGNATED_INITIALIZER;
 
 @end
 
