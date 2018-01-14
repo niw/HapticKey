@@ -10,10 +10,13 @@
 #import "HTKEventListener.h"
 #import "HTKHapticFeedback.h"
 #import "HTKMultitouchActuator.h"
+#import "HTKTimer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HTKHapticFeedback () <HTKEventListenerDelegate>
+
+@property (nonatomic, nullable) HTKTimer *timer;
 
 @end
 
@@ -47,8 +50,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 // MARK: - HTKEventListenerDelegate
 
+static const NSTimeInterval kMinimumActuationInterval = 0.05;
+
 - (void)eventListener:(HTKEventListener *)eventListener didListenEvent:(HTKEvent *)event
 {
+    // Start a timer to prevent frequent actuations.
+    if (self.timer) {
+        return;
+    }
+    self.timer = [[HTKTimer alloc] initWithInterval:kMinimumActuationInterval target:self selector:@selector(_htk_timer_didFire:)];
+
     const SInt32 actuationID = [self _htk_main_actuationID];
     switch (event.phase) {
         case HTKEventPhaseBegin:
@@ -58,6 +69,12 @@ NS_ASSUME_NONNULL_BEGIN
             [[HTKMultitouchActuator sharedActuator] actuateActuationID:actuationID unknown1:0 unknown2:0.0 unknown3:0.0];
             break;
     }
+}
+
+- (void)_htk_timer_didFire:(HTKTimer *)timer
+{
+    [self.timer invalidate];
+    self.timer = nil;
 }
 
 - (SInt32)_htk_main_actuationID
