@@ -235,6 +235,8 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 
     NSMenuItem * const useWeekFeedbackMenuItem = [[NSMenuItem alloc] init];
     useWeekFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_WEEK_FEEDBACK_MENU_ITEM", @"A status menu item to use weak feedback.");
+    useWeekFeedbackMenuItem.keyEquivalent = @"1";
+    useWeekFeedbackMenuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
     useWeekFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
     useWeekFeedbackMenuItem.target = self;
     [statusMenu addItem:useWeekFeedbackMenuItem];
@@ -242,6 +244,8 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 
     NSMenuItem * const useMediumFeedbackMenuItem = [[NSMenuItem alloc] init];
     useMediumFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_MEDIUM_FEEDBACK_MENU_ITEM", @"A status menu item to use medium feedback.");
+    useMediumFeedbackMenuItem.keyEquivalent = @"2";
+    useMediumFeedbackMenuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
     useMediumFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
     useMediumFeedbackMenuItem.target = self;
     [statusMenu addItem:useMediumFeedbackMenuItem];
@@ -249,6 +253,8 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 
     NSMenuItem * const useStrongFeedbackMenuItem = [[NSMenuItem alloc] init];
     useStrongFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_STRONG_FEEDBACK_MENU_ITEM", @"A status menu item to use strong feedback.");
+    useStrongFeedbackMenuItem.keyEquivalent = @"3";
+    useStrongFeedbackMenuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
     useStrongFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
     useStrongFeedbackMenuItem.target = self;
     [statusMenu addItem:useStrongFeedbackMenuItem];
