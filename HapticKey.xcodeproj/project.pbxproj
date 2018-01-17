@@ -25,8 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		17DB7DCD200A4F4600947159 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		17DB7DCE200A4F4D00947159 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		17DB7DCD200A4F4600947159 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		17DB7DCE200A4F4D00947159 /* zh-Hant */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		5443CEFA1FE38EA8002D4086 /* HTKEventListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEventListener.h; sourceTree = "<group>"; };
 		5443CEFB1FE38EA8002D4086 /* HTKEventListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKEventListener.m; sourceTree = "<group>"; };
 		5443CEFD1FE38F6C002D4086 /* HTKEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEvent.h; sourceTree = "<group>"; };
