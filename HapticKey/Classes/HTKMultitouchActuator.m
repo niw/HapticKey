@@ -104,6 +104,11 @@ static const UInt64 kAppleMultitouchDeviceMultitouchID = 0x200000001000000;
 
 - (BOOL)_htk_main_actuateActuationID:(SInt32)actuationID unknown1:(UInt32)unknown1 unknown2:(Float32)unknown2 unknown3:(Float32)unknown3
 {
+    if (!_actuatorRef) {
+        os_log_error(OS_LOG_DEFAULT, "The actuator is not opend yet.");
+        return NO;
+    }
+
     const IOReturn error = MTActuatorActuate(_actuatorRef, actuationID, unknown1, unknown2, unknown3);
     if (error != kIOReturnSuccess) {
         os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorActuate: %p, %d, %d, %f, %f error: %d", _actuatorRef, actuationID, unknown1, unknown2, unknown3, error);
