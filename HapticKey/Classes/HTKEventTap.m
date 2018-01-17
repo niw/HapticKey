@@ -29,13 +29,17 @@ static CGEventRef eventTapCallback(CGEventTapProxy proxy, CGEventType type,  CGE
             break;
         }
         default: {
-            NSEvent * const event = [NSEvent eventWithCGEvent:eventRef];
+            @autoreleasepool {
+                // `eventWithCGEvent:` returns an autoreleased `NSEvent` that retains given `CGEvent`.
+                // without `@autoreleasepool`, this will may leak and also `CGEvent` as well.
+                NSEvent * const event = [NSEvent eventWithCGEvent:eventRef];
 
-            id<HTKEventTapDelegate> const delegate = eventTap.delegate;
-            if ([delegate respondsToSelector:@selector(eventTap:didTapEvent:)]) {
-                [delegate eventTap:eventTap didTapEvent:event];
+                id<HTKEventTapDelegate> const delegate = eventTap.delegate;
+                if ([delegate respondsToSelector:@selector(eventTap:didTapEvent:)]) {
+                    [delegate eventTap:eventTap didTapEvent:event];
+                }
+                break;
             }
-            break;
         }
     }
 
