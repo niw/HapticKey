@@ -14,6 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+static const NSTimeInterval kMinimumActuationInterval = 0.05;
+
 @interface HTKHapticFeedback () <HTKEventListenerDelegate>
 
 @property (nonatomic, nullable) HTKTimer *timer;
@@ -49,8 +51,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 // MARK: - HTKEventListenerDelegate
-
-static const NSTimeInterval kMinimumActuationInterval = 0.05;
 
 - (void)eventListener:(HTKEventListener *)eventListener didListenEvent:(HTKEvent *)event
 {

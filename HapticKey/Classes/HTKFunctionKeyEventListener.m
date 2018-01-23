@@ -14,6 +14,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+// A lsit of key code of ESC and F1 to F12.
+static int64_t const kEscAndFunctionKeycodes[] = {
+    53, // ESC
+    122, 120, 99, 118, 96, 97, 98, 100, 101, 109, 103, 111 // F1 to F12
+};
+static const NSUInteger kNumberOfEscAndFunctionKeycodes = sizeof (kEscAndFunctionKeycodes) / sizeof (int64_t);
+static const int64_t kTouchbarKeyboardType = 198;
+
 @interface HTKFunctionKeyEventListener () <HTKEventTapDelegate>
 
 @property (nonatomic, readonly) HTKEventTap *eventTap;
@@ -45,14 +53,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 // MARK: - HTKEventTapDelegate
-
-// A lsit of key code of ESC and F1 to F12.
-static int64_t const kEscAndFunctionKeycodes[] = {
-    53, // ESC
-    122, 120, 99, 118, 96, 97, 98, 100, 101, 109, 103, 111 // F1 to F12
-};
-static const NSUInteger kNumberOfEscAndFunctionKeycodes = sizeof (kEscAndFunctionKeycodes) / sizeof (int64_t);
-static const int64_t kTouchbarKeyboardType = 198;
 
 - (void)eventTap:(HTKEventTap *)eventTap didTapEvent:(NSEvent *)event
 {
