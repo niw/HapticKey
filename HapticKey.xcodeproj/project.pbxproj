@@ -371,7 +371,6 @@
 				);
 				INFOPLIST_FILE = HapticKey/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = at.niw.HapticKey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -387,7 +386,6 @@
 				);
 				INFOPLIST_FILE = HapticKey/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = at.niw.HapticKey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
