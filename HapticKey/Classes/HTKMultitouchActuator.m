@@ -27,7 +27,8 @@ CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
 
 @end
 
-@implementation HTKMultitouchActuator {
+@implementation HTKMultitouchActuator
+{
     CFTypeRef _actuatorRef;
 }
 

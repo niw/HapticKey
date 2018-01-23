@@ -12,7 +12,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static CGEventRef eventTapCallback(CGEventTapProxy proxy, CGEventType type,  CGEventRef eventRef, void * _Nullable userInfo) {
+static CGEventRef EventTapCallback(CGEventTapProxy proxy, CGEventType type,  CGEventRef eventRef, void * _Nullable userInfo)
+{
     __unsafe_unretained HTKEventTap * const eventTap = (__bridge HTKEventTap *)userInfo;
 
     switch (type) {
@@ -46,7 +47,8 @@ static CGEventRef eventTapCallback(CGEventTapProxy proxy, CGEventType type,  CGE
     return eventRef;
 }
 
-@implementation HTKEventTap {
+@implementation HTKEventTap
+{
     CFMachPortRef _eventTap;
     CFRunLoopSourceRef _runLoopSource;
 }
@@ -89,7 +91,7 @@ static CGEventRef eventTapCallback(CGEventTapProxy proxy, CGEventType type,  CGE
         return;
     }
 
-    _eventTap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, 0, self.eventMask, eventTapCallback, (__bridge void *)self);
+    _eventTap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, 0, self.eventMask, EventTapCallback, (__bridge void *)self);
     if (_eventTap) {
         _runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, _eventTap, 0);
         if (_runLoopSource) {
