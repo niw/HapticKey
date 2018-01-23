@@ -35,6 +35,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 
 @property (nonatomic) HTKAppDelegateListeningEventType listeningEventType;
 @property (nonatomic) HTKAppDelegateFeedbackType feedbackType;
+@property (nonatomic, getter=isLoginItemEnabled) BOOL loginItemEnabled;
 
 @property (nonatomic, nullable) HTKHapticFeedback *hapticFeedback;
 
@@ -47,6 +48,8 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 @property (nonatomic, nullable) NSMenuItem *useWeekFeedbackMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useMediumFeedbackMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useStrongFeedbackMenuItem;
+
+@property (nonatomic, nullable) NSMenuItem *startOnLoginMenuItem;
 
 @end
 
@@ -98,6 +101,8 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
     self.useWeekFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeWeak) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useMediumFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeMedium) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useStrongFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeStrong) ? NSControlStateValueOn : NSControlStateValueOff;
+
+    self.startOnLoginMenuItem.state = (self.loginItemEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
 }
 
 - (void)_htk_main_updateHapticFeedback
@@ -265,6 +270,12 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 
     [statusMenu addItem:[NSMenuItem separatorItem]];
 
+    NSMenuItem * const startOnLoginMenuItem = [[NSMenuItem alloc] init];
+    startOnLoginMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_START_ON_LOGIN_MENU_ITEM", @"A status menu item to start application on login.");
+    startOnLoginMenuItem.action = @selector(_htk_action_didSelectStartOnLoginMenuItem:);
+    [statusMenu addItem:startOnLoginMenuItem];
+    self.startOnLoginMenuItem = startOnLoginMenuItem;
+
     NSMenuItem * const quitMenuItem = [[NSMenuItem alloc] init];
     quitMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_QUIT_MENU_ITEM", @"A status menu item to terminate the application.");
     quitMenuItem.keyEquivalent = @"q";
@@ -303,6 +314,13 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
         self.feedbackType = HTKAppDelegateFeedbackTypeMedium;
     } else if (sender == self.useStrongFeedbackMenuItem) {
         self.feedbackType = HTKAppDelegateFeedbackTypeStrong;
+    }
+}
+
+- (void)_htk_action_didSelectStartOnLoginMenuItem:(id)sender
+{
+    if (sender == self.startOnLoginMenuItem) {
+        self.loginItemEnabled = !self.loginItemEnabled;
     }
 }
 
