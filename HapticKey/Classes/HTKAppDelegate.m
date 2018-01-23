@@ -202,11 +202,11 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 {
     NSStatusBar * const statusBar = [NSStatusBar systemStatusBar];
     NSStatusItem * const statusItem = [statusBar statusItemWithLength:NSVariableStatusItemLength];
-    [statusItem setHighlightMode:YES];
+    statusItem.highlightMode = YES;
 
     NSImage * const statusItemImage = [NSImage imageNamed:@"StatusItem"];
     statusItemImage.template = YES;
-    [statusItem setImage:statusItemImage];
+    statusItem.image = statusItemImage;
 
     NSMenu * const statusMenu = [[NSMenu alloc] init];
 
@@ -269,7 +269,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
     quitMenuItem.action = @selector(terminate:);
     [statusMenu addItem:quitMenuItem];
 
-    [statusItem setMenu:statusMenu];
+    statusItem.menu = statusMenu;
 
     self.statusItem = statusItem;
 }
