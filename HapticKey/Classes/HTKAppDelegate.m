@@ -7,8 +7,8 @@
 //
 
 #import "HTKAppDelegate.h"
-#import "HTKHapticFeedback.h"
 #import "HTKFunctionKeyEventListener.h"
+#import "HTKHapticFeedback.h"
 #import "HTKTapGestureEventListener.h"
 
 NS_ASSUME_NONNULL_BEGIN
