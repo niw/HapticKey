@@ -67,7 +67,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
         [self _htk_main_updateStatusItem];
         [self _htk_main_updateHapticFeedback];
 
-        [self _htk_main_preserveUserDefaults];
+        [self _htk_main_updateUserDefaults];
     }
 }
 
@@ -79,7 +79,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
         [self _htk_main_updateStatusItem];
         [self _htk_main_updateHapticFeedbackType];
 
-        [self _htk_main_preserveUserDefaults];
+        [self _htk_main_updateUserDefaults];
     }
 }
 
@@ -148,17 +148,33 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
     }
 }
 
-// MARK: - User defaults
-
-- (void)_htk_main_preserveUserDefaults
+- (void)_htk_main_updateUserDefaults
 {
+    if (!self.finishedLaunching) {
+        return;
+    }
+
     NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
 
     [defaults setInteger:self.listeningEventType forKey:kListeningEventTypeUserDefaultsKey];
     [defaults setInteger:self.feedbackType forKey:kFeedbackTypeUserDefaultsKey];
 }
 
-- (void)_htk_main_restoreUserDefaults
+// MARK: - NSApplicationDelegate
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    [self _htk_main_loadUserDefaults];
+    [self _htk_main_loadStatusItem];
+
+    self.finishedLaunching = YES;
+
+    [self _htk_main_updateUserDefaults];
+    [self _htk_main_updateStatusItem];
+    [self _htk_main_updateHapticFeedback];
+}
+
+- (void)_htk_main_loadUserDefaults
 {
     NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
 
@@ -183,19 +199,6 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 
     self.listeningEventType = listeningEventType;
     self.feedbackType = feedbackType;
-}
-
-// MARK: - NSApplicationDelegate
-
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
-    [self _htk_main_restoreUserDefaults];
-    [self _htk_main_loadStatusItem];
-
-    self.finishedLaunching = YES;
-
-    [self _htk_main_updateStatusItem];
-    [self _htk_main_updateHapticFeedback];
 }
 
 - (void)_htk_main_loadStatusItem
