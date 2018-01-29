@@ -30,12 +30,20 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
     HTKAppDelegateFeedbackTypeStrong
 };
 
+static NSString * const kSoundEffectTypeUserDefaultsKey = @"SoundEffectType";
+
+typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
+    HTKAppDelegateSoundEffectTypeNone = 0,
+    HTKAppDelegateSoundEffectTypeDefault
+};
+
 @interface HTKAppDelegate () <NSApplicationDelegate, HTKLoginItemDelegate>
 
 @property (nonatomic, getter=isFinishedLaunching) BOOL finishedLaunching;
 
 @property (nonatomic) HTKAppDelegateListeningEventType listeningEventType;
 @property (nonatomic) HTKAppDelegateFeedbackType feedbackType;
+@property (nonatomic) HTKAppDelegateSoundEffectType soundEffectType;
 @property (nonatomic, getter=isLoginItemEnabled) BOOL loginItemEnabled;
 
 @property (nonatomic, nullable) HTKHapticFeedback *hapticFeedback;
@@ -50,6 +58,8 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 @property (nonatomic, nullable) NSMenuItem *useWeekFeedbackMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useMediumFeedbackMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useStrongFeedbackMenuItem;
+
+@property (nonatomic, nullable) NSMenuItem *useSoundEffectMenuItem;
 
 @property (nonatomic, nullable) NSMenuItem *startOnLoginMenuItem;
 
@@ -88,6 +98,18 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
     }
 }
 
+- (void)setSoundEffectType:(HTKAppDelegateSoundEffectType)soundEffectType
+{
+    if (_soundEffectType != soundEffectType) {
+        _soundEffectType = soundEffectType;
+
+        [self _htk_main_updateStatusItem];
+        [self _htk_main_updateSoundFeedbackType];
+
+        [self _htk_main_updateUserDefaults];
+    }
+}
+
 - (void)setLoginItemEnabled:(BOOL)loginItemEnabled
 {
     if (_loginItemEnabled != loginItemEnabled) {
@@ -113,6 +135,8 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
     self.useWeekFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeWeak) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useMediumFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeMedium) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useStrongFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeStrong) ? NSControlStateValueOn : NSControlStateValueOff;
+
+    self.useSoundEffectMenuItem.state = (self.soundEffectType == HTKAppDelegateSoundEffectTypeDefault) ? NSControlStateValueOn : NSControlStateValueOff;
 
     self.startOnLoginMenuItem.state = (self.loginItemEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
 }
@@ -184,6 +208,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 
     [defaults setInteger:self.listeningEventType forKey:kListeningEventTypeUserDefaultsKey];
     [defaults setInteger:self.feedbackType forKey:kFeedbackTypeUserDefaultsKey];
+    [defaults setInteger:self.soundEffectType forKey:kSoundEffectTypeUserDefaultsKey];
 }
 
 // MARK: - NSApplicationDelegate
@@ -225,8 +250,17 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
         feedbackType = HTKAppDelegateFeedbackTypeMedium;
     }
 
+    HTKAppDelegateSoundEffectType soundEffectType;
+    if ([defaults objectForKey:kSoundEffectTypeUserDefaultsKey]) {
+        soundEffectType = [defaults integerForKey:kSoundEffectTypeUserDefaultsKey];
+    } else {
+        // Default to no sound effect.
+        soundEffectType = HTKAppDelegateSoundEffectTypeNone;
+    }
+
     self.listeningEventType = listeningEventType;
     self.feedbackType = feedbackType;
+    self.soundEffectType = soundEffectType;
 }
 
 - (void)_htk_main_loadStatusItem
@@ -293,6 +327,15 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 
     [statusMenu addItem:[NSMenuItem separatorItem]];
 
+    NSMenuItem * const useSoundEffectMenuItem = [[NSMenuItem alloc] init];
+    useSoundEffectMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_SOUND_EFFECT_MENU_ITEM", @"A status menu item to use sound effect.");
+    useSoundEffectMenuItem.action = @selector(_htk_action_didSelectSoundEffectTypeMenuItem:);
+    useSoundEffectMenuItem.target = self;
+    [statusMenu addItem:useSoundEffectMenuItem];
+    self.useSoundEffectMenuItem = useSoundEffectMenuItem;
+
+    [statusMenu addItem:[NSMenuItem separatorItem]];
+
     NSMenuItem * const startOnLoginMenuItem = [[NSMenuItem alloc] init];
     startOnLoginMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_START_ON_LOGIN_MENU_ITEM", @"A status menu item to start application on login.");
     startOnLoginMenuItem.action = @selector(_htk_action_didSelectStartOnLoginMenuItem:);
@@ -354,6 +397,21 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
         self.feedbackType = HTKAppDelegateFeedbackTypeMedium;
     } else if (sender == self.useStrongFeedbackMenuItem) {
         self.feedbackType = HTKAppDelegateFeedbackTypeStrong;
+    }
+}
+
+- (void)_htk_action_didSelectSoundEffectTypeMenuItem:(id)sender
+{
+    if (sender == self.useSoundEffectMenuItem) {
+        // For now, there is an one sound effect and the menu item works as a boolean.
+        switch (self.soundEffectType) {
+            case HTKAppDelegateSoundEffectTypeNone:
+                self.soundEffectType = HTKAppDelegateSoundEffectTypeDefault;
+                break;
+            case HTKAppDelegateSoundEffectTypeDefault:
+                self.soundEffectType = HTKAppDelegateSoundEffectTypeNone;
+                break;
+        }
     }
 }
 
