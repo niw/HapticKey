@@ -14,23 +14,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 static CGEventRef EventTapCallback(CGEventTapProxy proxy, CGEventType type,  CGEventRef eventRef, void * _Nullable userInfo)
 {
-    __unsafe_unretained HTKEventTap * const eventTap = (__bridge HTKEventTap *)userInfo;
+    @autoreleasepool {
+        HTKEventTap * const eventTap = (__bridge HTKEventTap *)userInfo;
 
-    switch (type) {
-        case kCGEventTapDisabledByTimeout:
-        case kCGEventTapDisabledByUserInput: {
-            eventTap.enabled = NO;
+        switch (type) {
+            case kCGEventTapDisabledByTimeout:
+            case kCGEventTapDisabledByUserInput: {
+                eventTap.enabled = NO;
 
-            os_log_error(OS_LOG_DEFAULT, "Event tap disabled by type: %d", type);
+                os_log_error(OS_LOG_DEFAULT, "Event tap disabled by type: %d", type);
 
-            id<HTKEventTapDelegate> const delegate = eventTap.delegate;
-            if ([delegate respondsToSelector:@selector(eventTapDisabled:)]) {
-                [delegate eventTapDisabled:eventTap];
+                id<HTKEventTapDelegate> const delegate = eventTap.delegate;
+                if ([delegate respondsToSelector:@selector(eventTapDisabled:)]) {
+                    [delegate eventTapDisabled:eventTap];
+                }
+                break;
             }
-            break;
-        }
-        default: {
-            @autoreleasepool {
+            default: {
                 // `eventWithCGEvent:` returns an autoreleased `NSEvent` that retains given `CGEvent`.
                 // without `@autoreleasepool`, this will may leak and also `CGEvent` as well.
                 NSEvent * const event = [NSEvent eventWithCGEvent:eventRef];
@@ -42,9 +42,9 @@ static CGEventRef EventTapCallback(CGEventTapProxy proxy, CGEventType type,  CGE
                 break;
             }
         }
-    }
 
-    return eventRef;
+        return eventRef;
+    }
 }
 
 @implementation HTKEventTap
