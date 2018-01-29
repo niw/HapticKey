@@ -9,6 +9,7 @@
 #import "HTKAppDelegate.h"
 #import "HTKFunctionKeyEventListener.h"
 #import "HTKHapticFeedback.h"
+#import "HTKLoginItem.h"
 #import "HTKTapGestureEventListener.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -29,7 +30,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
     HTKAppDelegateFeedbackTypeStrong
 };
 
-@interface HTKAppDelegate () <NSApplicationDelegate>
+@interface HTKAppDelegate () <NSApplicationDelegate, HTKLoginItemDelegate>
 
 @property (nonatomic, getter=isFinishedLaunching) BOOL finishedLaunching;
 
@@ -38,6 +39,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 @property (nonatomic, getter=isLoginItemEnabled) BOOL loginItemEnabled;
 
 @property (nonatomic, nullable) HTKHapticFeedback *hapticFeedback;
+@property (nonatomic, nullable) HTKLoginItem *mainBundleLoginItem;
 
 @property (nonatomic, nullable) NSStatusItem *statusItem;
 
@@ -83,6 +85,16 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
         [self _htk_main_updateHapticFeedbackType];
 
         [self _htk_main_updateUserDefaults];
+    }
+}
+
+- (void)setLoginItemEnabled:(BOOL)loginItemEnabled
+{
+    if (_loginItemEnabled != loginItemEnabled) {
+        _loginItemEnabled = loginItemEnabled;
+
+        [self _htk_main_updateStatusItem];
+        [self _htk_main_updateMainBundleLoginItem];
     }
 }
 
@@ -153,6 +165,15 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
     }
 }
 
+- (void)_htk_main_updateMainBundleLoginItem
+{
+    if (!self.finishedLaunching) {
+        return;
+    }
+
+    self.mainBundleLoginItem.enabled = self.loginItemEnabled;
+}
+
 - (void)_htk_main_updateUserDefaults
 {
     if (!self.finishedLaunching) {
@@ -171,12 +192,14 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
 {
     [self _htk_main_loadUserDefaults];
     [self _htk_main_loadStatusItem];
+    [self _htk_main_loadMainBundleLoginItem];
 
     self.finishedLaunching = YES;
 
     [self _htk_main_updateUserDefaults];
     [self _htk_main_updateStatusItem];
     [self _htk_main_updateHapticFeedback];
+    [self _htk_main_updateMainBundleLoginItem];
 }
 
 - (void)_htk_main_loadUserDefaults
@@ -288,9 +311,26 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
     self.statusItem = statusItem;
 }
 
+- (void)_htk_main_loadMainBundleLoginItem
+{
+    NSString * const mainBundlePath = [NSBundle mainBundle].bundlePath;
+    HTKLoginItem * const mainBundleLoginItem = [[HTKLoginItem alloc] initWithPath:mainBundlePath];
+    mainBundleLoginItem.delegate = self;
+    self.mainBundleLoginItem = mainBundleLoginItem;
+
+    self.loginItemEnabled = self.mainBundleLoginItem.enabled;
+}
+
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
 {
     return NO;
+}
+
+// MARK: - HTKLoginItemDelegate
+
+- (void)loginItemDidChange:(HTKLoginItem *)loginItem
+{
+    self.loginItemEnabled = self.mainBundleLoginItem.enabled;
 }
 
 // MARK: - Actions
