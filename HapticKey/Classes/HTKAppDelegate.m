@@ -168,6 +168,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
     }
 
     [self _htk_main_updateHapticFeedbackType];
+    [self _htk_main_updateSoundFeedbackType];
 }
 
 - (void)_htk_main_updateHapticFeedbackType
@@ -185,6 +186,22 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
             break;
         case HTKAppDelegateFeedbackTypeStrong:
             self.hapticFeedback.type = HTKHapticFeedbackTypeStrong;
+            break;
+    }
+}
+
+- (void)_htk_main_updateSoundFeedbackType
+{
+    if (!self.hapticFeedback) {
+        return;
+    }
+
+    switch (self.soundEffectType) {
+        case HTKAppDelegateSoundEffectTypeNone:
+            self.hapticFeedback.soundType = HTKSoundFeedbackTypeNone;
+            break;
+        case HTKAppDelegateSoundEffectTypeDefault:
+            self.hapticFeedback.soundType = HTKSoundFeedbackTypeDefault;
             break;
     }
 }

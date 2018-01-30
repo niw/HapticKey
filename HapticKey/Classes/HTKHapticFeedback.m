@@ -10,15 +10,20 @@
 #import "HTKEventListener.h"
 #import "HTKHapticFeedback.h"
 #import "HTKMultitouchActuator.h"
+#import "HTKSystemSound.h"
 #import "HTKTimer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 static const NSTimeInterval kMinimumActuationInterval = 0.05;
 
+static NSString * const kDefaultSystemSoundsGroup = @"ink";
+static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
+
 @interface HTKHapticFeedback () <HTKEventListenerDelegate>
 
 @property (nonatomic, nullable) HTKTimer *timer;
+@property (nonatomic, readonly) HTKSystemSound *defaultSystemSound;
 
 @end
 
@@ -36,6 +41,8 @@ static const NSTimeInterval kMinimumActuationInterval = 0.05;
         _eventListener = eventListener;
         _eventListener.delegate = self;
         _type = HTKHapticFeedbackTypeMedium;
+
+        _defaultSystemSound = [[HTKSystemSound alloc] initWithSystemSoundsGroup:kDefaultSystemSoundsGroup name:kDefaultSystemSoundsName];
     }
     return self;
 }
@@ -61,9 +68,13 @@ static const NSTimeInterval kMinimumActuationInterval = 0.05;
     self.timer = [[HTKTimer alloc] initWithInterval:kMinimumActuationInterval target:self selector:@selector(_htk_timer_didFire:)];
 
     const SInt32 actuationID = [self _htk_main_actuationID];
+    HTKSystemSound * const systemSound = [self _htk_main_systemSound];
     switch (event.phase) {
         case HTKEventPhaseBegin:
             [[HTKMultitouchActuator sharedActuator] actuateActuationID:actuationID unknown1:0 unknown2:0.0 unknown3:2.0];
+            if (systemSound) {
+                [systemSound play];
+            }
             break;
         case HTKEventPhaseEnd:
             [[HTKMultitouchActuator sharedActuator] actuateActuationID:actuationID unknown1:0 unknown2:0.0 unknown3:0.0];
@@ -93,6 +104,16 @@ static const NSTimeInterval kMinimumActuationInterval = 0.05;
             return 6;
     }
     return 0;
+}
+
+- (nullable HTKSystemSound *)_htk_main_systemSound
+{
+    switch (self.soundType) {
+        case HTKSoundFeedbackTypeNone:
+            return nil;
+        case HTKSoundFeedbackTypeDefault:
+            return self.defaultSystemSound;
+    }
 }
 
 @end

@@ -18,11 +18,17 @@ typedef NS_ENUM(NSUInteger, HTKHapticFeedbackType) {
     HTKHapticFeedbackTypeStrong
 };
 
+typedef NS_ENUM(NSUInteger, HTKSoundFeedbackType) {
+    HTKSoundFeedbackTypeNone,
+    HTKSoundFeedbackTypeDefault
+};
+
 @interface HTKHapticFeedback : NSObject
 
 @property (nonatomic, readonly) HTKEventListener *eventListener;
 @property (nonatomic, getter=isEnabled) BOOL enabled;
 @property (nonatomic) HTKHapticFeedbackType type;
+@property (nonatomic) HTKSoundFeedbackType soundType;
 
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
