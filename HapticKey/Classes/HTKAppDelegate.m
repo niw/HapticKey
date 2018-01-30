@@ -27,7 +27,9 @@ static NSString * const kFeedbackTypeUserDefaultsKey = @"FeedbackType";
 typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
     HTKAppDelegateFeedbackTypeWeak = 0,
     HTKAppDelegateFeedbackTypeMedium,
-    HTKAppDelegateFeedbackTypeStrong
+    HTKAppDelegateFeedbackTypeStrong,
+    // NOTE: Due to backward compatibility, this enum value is intentionally not zero.
+    HTKAppDelegateFeedbackTypeNone
 };
 
 static NSString * const kSoundEffectTypeUserDefaultsKey = @"SoundEffectType";
@@ -55,6 +57,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
 @property (nonatomic, nullable) NSMenuItem *useFunctionKeyEventMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useTapGestureEventMenuItem;
 
+@property (nonatomic, nullable) NSMenuItem *noFeedbackMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useWeekFeedbackMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useMediumFeedbackMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useStrongFeedbackMenuItem;
@@ -132,6 +135,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
     self.useFunctionKeyEventMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeFunctionKey) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useTapGestureEventMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeTapGesture) ? NSControlStateValueOn : NSControlStateValueOff;
 
+    self.noFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeNone) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useWeekFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeWeak) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useMediumFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeMedium) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useStrongFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeStrong) ? NSControlStateValueOn : NSControlStateValueOff;
@@ -178,6 +182,8 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
     }
 
     switch (self.feedbackType) {
+        case HTKAppDelegateFeedbackTypeNone:
+            break;
         case HTKAppDelegateFeedbackTypeWeak:
             self.hapticFeedback.type = HTKHapticFeedbackTypeWeak;
             break;
@@ -315,6 +321,15 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
 
     [statusMenu addItem:[NSMenuItem separatorItem]];
 
+    NSMenuItem * const noFeedbackMenuItem = [[NSMenuItem alloc] init];
+    noFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_NO_FEEDBACK_MENU_ITEM", @"A status menu item to not use feedback.");
+    noFeedbackMenuItem.keyEquivalent = @"0";
+    noFeedbackMenuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
+    noFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
+    noFeedbackMenuItem.target = self;
+    [statusMenu addItem:noFeedbackMenuItem];
+    self.noFeedbackMenuItem = noFeedbackMenuItem;
+
     NSMenuItem * const useWeekFeedbackMenuItem = [[NSMenuItem alloc] init];
     useWeekFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_WEEK_FEEDBACK_MENU_ITEM", @"A status menu item to use weak feedback.");
     useWeekFeedbackMenuItem.keyEquivalent = @"1";
@@ -408,7 +423,9 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
 
 - (void)_htk_action_didSelectFeedbackTypeMenuItem:(id)sender
 {
-    if (sender == self.useWeekFeedbackMenuItem) {
+    if (sender == self.noFeedbackMenuItem) {
+        self.feedbackType = HTKAppDelegateFeedbackTypeNone;
+    } else if (sender == self.useWeekFeedbackMenuItem) {
         self.feedbackType = HTKAppDelegateFeedbackTypeWeak;
     } else if (sender == self.useMediumFeedbackMenuItem) {
         self.feedbackType = HTKAppDelegateFeedbackTypeMedium;
