@@ -39,6 +39,8 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
     HTKAppDelegateSoundEffectTypeDefault
 };
 
+static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnabled";
+
 @interface HTKAppDelegate () <NSApplicationDelegate, HTKLoginItemDelegate>
 
 @property (nonatomic, getter=isFinishedLaunching) BOOL finishedLaunching;
@@ -46,6 +48,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
 @property (nonatomic) HTKAppDelegateListeningEventType listeningEventType;
 @property (nonatomic) HTKAppDelegateFeedbackType feedbackType;
 @property (nonatomic) HTKAppDelegateSoundEffectType soundEffectType;
+@property (nonatomic, getter=isScreenFlashEnabled) BOOL screenFlashEnabled;
 @property (nonatomic, getter=isLoginItemEnabled) BOOL loginItemEnabled;
 
 @property (nonatomic, nullable) HTKHapticFeedback *hapticFeedback;
@@ -63,6 +66,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
 @property (nonatomic, nullable) NSMenuItem *useStrongFeedbackMenuItem;
 
 @property (nonatomic, nullable) NSMenuItem *useSoundEffectMenuItem;
+@property (nonatomic, nullable) NSMenuItem *useScreenFlashMenuItem;
 
 @property (nonatomic, nullable) NSMenuItem *startOnLoginMenuItem;
 
@@ -113,6 +117,17 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
     }
 }
 
+- (void)setScreenFlashEnabled:(BOOL)screenFlashEnabled
+{
+    if (_screenFlashEnabled != screenFlashEnabled) {
+        _screenFlashEnabled = screenFlashEnabled;
+
+        [self _htk_main_updateStatusItem];
+
+        [self _htk_main_updateUserDefaults];
+    }
+}
+
 - (void)setLoginItemEnabled:(BOOL)loginItemEnabled
 {
     if (_loginItemEnabled != loginItemEnabled) {
@@ -141,6 +156,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
     self.useStrongFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeStrong) ? NSControlStateValueOn : NSControlStateValueOff;
 
     self.useSoundEffectMenuItem.state = (self.soundEffectType == HTKAppDelegateSoundEffectTypeDefault) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.useScreenFlashMenuItem.state = (self.screenFlashEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
 
     self.startOnLoginMenuItem.state = (self.loginItemEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
 }
@@ -233,6 +249,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
     [defaults setInteger:self.listeningEventType forKey:kListeningEventTypeUserDefaultsKey];
     [defaults setInteger:self.feedbackType forKey:kFeedbackTypeUserDefaultsKey];
     [defaults setInteger:self.soundEffectType forKey:kSoundEffectTypeUserDefaultsKey];
+    [defaults setBool:self.screenFlashEnabled forKey:kScreenFlashEnabledUserDefaultsKey];
 }
 
 // MARK: - NSApplicationDelegate
@@ -282,9 +299,18 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
         soundEffectType = HTKAppDelegateSoundEffectTypeNone;
     }
 
+    BOOL screenFlashEnabled;
+    if ([defaults objectForKey:kScreenFlashEnabledUserDefaultsKey]) {
+        screenFlashEnabled = [defaults boolForKey:kScreenFlashEnabledUserDefaultsKey];
+    } else {
+        // Default to no screen flash.
+        screenFlashEnabled = NO;
+    }
+
     self.listeningEventType = listeningEventType;
     self.feedbackType = feedbackType;
     self.soundEffectType = soundEffectType;
+    self.screenFlashEnabled = screenFlashEnabled;
 }
 
 - (void)_htk_main_loadStatusItem
@@ -367,6 +393,13 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
     [statusMenu addItem:useSoundEffectMenuItem];
     self.useSoundEffectMenuItem = useSoundEffectMenuItem;
 
+    NSMenuItem * const useScreenFlashMenuItem = [[NSMenuItem alloc] init];
+    useScreenFlashMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_SCREEN_FLASH_MENU_ITEM", @"A status menu item to use screen flash.");
+    useScreenFlashMenuItem.action = @selector(_htk_action_didSelectScreenFlashMenuItem:);
+    useScreenFlashMenuItem.target = self;
+    [statusMenu addItem:useScreenFlashMenuItem];
+    self.useScreenFlashMenuItem = useScreenFlashMenuItem;
+
     [statusMenu addItem:[NSMenuItem separatorItem]];
 
     NSMenuItem * const startOnLoginMenuItem = [[NSMenuItem alloc] init];
@@ -447,6 +480,13 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
                 self.soundEffectType = HTKAppDelegateSoundEffectTypeNone;
                 break;
         }
+    }
+}
+
+- (void)_htk_action_didSelectScreenFlashMenuItem:(id)sender
+{
+    if (sender == self.useScreenFlashMenuItem) {
+        self.screenFlashEnabled = !self.screenFlashEnabled;
     }
 }
 
