@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class HTKEventListener;
 
 typedef NS_ENUM(NSUInteger, HTKHapticFeedbackType) {
+    HTKHapticFeedbackTypeNone,
     HTKHapticFeedbackTypeWeak,
     HTKHapticFeedbackTypeMedium,
     HTKHapticFeedbackTypeStrong

@@ -71,13 +71,17 @@ static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
     HTKSystemSound * const systemSound = [self _htk_main_systemSound];
     switch (event.phase) {
         case HTKEventPhaseBegin:
-            [[HTKMultitouchActuator sharedActuator] actuateActuationID:actuationID unknown1:0 unknown2:0.0 unknown3:2.0];
+            if (actuationID != 0) {
+                [[HTKMultitouchActuator sharedActuator] actuateActuationID:actuationID unknown1:0 unknown2:0.0 unknown3:2.0];
+            }
             if (systemSound) {
                 [systemSound play];
             }
             break;
         case HTKEventPhaseEnd:
-            [[HTKMultitouchActuator sharedActuator] actuateActuationID:actuationID unknown1:0 unknown2:0.0 unknown3:0.0];
+            if (actuationID != 0) {
+                [[HTKMultitouchActuator sharedActuator] actuateActuationID:actuationID unknown1:0 unknown2:0.0 unknown3:0.0];
+            }
             break;
     }
 }
@@ -96,6 +100,8 @@ static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
     // There are default 1, 2, 3, 4, 5, 6, 15, and 16 actuation IDs now.
 
     switch (self.type) {
+        case HTKHapticFeedbackTypeNone:
+            return 0;
         case HTKHapticFeedbackTypeWeak:
             return 3;
         case HTKHapticFeedbackTypeMedium:

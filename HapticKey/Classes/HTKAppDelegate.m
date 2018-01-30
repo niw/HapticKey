@@ -183,6 +183,7 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
 
     switch (self.feedbackType) {
         case HTKAppDelegateFeedbackTypeNone:
+            self.hapticFeedback.type = HTKHapticFeedbackTypeNone;
             break;
         case HTKAppDelegateFeedbackTypeWeak:
             self.hapticFeedback.type = HTKHapticFeedbackTypeWeak;
