@@ -13,6 +13,8 @@
 #import "HTKSystemSound.h"
 #import "HTKTimer.h"
 
+@import AudioToolbox;
+
 NS_ASSUME_NONNULL_BEGIN
 
 static const NSTimeInterval kMinimumActuationInterval = 0.05;
@@ -76,6 +78,9 @@ static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
             }
             if (systemSound) {
                 [systemSound play];
+            }
+            if (self.screenFlashEnabled) {
+                AudioServicesPlaySystemSoundWithCompletion(kSystemSoundID_FlashScreen, NULL);
             }
             break;
         case HTKEventPhaseEnd:

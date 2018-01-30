@@ -123,6 +123,7 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
         _screenFlashEnabled = screenFlashEnabled;
 
         [self _htk_main_updateStatusItem];
+        [self _htk_main_updateScreenFlashEnabled];
 
         [self _htk_main_updateUserDefaults];
     }
@@ -189,6 +190,7 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 
     [self _htk_main_updateHapticFeedbackType];
     [self _htk_main_updateSoundFeedbackType];
+    [self _htk_main_updateScreenFlashEnabled];
 }
 
 - (void)_htk_main_updateHapticFeedbackType
@@ -227,6 +229,15 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
             self.hapticFeedback.soundType = HTKSoundFeedbackTypeDefault;
             break;
     }
+}
+
+- (void)_htk_main_updateScreenFlashEnabled
+{
+    if (!self.hapticFeedback) {
+        return;
+    }
+
+    self.hapticFeedback.screenFlashEnabled = self.screenFlashEnabled;
 }
 
 - (void)_htk_main_updateMainBundleLoginItem
