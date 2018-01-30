@@ -162,6 +162,26 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     self.startOnLoginMenuItem.state = (self.loginItemEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
 }
 
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    // Do not allow to have a combination of settings that has no feedback effects.
+    // This is a loose guard at user interface level and not really preventing to have such condition.
+    if (menuItem == self.noFeedbackMenuItem) {
+        if ((self.soundEffectType == HTKAppDelegateSoundEffectTypeNone) && !self.screenFlashEnabled) {
+            return (self.feedbackType == HTKAppDelegateFeedbackTypeNone);
+        }
+    } else if (menuItem == self.useSoundEffectMenuItem) {
+        if (self.feedbackType == HTKAppDelegateFeedbackTypeNone && !self.screenFlashEnabled) {
+            return (self.soundEffectType == HTKAppDelegateSoundEffectTypeNone);
+        }
+    } else if (menuItem == self.useScreenFlashMenuItem) {
+        if ((self.feedbackType == HTKAppDelegateFeedbackTypeNone) && (self.soundEffectType == HTKAppDelegateSoundEffectTypeNone)) {
+            return !self.screenFlashEnabled;
+        }
+    }
+    return YES;
+}
+
 - (void)_htk_main_updateHapticFeedback
 {
     if (!self.finishedLaunching) {
