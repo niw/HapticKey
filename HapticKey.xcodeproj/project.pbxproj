@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4AD21C6BD8B5F4994E5F2F55 /* Pods_HapticKey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86A629DFADB6DF8A37ECFC14 /* Pods_HapticKey.framework */; };
 		5443CEFC1FE38EA8002D4086 /* HTKEventListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CEFB1FE38EA8002D4086 /* HTKEventListener.m */; };
 		5443CEFF1FE38F6C002D4086 /* HTKEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CEFE1FE38F6C002D4086 /* HTKEvent.m */; };
 		5443CF051FE39049002D4086 /* HTKFunctionKeyEventListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CF041FE39049002D4086 /* HTKFunctionKeyEventListener.m */; };
@@ -62,6 +63,9 @@
 		54FBCF281FD4CDE0000EB4D3 /* HTKMultitouchActuator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKMultitouchActuator.m; sourceTree = "<group>"; };
 		54FBCF301FD52483000EB4D3 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		54FBCF311FD52483000EB4D3 /* StatusItem.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = StatusItem.pdf; sourceTree = "<group>"; };
+		86A629DFADB6DF8A37ECFC14 /* Pods_HapticKey.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HapticKey.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF181BDD3D700AFA27CE0DAF /* Pods-HapticKey.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HapticKey.release.xcconfig"; path = "Pods/Target Support Files/Pods-HapticKey/Pods-HapticKey.release.xcconfig"; sourceTree = "<group>"; };
+		E7CC19B9E6C50A0FB8286DA9 /* Pods-HapticKey.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HapticKey.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HapticKey/Pods-HapticKey.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +74,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54A310B81FD390EB002DE7BC /* MultitouchSupport.framework in Frameworks */,
+				4AD21C6BD8B5F4994E5F2F55 /* Pods_HapticKey.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +87,7 @@
 				548E15381FD00412001C0D4C /* HapticKey */,
 				548E15371FD00412001C0D4C /* Products */,
 				54A310B61FD390EA002DE7BC /* Frameworks */,
+				C6E359C50980BA49CE35B286 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -110,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */,
+				86A629DFADB6DF8A37ECFC14 /* Pods_HapticKey.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -153,6 +160,15 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		C6E359C50980BA49CE35B286 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E7CC19B9E6C50A0FB8286DA9 /* Pods-HapticKey.debug.xcconfig */,
+				AF181BDD3D700AFA27CE0DAF /* Pods-HapticKey.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -160,9 +176,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 548E15471FD00412001C0D4C /* Build configuration list for PBXNativeTarget "HapticKey" */;
 			buildPhases = (
+				196F672AC6E1F8935AC61FB3 /* [CP] Check Pods Manifest.lock */,
 				548E15321FD00412001C0D4C /* Sources */,
 				548E15331FD00412001C0D4C /* Frameworks */,
 				548E15341FD00412001C0D4C /* Resources */,
+				E322AC885D84983B764EEC09 /* [CP] Embed Pods Frameworks */,
+				D73DC20D09E54C2240260AE2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -221,6 +240,62 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		196F672AC6E1F8935AC61FB3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HapticKey-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D73DC20D09E54C2240260AE2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HapticKey/Pods-HapticKey-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E322AC885D84983B764EEC09 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-HapticKey/Pods-HapticKey-frameworks.sh",
+				"${PODS_ROOT}/Sparkle/Sparkle.framework",
+				"${PODS_ROOT}/Sparkle/Sparkle.framework.dSYM",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sparkle.framework",
+				"${DWARF_DSYM_FOLDER_PATH}/Sparkle.framework.dSYM",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HapticKey/Pods-HapticKey-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		548E15321FD00412001C0D4C /* Sources */ = {
@@ -373,6 +448,7 @@
 		};
 		548E15481FD00412001C0D4C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E7CC19B9E6C50A0FB8286DA9 /* Pods-HapticKey.debug.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -388,6 +464,7 @@
 		};
 		548E15491FD00412001C0D4C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF181BDD3D700AFA27CE0DAF /* Pods-HapticKey.release.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
