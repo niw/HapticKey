@@ -125,6 +125,7 @@ static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
         case HTKSoundFeedbackTypeDefault:
             return self.defaultSystemSound;
     }
+    return nil;
 }
 
 @end
