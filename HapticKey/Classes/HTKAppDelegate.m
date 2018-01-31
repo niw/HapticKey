@@ -436,6 +436,7 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     NSMenuItem * const startOnLoginMenuItem = [[NSMenuItem alloc] init];
     startOnLoginMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_START_ON_LOGIN_MENU_ITEM", @"A status menu item to start application on login.");
     startOnLoginMenuItem.action = @selector(_htk_action_didSelectStartOnLoginMenuItem:);
+    startOnLoginMenuItem.target = self;
     [statusMenu addItem:startOnLoginMenuItem];
     self.startOnLoginMenuItem = startOnLoginMenuItem;
 
