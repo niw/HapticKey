@@ -68,6 +68,9 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 @property (nonatomic, nullable) NSMenuItem *useSoundEffectMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useScreenFlashMenuItem;
 
+@property (nonatomic, nullable) NSMenuItem *checkForUpdatesMenuItem;
+@property (nonatomic, nullable) NSMenuItem *automaticallyCheckForUpdatesMenuItem;
+
 @property (nonatomic, nullable) NSMenuItem *startOnLoginMenuItem;
 
 @end
@@ -430,6 +433,18 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     useScreenFlashMenuItem.target = self;
     [statusMenu addItem:useScreenFlashMenuItem];
     self.useScreenFlashMenuItem = useScreenFlashMenuItem;
+
+    [statusMenu addItem:[NSMenuItem separatorItem]];
+
+    NSMenuItem * const checkForUpdatesMenuItem = [[NSMenuItem alloc] init];
+    checkForUpdatesMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_CHECK_FOR_UPDATES_MENU_ITEM", @"A status menu item to check for updates.");
+    [statusMenu addItem:checkForUpdatesMenuItem];
+    self.checkForUpdatesMenuItem = checkForUpdatesMenuItem;
+
+    NSMenuItem * const automaticallyCheckForUpdatesMenuItem = [[NSMenuItem alloc] init];
+    automaticallyCheckForUpdatesMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_AUTOMATICALLY_CHECK_FOR_UPDATES_MENU_ITEM", @"A status menu item to set automatically check for updates.");
+    [statusMenu addItem:automaticallyCheckForUpdatesMenuItem];
+    self.automaticallyCheckForUpdatesMenuItem = automaticallyCheckForUpdatesMenuItem;
 
     [statusMenu addItem:[NSMenuItem separatorItem]];
 
