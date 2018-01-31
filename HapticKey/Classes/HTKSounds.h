@@ -7,7 +7,6 @@
 //
 
 @import Foundation;
-@import AVFoundation;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,13 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface HTKSounds : NSObject
 
+// MARK: Properties
+
 /** Current sound file directory */
 @property (nonatomic, readonly) NSString *path;
 /** Full paths to all potential sound files in this directory */
 @property (nonatomic, readonly) NSArray<NSURL*> *allSoundFiles;
 
-@property (nonatomic, readonly, nullable) AVAudioPlayer *fingerUp;
-@property (nonatomic, readonly, nullable) AVAudioPlayer *fingerDown;
+// MARK: Init
 
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
@@ -31,13 +31,29 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithPath:(NSString *)path error:(NSError**)error NS_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithDefaultPath;
 
-/** Reloads fingerUp and fingerDown players */
+// MARK: Public Methods
+
+/** Reloads fingerUp and fingerDown players from user preferences */
 - (void) reloadPlayers;
 
-// MARK: - Class Properties
+/** Play sound for finger up, if enabled */
+- (void) playFingerUp;
+/** Play sound for finger down, if enabled */
+- (void) playFingerDown;
+
+/** Resets to use default sounds */
+- (BOOL) resetDefaultSounds;
+
+// MARK: Class Properties
 
 /** ~/Library/Application Support/HapticKey/Sounds/ */
 @property (nonatomic, class, readonly) NSString *defaultPath;
+
+@end
+
+// MARK: - User Defaults
+
+@interface HTKSounds (UserDefaults)
 
 /** finger down sound file path stored in user defaults */
 @property (nonatomic, class, nullable) NSString *fingerUpFilePath;

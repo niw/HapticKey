@@ -11,6 +11,7 @@
 #import "HTKHapticFeedback.h"
 #import "HTKLoginItem.h"
 #import "HTKTapGestureEventListener.h"
+#import "HTKSounds.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -292,7 +293,7 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     [self _htk_main_loadMainBundleLoginItem];
 
     self.finishedLaunching = YES;
-
+    
     [self _htk_main_updateUserDefaults];
     [self _htk_main_updateStatusItem];
     [self _htk_main_updateHapticFeedback];
