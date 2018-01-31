@@ -12,6 +12,8 @@
 #import "HTKLoginItem.h"
 #import "HTKTapGestureEventListener.h"
 
+@import Sparkle;
+
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString * const kListeningEventTypeUserDefaultsKey = @"ListeningEventType";
@@ -43,6 +45,8 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 
 @interface HTKAppDelegate () <NSApplicationDelegate, HTKLoginItemDelegate>
 
+@property (nonatomic, readonly) SUUpdater *updater;
+
 @property (nonatomic, getter=isFinishedLaunching) BOOL finishedLaunching;
 
 @property (nonatomic) HTKAppDelegateListeningEventType listeningEventType;
@@ -50,6 +54,7 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 @property (nonatomic) HTKAppDelegateSoundEffectType soundEffectType;
 @property (nonatomic, getter=isScreenFlashEnabled) BOOL screenFlashEnabled;
 @property (nonatomic, getter=isLoginItemEnabled) BOOL loginItemEnabled;
+@property (nonatomic, getter=isAutomaticallyCheckForUpdatesEnabled) BOOL automaticallyCheckForUpdatesEnabled;
 
 @property (nonatomic, nullable) HTKHapticFeedback *hapticFeedback;
 @property (nonatomic, nullable) HTKLoginItem *mainBundleLoginItem;
@@ -76,6 +81,14 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 @end
 
 @implementation HTKAppDelegate
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _updater = [[SUUpdater alloc] init];
+    }
+    return self;
+}
 
 - (void)setListeningEventType:(HTKAppDelegateListeningEventType)listeningEventType
 {
@@ -132,6 +145,20 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     }
 }
 
+- (BOOL)isAutomaticallyCheckForUpdatesEnabled
+{
+    return self.updater.automaticallyChecksForUpdates;
+}
+
+- (void)setAutomaticallyCheckForUpdatesEnabled:(BOOL)automaticallyCheckForUpdatesEnabled
+{
+    if (self.updater.automaticallyChecksForUpdates != automaticallyCheckForUpdatesEnabled) {
+        self.updater.automaticallyChecksForUpdates = automaticallyCheckForUpdatesEnabled;
+
+        [self _htk_main_updateStatusItem];
+    }
+}
+
 - (void)setLoginItemEnabled:(BOOL)loginItemEnabled
 {
     if (_loginItemEnabled != loginItemEnabled) {
@@ -162,6 +189,8 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     self.useSoundEffectMenuItem.state = (self.soundEffectType == HTKAppDelegateSoundEffectTypeDefault) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useScreenFlashMenuItem.state = (self.screenFlashEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
 
+    self.automaticallyCheckForUpdatesMenuItem.state = (self.automaticallyCheckForUpdatesEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
+
     self.startOnLoginMenuItem.state = (self.loginItemEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
 }
 
@@ -181,6 +210,8 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
         if ((self.feedbackType == HTKAppDelegateFeedbackTypeNone) && (self.soundEffectType == HTKAppDelegateSoundEffectTypeNone)) {
             return !self.screenFlashEnabled;
         }
+    } else if (menuItem == self.checkForUpdatesMenuItem) {
+        return [self.updater validateMenuItem:menuItem];
     }
     return YES;
 }
@@ -438,11 +469,15 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 
     NSMenuItem * const checkForUpdatesMenuItem = [[NSMenuItem alloc] init];
     checkForUpdatesMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_CHECK_FOR_UPDATES_MENU_ITEM", @"A status menu item to check for updates.");
+    checkForUpdatesMenuItem.action = @selector(checkForUpdates:);
+    checkForUpdatesMenuItem.target = self.updater;
     [statusMenu addItem:checkForUpdatesMenuItem];
     self.checkForUpdatesMenuItem = checkForUpdatesMenuItem;
 
     NSMenuItem * const automaticallyCheckForUpdatesMenuItem = [[NSMenuItem alloc] init];
     automaticallyCheckForUpdatesMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_AUTOMATICALLY_CHECK_FOR_UPDATES_MENU_ITEM", @"A status menu item to set automatically check for updates.");
+    automaticallyCheckForUpdatesMenuItem.action = @selector(_htk_action_didSelectAutomaticallyCheckForUpdateMenuItem:);
+    automaticallyCheckForUpdatesMenuItem.target = self;
     [statusMenu addItem:automaticallyCheckForUpdatesMenuItem];
     self.automaticallyCheckForUpdatesMenuItem = automaticallyCheckForUpdatesMenuItem;
 
@@ -533,6 +568,11 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 - (void)_htk_action_didSelectScreenFlashMenuItem:(id)sender
 {
     self.screenFlashEnabled = !self.screenFlashEnabled;
+}
+
+- (void)_htk_action_didSelectAutomaticallyCheckForUpdateMenuItem:(id)sender
+{
+    self.automaticallyCheckForUpdatesEnabled = !self.automaticallyCheckForUpdatesEnabled;
 }
 
 - (void)_htk_action_didSelectStartOnLoginMenuItem:(id)sender
