@@ -517,16 +517,12 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 
 - (void)_htk_action_didSelectScreenFlashMenuItem:(id)sender
 {
-    if (sender == self.useScreenFlashMenuItem) {
-        self.screenFlashEnabled = !self.screenFlashEnabled;
-    }
+    self.screenFlashEnabled = !self.screenFlashEnabled;
 }
 
 - (void)_htk_action_didSelectStartOnLoginMenuItem:(id)sender
 {
-    if (sender == self.startOnLoginMenuItem) {
-        self.loginItemEnabled = !self.loginItemEnabled;
-    }
+    self.loginItemEnabled = !self.loginItemEnabled;
 }
 
 @end
