@@ -2,3 +2,5 @@
 *.xcworkspace
 xcuserdata/
 *-assets/
+.gems/
+.bundle/

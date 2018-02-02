@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+exec_with_gems() {
+  # Fail to exit.
+  set -e
+
+  local -r root_dir="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.."; pwd)"
+
+  # Use system Ruby always.
+  local -r ruby_bin_path="/System/Library/Frameworks/Ruby.framework/Versions/Current/usr/bin"
+  if [[ ! -d "$ruby_bin_path" ]]; then
+    echo "No system ruby $ruby_bin_path found." >&2
+    exit 1
+  fi
+
+  local -r rubygems="$ruby_bin_path/gem"
+
+  # Set GEM_HOME and GEM_PATH to isolate gems.
+  export GEM_HOME="$root_dir/.gems"
+  export GEM_PATH="$GEM_HOME"
+  mkdir -p "$GEM_HOME"
+
+  # Install or update Bundler, if it's not present or not executable.
+  # Since bundler binstubs are installed with `--no-env-shebang` to use system ruby,
+  # in case macOS updated its `Ruby.framework`, the binstubs are no longer executable.
+  # Use `help` command to test if it's runnable or not.
+  ("$rubygems" list --norc -i bundler -v "~> 1.15" > /dev/null) || {
+    echo "No bundler found in $GEM_HOME, install it..."
+
+    # Install or update Bundler.
+    "$rubygems" install \
+      --norc \
+      --no-user-install \
+      --no-env-shebang \
+      --no-rdoc \
+      --no-ri \
+      --clear-sources \
+      bundler || {
+      echo "Fail to install bundler." >&2
+      exit 1
+    }
+
+    # Cleanup all previous versions of Bundler.
+    "$rubygems" cleanup bundler
+  }
+
+  # Install dependency gems using installed Bundler.
+  # All dependencies are managed by Bundler `Gemfile`,
+  # except Bundler itself.
+  ("$GEM_HOME/bin/bundle" check > /dev/null) || {
+    echo "Update gems dependencies..."
+
+    # Install or update gems.
+    "$GEM_HOME/bin/bundle" install \
+      --gemfile "$root_dir/Gemfile" \
+      --without development || {
+      echo "Fail to bundle install." >&2
+      exit 1
+    }
+
+    # Cleanup all previous version of gems.
+    "$GEM_HOME/bin/bundle" clean --force
+  }
+
+  # Set gems bin path to PATH.
+  export PATH="$ruby_bin_path:$GEM_HOME/bin:$PATH"
+
+  # If this is not sourced by the other script, exec using Bundler.
+  if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
+    exec "$@"
+  fi
+}
+
+exec_with_gems "$@"
