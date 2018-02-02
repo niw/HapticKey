@@ -469,8 +469,8 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 
     NSMenuItem * const checkForUpdatesMenuItem = [[NSMenuItem alloc] init];
     checkForUpdatesMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_CHECK_FOR_UPDATES_MENU_ITEM", @"A status menu item to check for updates.");
-    checkForUpdatesMenuItem.action = @selector(checkForUpdates:);
-    checkForUpdatesMenuItem.target = self.updater;
+    checkForUpdatesMenuItem.action = @selector(_htk_action_didSelectCheckForUpdates:);
+    checkForUpdatesMenuItem.target = self;
     [statusMenu addItem:checkForUpdatesMenuItem];
     self.checkForUpdatesMenuItem = checkForUpdatesMenuItem;
 
@@ -568,6 +568,15 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 - (void)_htk_action_didSelectScreenFlashMenuItem:(id)sender
 {
     self.screenFlashEnabled = !self.screenFlashEnabled;
+}
+
+- (void)_htk_action_didSelectCheckForUpdates:(id)sender
+{
+    // `checkForUpdates:` _MAY_ present `NSAlert` by calling `runModal`.
+    // However, at this moment `NSMenu` is still appearing and if we use `runModal`,
+    // AppKit seems begin in unexpected state and eventually crashes the app.
+    // To workaround this behavior, simply perform the selector in later run loop in default mode.
+    [self.updater performSelectorOnMainThread:@selector(checkForUpdates:) withObject:nil waitUntilDone:NO];
 }
 
 - (void)_htk_action_didSelectAutomaticallyCheckForUpdateMenuItem:(id)sender
