@@ -14,11 +14,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+static NSString * const kDefaultDownFileName = @"↓.aif";
+static NSString * const kDefaultUpFileName = @"↑.aif";
+
 static NSString * const kDefaultSystemSoundFilePath = @"/System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/ink/InkSoundBecomeMouse.aif";
+static UInt64 const kDefaultSystemSoundExpectedAudioBytes = 88032;
 
-//static NSString * const kDefaultSystemSoundFilePath = @"/System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/system/Media Keys.aif";
-
+/** NSUserDefaults key */
 static NSString * const kFingerUpFilePathKey = @"FingerUpFilePath";
+/** NSUserDefaults key */
 static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
 
 @interface HTKSounds() <AVAudioPlayerDelegate>
@@ -41,16 +45,18 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
     NSParameterAssert(path);
     if (self = [super init]) {
         _path = [path copy];
-        if (![self createDirectoryIfNeeded:error]) {
+        if (![self createSoundsDirectoryIfNeeded:error]) {
             return nil;
         }
+        [self createDefaultSoundsIfNeeded];
+        [self checkValidityOfUserSoundPreferences];
         [self reloadPlayers];
     }
     return self;
 }
 
 - (nullable instancetype)initWithDefaultPath {
-    return [self initWithPath:self.class.defaultPath error:nil];
+    return [self initWithPath:self.class.defaultSoundsDirectory error:nil];
 }
 
 // MARK: - Public
@@ -92,10 +98,21 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
 
 // MARK: - Private
 
-- (BOOL) createDirectoryIfNeeded:(NSError**)error {
-    // create directory if it isn't already
+/// checks if user's sound preferences point to valid paths
+/// and unsets them if they are invalid
+- (void) checkValidityOfUserSoundPreferences {
+    if (![NSFileManager.defaultManager fileExistsAtPath:self.class.fingerUpFilePath]) {
+        self.class.fingerUpFilePath = nil;
+    }
+    if (![NSFileManager.defaultManager fileExistsAtPath:self.class.fingerDownFilePath]) {
+        self.class.fingerDownFilePath = nil;
+    }
+}
+
+/// creates destination sound directory if it is not present
+- (BOOL) createSoundsDirectoryIfNeeded:(NSError**)error {
     BOOL isDirectory = NO;
-    BOOL exists = [NSFileManager.defaultManager fileExistsAtPath:_path isDirectory:&isDirectory];
+    BOOL exists = [NSFileManager.defaultManager fileExistsAtPath:self.path isDirectory:&isDirectory];
     if (exists && !isDirectory) {
         // path must be a directory
         return NO;
@@ -106,8 +123,21 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
     }
 }
 
-- (BOOL) resetDefaultSounds {
-    
+/// on first launch, split the default system sound into two
+/// separate sound files for finger-up and finger-down
+/// returns YES if sounds are ready, or NO on failure
+- (BOOL) createDefaultSoundsIfNeeded {
+    // bail out if we've got the files already
+    if ([NSFileManager.defaultManager fileExistsAtPath:self.class.defaultUpFilePath] &&
+        [NSFileManager.defaultManager fileExistsAtPath:self.class.defaultDownFilePath]) {
+        return YES;
+    } else {
+        return [self createDefaultSoundFiles];
+    }
+}
+
+/// creates default up/down sound files from source system sound
+- (BOOL) createDefaultSoundFiles {
     NSURL *originalFile = [NSURL fileURLWithPath:kDefaultSystemSoundFilePath];
     
     AudioFileID inAudioFile = NULL;
@@ -148,6 +178,15 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
     specifierSize = sizeof(totalBytes);
     result = AudioFileGetProperty(inAudioFile, kAudioFilePropertyAudioDataByteCount, &specifierSize, &totalBytes);
     NSAssert1(noErr == result, @"Error getting audio byte count %d", result);
+    
+    // Check validity of source file by expected number of audio bytes
+    NSAssert2(kDefaultSystemSoundExpectedAudioBytes == totalBytes, @"Unexpected default system sound audio byte count! %llu vs %llu", totalBytes, kDefaultSystemSoundExpectedAudioBytes);
+    if (kDefaultSystemSoundExpectedAudioBytes != totalBytes) {
+        os_log_error(OS_LOG_DEFAULT, "Unexpected default system sound audio byte count! %llu vs %llu", totalBytes, kDefaultSystemSoundExpectedAudioBytes);
+        closeAudioFiles();
+        return NO;
+    }
+    
     UInt64 packetCount = 0;
     specifierSize = sizeof(packetCount);
     result = AudioFileGetProperty(inAudioFile, kAudioFilePropertyAudioDataPacketCount, &specifierSize, &packetCount);
@@ -157,26 +196,8 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
     result = AudioFileGetProperty(inAudioFile, kAudioFilePropertyMaximumPacketSize, &specifierSize, &packetSize);
     NSAssert1(noErr == result, @"Error getting audio packet size %d", result);
 
-    
-    NSURL* (^createOutURL)(NSString*) = ^NSURL*(NSString *suffix) {
-        // TODO: use proper localized string
-        NSString *fileName = [[NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"Default", @"default audio file name"), suffix] stringByAppendingPathExtension:@"aif"];
-        if (!fileName) {
-            return nil;
-        }
-        NSString *filePath = [self.path stringByAppendingPathComponent:fileName];
-        NSURL *fileURL = [NSURL fileURLWithPath:filePath];
-        return fileURL;
-    };
-
-    NSURL *downFileURL = createOutURL(@"↓");
-    NSURL *upFileURL = createOutURL(@"↑");
-    NSAssert(downFileURL && upFileURL, @"Could not create out file URLs");
-    if (!downFileURL || !upFileURL) {
-        os_log_error(OS_LOG_DEFAULT, "Could not create out file URLs");
-        closeAudioFiles();
-        return NO;
-    }
+    NSURL *downFileURL = [NSURL fileURLWithPath:self.class.defaultDownFilePath];
+    NSURL *upFileURL = [NSURL fileURLWithPath:self.class.defaultUpFilePath];
     
     OSStatus (^createOutFile)(NSURL*,AudioFileID*) = ^OSStatus(NSURL *fileURL, AudioFileID *audioFile) {
         OSStatus result = AudioFileCreateWithURL((__bridge CFURLRef)fileURL, kAudioFileAIFFType, &asbd, kAudioFileFlags_EraseFile, audioFile);
@@ -226,17 +247,27 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
   
     closeAudioFiles();
     
-    self.class.fingerUpFilePath = upFileURL.path;
-    self.class.fingerDownFilePath = downFileURL.path;
-    [self reloadPlayers];
-    
     return YES;
 }
 
 
-// MARK: - Class Properties
+@end
 
-+ (NSString*) defaultPath {
+// MARK: - File Paths
+
+@implementation HTKSounds (FilePaths)
+
++ (NSString*) defaultUpFilePath {
+    NSString *filePath = [self.defaultSoundsDirectory stringByAppendingPathComponent:kDefaultUpFileName];
+    return filePath;
+}
+
++ (NSString*) defaultDownFilePath {
+    NSString *filePath = [self.defaultSoundsDirectory stringByAppendingPathComponent:kDefaultDownFileName];
+    return filePath;
+}
+
++ (NSString*) defaultSoundsDirectory {
     NSString *applicationSupportDirectory = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).lastObject;
     NSString *applicationName = NSBundle.mainBundle.infoDictionary[(NSString*)kCFBundleNameKey];
     NSString *appDirectory = [applicationSupportDirectory stringByAppendingPathComponent:applicationName];
@@ -245,9 +276,8 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
     return soundsDirectory;
 }
 
-
-
 @end
+
 
 // MARK: - User Defaults
 
@@ -275,6 +305,14 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
 
 + (nullable NSString*) fingerDownFilePath {
     return [NSUserDefaults.standardUserDefaults stringForKey:kFingerDownFilePathKey];
+}
+
+- (void) resetDefaultSounds {
+    [self createDefaultSoundFiles];
+    self.class.fingerUpFilePath = self.class.defaultUpFilePath;
+    self.class.fingerDownFilePath = self.class.defaultDownFilePath;
+    [self checkValidityOfUserSoundPreferences];
+    [self reloadPlayers];
 }
 
 @end

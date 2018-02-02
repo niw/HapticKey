@@ -41,13 +41,20 @@ NS_ASSUME_NONNULL_BEGIN
 /** Play sound for finger down, if enabled */
 - (void) playFingerDown;
 
-/** Resets to use default sounds */
-- (BOOL) resetDefaultSounds;
-
 // MARK: Class Properties
 
+@end
+
+// MARK: - File Paths
+
+@interface HTKSounds (FilePaths)
+
 /** ~/Library/Application Support/HapticKey/Sounds/ */
-@property (nonatomic, class, readonly) NSString *defaultPath;
+@property (nonatomic, class, readonly) NSString *defaultSoundsDirectory;
+/** Default sound for finger-up */
+@property (nonatomic, class, readonly) NSString *defaultUpFilePath;
+/** Default sound for finger-down */
+@property (nonatomic, class, readonly) NSString *defaultDownFilePath;
 
 @end
 
@@ -59,6 +66,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, class, nullable) NSString *fingerUpFilePath;
 /** finger up sound file path stored in user defaults */
 @property (nonatomic, class, nullable) NSString *fingerDownFilePath;
+
+/** Force-resets to use default sounds */
+- (void) resetDefaultSounds;
 
 @end
 
