@@ -14,8 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSString * const kDefaultDownFileName = @"↓.aif";
-static NSString * const kDefaultUpFileName = @"↑.aif";
+static NSString * const kDefaultDownSoundFileName = @"↓.aif";
+static NSString * const kDefaultUpSoundFileName = @"↑.aif";
 
 static NSString * const kDefaultSystemSoundFilePath = @"/System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/ink/InkSoundBecomeMouse.aif";
 static UInt64 const kDefaultSystemSoundExpectedAudioBytes = 88032;
@@ -250,7 +250,6 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
     return YES;
 }
 
-
 @end
 
 // MARK: - File Paths
@@ -258,12 +257,12 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
 @implementation HTKSounds (FilePaths)
 
 + (NSString*) defaultUpFilePath {
-    NSString *filePath = [self.defaultSoundsDirectory stringByAppendingPathComponent:kDefaultUpFileName];
+    NSString *filePath = [self.defaultSoundsDirectory stringByAppendingPathComponent:kDefaultUpSoundFileName];
     return filePath;
 }
 
 + (NSString*) defaultDownFilePath {
-    NSString *filePath = [self.defaultSoundsDirectory stringByAppendingPathComponent:kDefaultDownFileName];
+    NSString *filePath = [self.defaultSoundsDirectory stringByAppendingPathComponent:kDefaultDownSoundFileName];
     return filePath;
 }
 

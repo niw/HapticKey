@@ -12,6 +12,7 @@
 #import "HTKLoginItem.h"
 #import "HTKTapGestureEventListener.h"
 #import "HTKSounds.h"
+#import "HTKSoundMenu.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -70,6 +71,9 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 @property (nonatomic, nullable) NSMenuItem *useScreenFlashMenuItem;
 
 @property (nonatomic, nullable) NSMenuItem *startOnLoginMenuItem;
+
+@property (nonatomic, nullable) HTKSounds *sounds;
+@property (nonatomic, nullable) HTKSoundMenu *soundMenu;
 
 @end
 
@@ -202,7 +206,7 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     }
 
     if (eventListener) {
-        HTKHapticFeedback * const hapticFeedback = [[HTKHapticFeedback alloc] initWithEventListener:eventListener];
+        HTKHapticFeedback * const hapticFeedback = [[HTKHapticFeedback alloc] initWithEventListener:eventListener sounds:self.sounds];
         hapticFeedback.enabled = YES;
         self.hapticFeedback = hapticFeedback;
     } else {
@@ -288,6 +292,7 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    [self _htk_main_loadSounds];
     [self _htk_main_loadUserDefaults];
     [self _htk_main_loadStatusItem];
     [self _htk_main_loadMainBundleLoginItem];
@@ -298,6 +303,12 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     [self _htk_main_updateStatusItem];
     [self _htk_main_updateHapticFeedback];
     [self _htk_main_updateMainBundleLoginItem];
+}
+
+- (void)_htk_main_loadSounds {
+    HTKSounds *sounds = [[HTKSounds alloc] initWithDefaultPath];
+    _sounds = sounds;
+    _soundMenu = [[HTKSoundMenu alloc] initWithSounds:sounds];
 }
 
 - (void)_htk_main_loadUserDefaults
@@ -420,8 +431,9 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 
     NSMenuItem * const useSoundEffectMenuItem = [[NSMenuItem alloc] init];
     useSoundEffectMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_SOUND_EFFECT_MENU_ITEM", @"A status menu item to use sound effect.");
-    useSoundEffectMenuItem.action = @selector(_htk_action_didSelectSoundEffectTypeMenuItem:);
-    useSoundEffectMenuItem.target = self;
+    //useSoundEffectMenuItem.action = @selector(_htk_action_didSelectSoundEffectTypeMenuItem:);
+    //useSoundEffectMenuItem.target = self;
+    useSoundEffectMenuItem.submenu = self.soundMenu.soundSubmenu;
     [statusMenu addItem:useSoundEffectMenuItem];
     self.useSoundEffectMenuItem = useSoundEffectMenuItem;
 

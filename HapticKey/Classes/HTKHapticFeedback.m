@@ -38,14 +38,13 @@ static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
 }
 
 - (instancetype)initWithEventListener:(HTKEventListener *)eventListener
+                               sounds:(nullable HTKSounds*)sounds
 {
     if (self = [super init]) {
         _eventListener = eventListener;
         _eventListener.delegate = self;
         _type = HTKHapticFeedbackTypeMedium;
-
-        _sounds = [[HTKSounds alloc] initWithDefaultPath];
-        [_sounds resetDefaultSounds];
+        _sounds = sounds;
     }
     return self;
 }

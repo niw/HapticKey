@@ -25,6 +25,7 @@
 		54FBCF321FD52483000EB4D3 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 54FBCF301FD52483000EB4D3 /* AppIcon.icns */; };
 		54FBCF331FD52483000EB4D3 /* StatusItem.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 54FBCF311FD52483000EB4D3 /* StatusItem.pdf */; };
 		D978A86E20218E8100F9810F /* HTKSounds.m in Sources */ = {isa = PBXBuildFile; fileRef = D978A86D20218E8100F9810F /* HTKSounds.m */; };
+		D9F9D553202538C900E70D09 /* HTKSoundMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = D9F9D552202538C900E70D09 /* HTKSoundMenu.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +66,8 @@
 		54FBCF311FD52483000EB4D3 /* StatusItem.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = StatusItem.pdf; sourceTree = "<group>"; };
 		D978A86C20218E8100F9810F /* HTKSounds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKSounds.h; sourceTree = "<group>"; };
 		D978A86D20218E8100F9810F /* HTKSounds.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKSounds.m; sourceTree = "<group>"; };
+		D9F9D551202538C900E70D09 /* HTKSoundMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKSoundMenu.h; sourceTree = "<group>"; };
+		D9F9D552202538C900E70D09 /* HTKSoundMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKSoundMenu.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,8 @@
 		54CDDBF11FE44F33005F35A1 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D9F9D551202538C900E70D09 /* HTKSoundMenu.h */,
+				D9F9D552202538C900E70D09 /* HTKSoundMenu.m */,
 				D978A86C20218E8100F9810F /* HTKSounds.h */,
 				D978A86D20218E8100F9810F /* HTKSounds.m */,
 				548E15391FD00412001C0D4C /* HTKAppDelegate.h */,
@@ -232,6 +237,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9F9D553202538C900E70D09 /* HTKSoundMenu.m in Sources */,
 				5443CF0D1FE394BB002D4086 /* HTKHapticFeedback.m in Sources */,
 				549F9236200AF543003A8D7B /* HTKTimer.m in Sources */,
 				5443CEFF1FE38F6C002D4086 /* HTKEvent.m in Sources */,
