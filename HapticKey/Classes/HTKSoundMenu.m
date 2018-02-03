@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
 - (void)htk_pinAllEdgesToView:(NSView *)view;
 @end
 
-@interface HTKSoundMenu()
+@interface HTKSoundMenu() <NSMenuDelegate>
 
 /// all menu items in soundSubmenu
 //@property (nonatomic, readonly) NSArray<NSMenuItem*> *allMenuItems;
@@ -48,6 +48,7 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     if (self = [super init]) {
         _sounds = sounds;
         _soundSubmenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Sound", @"label for sound submenu")];
+        _soundSubmenu.delegate = self;
         _volumeSlider = [NSSlider sliderWithTarget:self action:@selector(volumeSliderValueChanged:)];
         _volumeSlider.translatesAutoresizingMaskIntoConstraints = NO;
         [self refreshMenuItems];
@@ -217,6 +218,7 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     volumeLabel.enabled = NO;
     [menuItems addObject:volumeLabel];
     
+    // Can't seem to get the volume slider's left inset to work without doing this
     NSMenuItem *volumeItem = [[NSMenuItem alloc] init];
     NSView *view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 100, 19)];
     [view addSubview:self.volumeSlider];
@@ -243,6 +245,12 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     _soundFileMenuItems = [upItems arrayByAddingObjectsFromArray:downItems];
     
     return menuItems;
+}
+
+// MARK: - NSMenuDelegate
+
+- (void) menuNeedsUpdate:(NSMenu *)menu {
+    [self refreshMenuItems];
 }
 
 @end
