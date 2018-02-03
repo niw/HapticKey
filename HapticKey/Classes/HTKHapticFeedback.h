@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class HTKEventListener;
+@class HTKSounds;
 
 typedef NS_ENUM(NSUInteger, HTKHapticFeedbackType) {
     HTKHapticFeedbackTypeNone,
@@ -30,12 +31,14 @@ typedef NS_ENUM(NSUInteger, HTKSoundFeedbackType) {
 @property (nonatomic, getter=isEnabled) BOOL enabled;
 @property (nonatomic) HTKHapticFeedbackType type;
 @property (nonatomic) HTKSoundFeedbackType soundType;
+@property (nonatomic, readonly, nullable) HTKSounds *sounds;
 @property (nonatomic, getter=isScreenFlashEnabled) BOOL screenFlashEnabled;
 
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 
-- (instancetype)initWithEventListener:(HTKEventListener *)eventListener NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithEventListener:(HTKEventListener *)eventListener
+                               sounds:(nullable HTKSounds*)sounds NS_DESIGNATED_INITIALIZER;
 
 @end
 
