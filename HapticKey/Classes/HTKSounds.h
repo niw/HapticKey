@@ -35,6 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** Reloads fingerUp and fingerDown players from user preferences */
 - (void) reloadPlayers;
+- (void) reloadFingerUp;
+- (void) reloadFingerDown;
+/** Updates player volumes based on stored user preference */
+- (void) updateVolume;
 
 /** Play sound for finger up, if enabled */
 - (void) playFingerUp;
@@ -66,6 +70,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, class, nullable) NSString *fingerUpFilePath;
 /** finger up sound file path stored in user defaults */
 @property (nonatomic, class, nullable) NSString *fingerDownFilePath;
+
+/** volume from 0.0 -> 1.0. Takes effect after reloadPlayers is called. */
+@property (nonatomic, class) float desiredVolume;
 
 /** Force-resets to use default sounds */
 - (void) resetDefaultSounds;

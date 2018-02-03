@@ -16,12 +16,19 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     HTKFingerDirectionDown
 };
 
+@interface NSView (Constranits)
+- (void)htk_pinToView:(NSView *)view edge:(NSLayoutAttribute)edge offset:(CGFloat)offset;
+- (void)htk_pinToView:(NSView *)view edge:(NSLayoutAttribute)attribute;
+- (void)htk_pinAllEdgesToView:(NSView *)view;
+@end
+
 @interface HTKSoundMenu()
 
 /// all menu items in soundSubmenu
 //@property (nonatomic, readonly) NSArray<NSMenuItem*> *allMenuItems;
 /// menu items corresponding to sound files on disk
 @property (nonatomic, readonly) NSArray<NSMenuItem*> *soundFileMenuItems;
+@property (nonatomic, readonly) NSSlider *volumeSlider;
 
 @end
 
@@ -41,6 +48,8 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     if (self = [super init]) {
         _sounds = sounds;
         _soundSubmenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Sound", @"label for sound submenu")];
+        _volumeSlider = [NSSlider sliderWithTarget:self action:@selector(volumeSliderValueChanged:)];
+        _volumeSlider.translatesAutoresizingMaskIntoConstraints = NO;
         [self refreshMenuItems];
     }
     return self;
@@ -51,7 +60,7 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
 - (void) refreshMenuItems {
     [self.soundSubmenu removeAllItems];
     [self addSoundSubmenuItems];
-    
+    [self updateVolumeSlider];
 }
 
 // MARK: UI Actions
@@ -67,16 +76,35 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     switch (fingerDirection) {
         case HTKFingerDirectionUp:
             HTKSounds.fingerUpFilePath = soundFilePath;
+            [self.sounds reloadFingerUp];
+            [self.sounds playFingerUp];
             break;
         case HTKFingerDirectionDown:
             HTKSounds.fingerDownFilePath = soundFilePath;
+            [self.sounds reloadFingerDown];
+            [self.sounds playFingerDown];
             break;
     }
     [self updateStateForSoundMenuItems];
-    [self.sounds reloadPlayers];
+}
+
+- (void) volumeSliderValueChanged:(NSSlider*)sender {
+    HTKSounds.desiredVolume = sender.floatValue;
+    [self.sounds updateVolume];
+    // preview volume level
+    if (HTKSounds.fingerDownFilePath) {
+        [self.sounds playFingerDown];
+    } else if (HTKSounds.fingerUpFilePath) {
+        [self.sounds playFingerUp];
+    }
 }
 
 // MARK: Private Methods
+
+- (void) updateVolumeSlider {
+    float value = HTKSounds.desiredVolume;
+    self.volumeSlider.floatValue = value;
+}
 
 /// adds/removes checkmarks to the sound menu items that were chosen by the user
 - (void) updateStateForSoundMenuItems {
@@ -175,11 +203,29 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     
     NSMenuItem *fingerUpLabel = [[NSMenuItem alloc] init];
     fingerUpLabel.title = NSLocalizedString(@"Finger Up", @"section label for finger up settings");
-    fingerDownLabel.enabled = NO;
+    fingerUpLabel.enabled = NO;
     [menuItems addObject:fingerUpLabel];
     
     NSArray<NSMenuItem*> *upItems = [self generateSoundMenuItemsForDirection:HTKFingerDirectionUp];
     [menuItems addObjectsFromArray:upItems];
+    
+    // Volume Control
+    [menuItems addObject:NSMenuItem.separatorItem];
+
+    NSMenuItem *volumeLabel = [[NSMenuItem alloc] init];
+    volumeLabel.title = NSLocalizedString(@"Volume", @"section label for sound effect volume setting");
+    volumeLabel.enabled = NO;
+    [menuItems addObject:volumeLabel];
+    
+    NSMenuItem *volumeItem = [[NSMenuItem alloc] init];
+    NSView *view = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 100, 19)];
+    [view addSubview:self.volumeSlider];
+    [view htk_pinToView:self.volumeSlider edge:NSLayoutAttributeLeading offset:-20];
+    [view htk_pinToView:self.volumeSlider edge:NSLayoutAttributeTop offset:0];
+    [view htk_pinToView:self.volumeSlider edge:NSLayoutAttributeBottom offset:0];
+    [view htk_pinToView:self.volumeSlider edge:NSLayoutAttributeTrailing offset:0];
+    volumeItem.view = view;
+    [menuItems addObject:volumeItem];
     
     // Add Sounds...
     BOOL showCustom = YES;
@@ -193,11 +239,40 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
         [menuItems addObject:addSounds];
     }
     
+    // store sounds separately so we can toggle them
     _soundFileMenuItems = [upItems arrayByAddingObjectsFromArray:downItems];
     
     return menuItems;
 }
 
+@end
+
+// MARK: - View Constraints
+
+@implementation NSView (Constranits)
+
+- (void)htk_pinToView:(NSView *)view edge:(NSLayoutAttribute)edge {
+    [self htk_pinToView:view edge:edge offset:0.0];
+}
+
+- (void)htk_pinToView:(NSView *)view edge:(NSLayoutAttribute)edge offset:(CGFloat)offset
+{
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self
+                                                     attribute:edge
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:view
+                                                     attribute:edge
+                                                    multiplier:1.0f
+                                                      constant:offset]];
+}
+
+- (void)htk_pinAllEdgesToView:(NSView *)view
+{
+    [self htk_pinToView:view edge:NSLayoutAttributeBottom];
+    [self htk_pinToView:view edge:NSLayoutAttributeTop];
+    [self htk_pinToView:view edge:NSLayoutAttributeLeading];
+    [self htk_pinToView:view edge:NSLayoutAttributeTrailing];
+}
 @end
 
 NS_ASSUME_NONNULL_END

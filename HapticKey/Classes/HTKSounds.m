@@ -24,6 +24,8 @@ static UInt64 const kDefaultSystemSoundExpectedAudioBytes = 88032;
 static NSString * const kFingerUpFilePathKey = @"FingerUpFilePath";
 /** NSUserDefaults key */
 static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
+static NSString * const kDesiredVolumeKey = @"DesiredVolume";
+
 
 @interface HTKSounds() <AVAudioPlayerDelegate>
 @property (nonatomic, readonly, nullable) AVAudioPlayer *fingerUp;
@@ -70,20 +72,33 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
 }
 
 - (void) reloadPlayers {
+    [self reloadFingerDown];
+    [self reloadFingerUp];
+}
+
+- (void) reloadFingerUp {
     _fingerUp = nil;
-    _fingerDown = nil;
-    NSError *error = nil;
     NSString *fingerUpFilePath = self.class.fingerUpFilePath;
-    NSString *fingerDownFilePath = self.class.fingerDownFilePath;
-    
     if (fingerUpFilePath) {
         NSURL *fileURL = [NSURL fileURLWithPath:fingerUpFilePath];
-        _fingerUp = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
+        _fingerUp = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil];
     }
+    _fingerUp.volume = self.class.desiredVolume;
+}
+
+- (void) reloadFingerDown {
+    _fingerDown = nil;
+    NSString *fingerDownFilePath = self.class.fingerDownFilePath;
     if (fingerDownFilePath) {
         NSURL *fileURL = [NSURL fileURLWithPath:fingerDownFilePath];
-        _fingerDown = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&error];
+        _fingerDown = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil];
     }
+    _fingerDown.volume = self.class.desiredVolume;
+}
+
+- (void) updateVolume {
+    _fingerUp.volume = self.class.desiredVolume;
+    _fingerDown.volume = self.class.desiredVolume;
 }
 
 - (NSArray<NSURL*>*) allSoundFiles {
@@ -288,6 +303,7 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
     } else {
         [NSUserDefaults.standardUserDefaults removeObjectForKey:kFingerUpFilePathKey];
     }
+    [NSUserDefaults.standardUserDefaults synchronize];
 }
 
 + (nullable NSString*) fingerUpFilePath {
@@ -300,10 +316,37 @@ static NSString * const kFingerDownFilePathKey = @"FingerDownFilePath";
     } else {
         [NSUserDefaults.standardUserDefaults removeObjectForKey:kFingerDownFilePathKey];
     }
+    [NSUserDefaults.standardUserDefaults synchronize];
 }
 
 + (nullable NSString*) fingerDownFilePath {
     return [NSUserDefaults.standardUserDefaults stringForKey:kFingerDownFilePathKey];
+}
+
+/// returns valid volume range within 0.0->1.0
++ (float) validVolume:(float)value {
+    if (value > 1.0) {
+        return 1.0;
+    } else if (value < 0.0) {
+        return 0.0;
+    } else {
+        return value;
+    }
+}
+
++ (float) desiredVolume {
+    // default to 1.0 if unset
+    if(![NSUserDefaults.standardUserDefaults objectForKey:kDesiredVolumeKey]){
+        return 1.0;
+    }
+    float value = [NSUserDefaults.standardUserDefaults floatForKey:kDesiredVolumeKey];
+    return [self validVolume:value];
+}
+
++ (void) setDesiredVolume:(float)desiredVolume {
+    float value = [self validVolume:desiredVolume];
+    [NSUserDefaults.standardUserDefaults setFloat:value forKey:kDesiredVolumeKey];
+    [NSUserDefaults.standardUserDefaults synchronize];
 }
 
 - (void) resetDefaultSounds {
