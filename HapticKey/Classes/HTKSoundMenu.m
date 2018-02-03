@@ -47,7 +47,7 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     NSParameterAssert(sounds);
     if (self = [super init]) {
         _sounds = sounds;
-        _soundSubmenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Sound", @"label for sound submenu")];
+        _soundSubmenu = [[NSMenu alloc] init];
         _soundSubmenu.delegate = self;
         _volumeSlider = [NSSlider sliderWithTarget:self action:@selector(volumeSliderValueChanged:)];
         _volumeSlider.translatesAutoresizingMaskIntoConstraints = NO;
@@ -121,12 +121,12 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     
     NSString *title = soundFilePath.lastPathComponent.stringByDeletingPathExtension;
     if (!title) {
-        title = NSLocalizedString(@"None", "no sound menu item selected");
+        title = NSLocalizedString(@"SOUND_MENU_ITEM_NONE", "no sound menu item selected");
     }
     
     if ([soundFilePath isEqualToString:HTKSounds.defaultUpFilePath] ||
         [soundFilePath isEqualToString:HTKSounds.defaultDownFilePath]) {
-        NSString *defaultString = NSLocalizedString(@"Default", @"string for default sound");
+        NSString *defaultString = NSLocalizedString(@"SOUND_MENU_ITEM_DEFAULT", @"section label string for default selection");
         title = [NSString stringWithFormat:@"%@ %@", defaultString, title];
     }
     menuItem.title = title;
@@ -192,7 +192,7 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     // Finger Down
     
     NSMenuItem *fingerDownLabel = [[NSMenuItem alloc] init];
-    fingerDownLabel.title = NSLocalizedString(@"Finger Down", @"section label for finger down settings");
+    fingerDownLabel.title = NSLocalizedString(@"SOUND_MENU_ITEM_FINGER_DOWN", @"section label for finger down settings");
     fingerDownLabel.enabled = NO;
     [menuItems addObject:fingerDownLabel];
     
@@ -203,7 +203,7 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     [menuItems addObject:NSMenuItem.separatorItem];
     
     NSMenuItem *fingerUpLabel = [[NSMenuItem alloc] init];
-    fingerUpLabel.title = NSLocalizedString(@"Finger Up", @"section label for finger up settings");
+    fingerUpLabel.title = NSLocalizedString(@"SOUND_MENU_ITEM_FINGER_UP", @"section label for finger up settings");
     fingerUpLabel.enabled = NO;
     [menuItems addObject:fingerUpLabel];
     
@@ -214,7 +214,7 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     [menuItems addObject:NSMenuItem.separatorItem];
 
     NSMenuItem *volumeLabel = [[NSMenuItem alloc] init];
-    volumeLabel.title = NSLocalizedString(@"Volume", @"section label for sound effect volume setting");
+    volumeLabel.title = NSLocalizedString(@"SOUND_MENU_ITEM_VOLUME", @"section label for sound effect volume setting");
     volumeLabel.enabled = NO;
     [menuItems addObject:volumeLabel];
     
@@ -230,16 +230,13 @@ typedef NS_ENUM(NSInteger, HTKFingerDirection) {
     [menuItems addObject:volumeItem];
     
     // Add Sounds...
-    BOOL showCustom = YES;
-    if (showCustom) {
-        [menuItems addObject:NSMenuItem.separatorItem];
-        
-        NSMenuItem *addSounds = [[NSMenuItem alloc] init];
-        addSounds.title = NSLocalizedString(@"Add Sounds...", @"menu item for adding custom sounds");
-        addSounds.action = @selector(openSoundDirectoryInFinder:);
-        addSounds.target = self;
-        [menuItems addObject:addSounds];
-    }
+    [menuItems addObject:NSMenuItem.separatorItem];
+    
+    NSMenuItem *addSounds = [[NSMenuItem alloc] init];
+    addSounds.title = NSLocalizedString(@"SOUND_MENU_ITEM_ADD_SOUNDS", @"menu item for adding custom sounds");
+    addSounds.action = @selector(openSoundDirectoryInFinder:);
+    addSounds.target = self;
+    [menuItems addObject:addSounds];
     
     // store sounds separately so we can toggle them
     _soundFileMenuItems = [upItems arrayByAddingObjectsFromArray:downItems];
