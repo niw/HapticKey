@@ -32,5 +32,7 @@
 	<string>NSApplication</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/niw/HapticKey/sparkle/appcast.xml</string>
 </dict>
 </plist>
