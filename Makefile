@@ -1,26 +1,78 @@
 NAME = HapticKey
 
-DERIVED_DATA_PATH = build
+BUILD_PATH = build
 
-BUNDLE_PATH = $(DERIVED_DATA_PATH)/Build/Products/Release/$(NAME).app
-TARGET = $(DERIVED_DATA_PATH)/$(NAME).app.zip
+POD_INSTALL_TAG_PATH = Pods/Manifest.lock
+
+XCODE_WORKSPACE_PATH = $(NAME).xcworkspace
+XCODE_SCHEME = $(NAME)
+XCODE_ARCHIVE_PATH = $(BUILD_PATH)/$(NAME).xcarchive
+XCODE_ARCHIVE_BUNDLE_PATH = $(XCODE_ARCHIVE_PATH)/Products/Applications/$(NAME).app
+
+TARGET_PATH = $(XCODE_ARCHIVE_BUNDLE_PATH)
+
+APPCAST_ARCHIVE_PATH = $(BUILD_PATH)/$(NAME).app.zip
+APPCAST_PATH = $(BUILD_PATH)/appcast.xml
+APPCAST_RELEASE_NOTE_PATH = $(BUILD_PATH)/release_note.md
+APPCAST_ARCHIVE_URL = "http://"
 
 .PHONY: all
-all: $(TARGET)
+all: $(TARGET_PATH)
 
-Pods/Manifest.lock: Podfile Podfile.lock
-	scripts/pod install
+.PHONY: bootstrap
+bootstrap: $(POD_INSTALL_TAG_PATH)
 
-$(BUNDLE_PATH): Pods/Manifest.lock
-	xcodebuild \
-		-workspace "$(NAME).xcworkspace" \
-		-scheme "$(NAME)" \
-		-configuration "Release" \
-		-derivedDataPath "$(DERIVED_DATA_PATH)"
-
-$(TARGET): $(BUNDLE_PATH)
-	ditto -c -k --sequesterRsrc --keepParent $(BUNDLE_PATH) $@
+.PHONY: release
+release: $(APPCAST_ARCHIVE_PATH) $(APPCAST_PATH)
 
 .PHONY: claen
 clean:
 	git clean -dfX
+
+$(POD_INSTALL_TAG_PATH): Podfile Podfile.lock
+	scripts/pod install
+
+$(XCODE_ARCHIVE_BUNDLE_PATH): $(POD_INSTALL_TAG_PATH)
+	xcodebuild \
+		-workspace "$(XCODE_WORKSPACE_PATH)" \
+		-scheme "$(XCODE_SCHEME)" \
+		-derivedDataPath "$(BUILD_PATH)" \
+		-archivePath "$(XCODE_ARCHIVE_PATH)" \
+		archive
+
+# Use `xcodebuild -exportArchive` to sign archive.
+# For now, we don't sign archive so directly using archive bundle.
+#$(TARGET_PATH): $(XCODE_ARCHIVE_BUNDLE_PATH)
+#	xcodebuild \
+#		-exportArchive \
+#		...
+
+$(APPCAST_ARCHIVE_PATH): $(TARGET_PATH)
+	ditto -c -k --sequesterRsrc --keepParent $< $@
+
+.PHONY: require_master_branch
+require_master_branch:
+ifneq ($(shell git symbolic-ref --short HEAD), master)
+	@echo "Current working directory is not master branch."
+	@exit 1
+endif
+
+.PHONY: tag_version
+tag_version: require_master_branch $(TARGET_PATH)
+	git tag $(shell scripts/sparkle_appcast info --bundle-short-version-string "$(TARGET_PATH)")
+
+$(APPCAST_RELEASE_NOTE_PATH): require_master_branch tag_version
+	git show --format='%B' -s HEAD|tee $@
+
+$(APPCAST_PATH): $(APPCAST_ARCHIVE_PATH) $(APPCAST_RELEASE_NOTE_PATH)
+ifdef KEY
+	scripts/sparkle_appcast appcast \
+		--key="$(KEY)" \
+		--url="$(APPCAST_ARCHIVE_URL)" \
+		--release-note="$(APPCAST_RELEASE_NOTE_PATH)" \
+		--output "$@" \
+		"$(APPCAST_ARCHIVE_PATH)"
+else
+	@echo "KEY is missing."
+	@exit 1
+endif
