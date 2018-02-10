@@ -19,6 +19,18 @@ Development
 
 To build the application from the source code, you need to use the latest Xcode 9.
 
+### Install dependencies
+
+Use `script/pod` to install all dependencies from [CocoaPods](https://cocoapods.org/).
+
+    scripts/pod install
+
+This wrapper script uses system `/usr/bin/ruby`, creates an isolated [RubyGems](https://rubygems.org/) environment under project directory, then install [Bundler](http://bundler.io/), install CocoaPods and finally install dependencies.
+
+Once it’s ready, you can open `HapticKey.xcworkspace` to build the application.
+
+### Overviews
+
 This application is using `CGEventTap` to listen key down and up or tap events on Touch Bar.
 
 It triggers haptic feedbacks by using private APIs in `MultitouchSupport.framework` when the event meets the conditions.
