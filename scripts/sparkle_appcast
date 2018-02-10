@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+readonly current_dir="$(cd -P "$(dirname "${BASH_SOURCE[0]}")"; pwd)"
+
+exec "$current_dir/exec_with_gems" sparkle_appcast "$@"

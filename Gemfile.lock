@@ -50,12 +50,19 @@ GEM
     gh_inspector (1.1.2)
     i18n (0.9.4)
       concurrent-ruby (~> 1.0)
+    kramdown (1.16.2)
     minitest (5.11.3)
     molinillo (0.6.4)
     nanaimo (0.2.3)
     nap (1.1.0)
     netrc (0.11.0)
+    plist (3.4.0)
     ruby-macho (1.1.0)
+    sparkle_appcast (0.1.1)
+      kramdown
+      plist
+      thor
+    thor (0.20.0)
     thread_safe (0.3.6)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
@@ -71,6 +78,7 @@ PLATFORMS
 
 DEPENDENCIES
   cocoapods
+  sparkle_appcast (~> 0.1.1)
 
 BUNDLED WITH
    1.16.1
