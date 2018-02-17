@@ -21,11 +21,11 @@ To build the application from the source code, you need to use the latest Xcode 
 
 ### Install dependencies
 
-Use `script/pod` to install all dependencies from [CocoaPods](https://cocoapods.org/).
+Use `boostrap` make target to all dependencies from [CocoaPods](https://cocoapods.org/).
 
-    scripts/pod install
+    make bootstrap
 
-This wrapper script uses system `/usr/bin/ruby`, creates an isolated [RubyGems](https://rubygems.org/) environment under project directory, then install [Bundler](http://bundler.io/), install CocoaPods and finally install dependencies.
+This target uses a wrapper script `scripts/pod`, which uses system `/usr/bin/ruby` to create an isolated [RubyGems](https://rubygems.org/) environment under project directory, then install [Bundler](http://bundler.io/), install CocoaPods and finally install dependencies.
 
 Once it’s ready, you can open `HapticKey.xcworkspace` to build the application.
 
