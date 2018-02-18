@@ -12,8 +12,11 @@
 #import "NSTouchDevice.h"
 
 @import AppKit;
+@import IOKit;
 
 NS_ASSUME_NONNULL_BEGIN
+
+static const uint32_t kCGEventFieldTouchContextID = 0x92;
 
 @interface HTKTapGestureEventListener () <HTKEventTapDelegate>
 
@@ -47,20 +50,26 @@ NS_ASSUME_NONNULL_BEGIN
 
 // MARK: - HTKEventTapDelegate
 
-- (void)eventTap:(HTKEventTap *)eventTap didTapEvent:(NSEvent *)event
+- (void)eventTap:(HTKEventTap *)eventTap didTapCGEvent:(CGEventRef)eventRef
 {
-    for (NSTouch * const touch in [event allTouches]) {
-        NSTouchDevice * const touchDevice = touch.device;
-        if (!touch.resting && touchDevice.deviceType == NSTouchDeviceTypeTouchBar) {
-            switch (touch.phase) {
-                case NSTouchPhaseBegan:
-                    [self _htk_main_didListenEvent:[[HTKEvent alloc] initWithPhase:HTKEventPhaseBegin]];
-                    return;
-                case NSTouchPhaseEnded:
-                    [self _htk_main_didListenEvent:[[HTKEvent alloc] initWithPhase:HTKEventPhaseEnd]];
-                    return;
-                default:
-                    break;
+    // `eventWithCGEvent:` is relatively expensive.
+    // Check touch contextID exists or not first. All touches on TouchBar has this ID.
+    const int64_t contextID = CGEventGetIntegerValueField(eventRef, kCGEventFieldTouchContextID);
+    if (contextID != 0) {
+        NSEvent * const event = [NSEvent eventWithCGEvent:eventRef];
+        for (NSTouch * const touch in [event allTouches]) {
+            NSTouchDevice * const touchDevice = touch.device;
+            if (!touch.resting && touchDevice.deviceType == NSTouchDeviceTypeTouchBar) {
+                switch (touch.phase) {
+                    case NSTouchPhaseBegan:
+                        [self _htk_main_didListenEvent:[[HTKEvent alloc] initWithPhase:HTKEventPhaseBegin]];
+                        return;
+                    case NSTouchPhaseEnded:
+                        [self _htk_main_didListenEvent:[[HTKEvent alloc] initWithPhase:HTKEventPhaseEnd]];
+                        return;
+                    default:
+                        break;
+                }
             }
         }
     }

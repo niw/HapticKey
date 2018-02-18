@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol HTKEventTapDelegate <NSObject>
 
 @optional
+- (void)eventTap:(HTKEventTap *)eventTap didTapCGEvent:(CGEventRef)eventRef;
+// Implement this only when the delegate needs to use `NSEvent` for all tapped event.
+// In many cases, using `CGEvent` without creating `NSEvent` may be faster and cheap.
 - (void)eventTap:(HTKEventTap *)eventTap didTapEvent:(NSEvent *)event;
 - (void)eventTapDisabled:(HTKEventTap *)eventTap;
 
