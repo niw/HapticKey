@@ -14,6 +14,7 @@ TARGET_PATH = $(XCODE_ARCHIVE_BUNDLE_PATH)
 APPCAST_ARCHIVE_PATH = $(BUILD_PATH)/$(NAME).app.zip
 APPCAST_PATH = $(BUILD_PATH)/appcast.xml
 APPCAST_RELEASE_NOTE_PATH = $(BUILD_PATH)/release_note.md
+APPCAST_ARCHIVE_URL = "https://github.com/niw/$(NAME)/releases/download/{{bundle_short_version_string}}/$(NAME).app.zip"
 
 .PHONY: all
 all: $(TARGET_PATH)
@@ -66,7 +67,7 @@ $(APPCAST_PATH): $(APPCAST_ARCHIVE_PATH) $(APPCAST_RELEASE_NOTE_PATH) $(TARGET_P
 ifdef KEY
 	scripts/sparkle_appcast appcast \
 		--key="$(KEY)" \
-		--url="https://github.com/niw/$(NAME)/releases/download/$(shell scripts/sparkle_appcast info --bundle-short-version-string "$(TARGET_PATH)")/$(NAME).app.zip" \
+		--url="$(APPCAST_ARCHIVE_URL)" \
 		--release-note="$(APPCAST_RELEASE_NOTE_PATH)" \
 		--output "$@" \
 		"$(APPCAST_ARCHIVE_PATH)"
