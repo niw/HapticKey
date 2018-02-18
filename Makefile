@@ -53,8 +53,7 @@ $(APPCAST_ARCHIVE_PATH): $(TARGET_PATH)
 .PHONY: require_master_branch
 require_master_branch:
 ifneq ($(shell git symbolic-ref --short HEAD), master)
-	@echo "Current working directory is not master branch."
-	@exit 1
+	$(error "Current working directory is not master branch.")
 endif
 
 .PHONY: tag_version
@@ -73,6 +72,5 @@ ifdef KEY
 		--output "$@" \
 		"$(APPCAST_ARCHIVE_PATH)"
 else
-	@echo "KEY is missing."
-	@exit 1
+	$(error "KEY is missing.")
 endif
