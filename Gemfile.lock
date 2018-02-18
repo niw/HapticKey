@@ -53,13 +53,15 @@ GEM
     kramdown (1.16.2)
     minitest (5.11.3)
     molinillo (0.6.4)
+    mustache (1.0.5)
     nanaimo (0.2.3)
     nap (1.1.0)
     netrc (0.11.0)
     plist (3.4.0)
     ruby-macho (1.1.0)
-    sparkle_appcast (0.1.1)
+    sparkle_appcast (0.1.2)
       kramdown
+      mustache
       plist
       thor
     thor (0.20.0)
@@ -78,7 +80,7 @@ PLATFORMS
 
 DEPENDENCIES
   cocoapods
-  sparkle_appcast (~> 0.1.1)
+  sparkle_appcast (~> 0.1.2)
 
 BUNDLED WITH
    1.16.1
