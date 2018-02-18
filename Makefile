@@ -14,7 +14,6 @@ TARGET_PATH = $(XCODE_ARCHIVE_BUNDLE_PATH)
 APPCAST_ARCHIVE_PATH = $(BUILD_PATH)/$(NAME).app.zip
 APPCAST_PATH = $(BUILD_PATH)/appcast.xml
 APPCAST_RELEASE_NOTE_PATH = $(BUILD_PATH)/release_note.md
-APPCAST_ARCHIVE_URL = "http://"
 
 .PHONY: all
 all: $(TARGET_PATH)
@@ -63,11 +62,11 @@ tag_version: require_master_branch $(TARGET_PATH)
 $(APPCAST_RELEASE_NOTE_PATH): require_master_branch tag_version
 	git show --format='%B' -s HEAD|tee $@
 
-$(APPCAST_PATH): $(APPCAST_ARCHIVE_PATH) $(APPCAST_RELEASE_NOTE_PATH)
+$(APPCAST_PATH): $(APPCAST_ARCHIVE_PATH) $(APPCAST_RELEASE_NOTE_PATH) $(TARGET_PATH)
 ifdef KEY
 	scripts/sparkle_appcast appcast \
 		--key="$(KEY)" \
-		--url="$(APPCAST_ARCHIVE_URL)" \
+		--url="https://github.com/niw/$(NAME)/releases/download/$(shell scripts/sparkle_appcast info --bundle-short-version-string "$(TARGET_PATH)")/$(NAME).app.zip" \
 		--release-note="$(APPCAST_RELEASE_NOTE_PATH)" \
 		--output "$@" \
 		"$(APPCAST_ARCHIVE_PATH)"
