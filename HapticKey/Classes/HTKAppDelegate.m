@@ -43,6 +43,9 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
 
 static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnabled";
 
+static const char kStatusItemVisibleKeyObservingTag;
+static NSString * const kStatusItemVisibleKeyPath = @"visible";
+
 @interface HTKAppDelegate () <NSApplicationDelegate, HTKLoginItemDelegate>
 
 @property (nonatomic, readonly) SUUpdater *updater;
@@ -55,11 +58,14 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 @property (nonatomic, getter=isScreenFlashEnabled) BOOL screenFlashEnabled;
 @property (nonatomic, getter=isLoginItemEnabled) BOOL loginItemEnabled;
 @property (nonatomic, getter=isAutomaticallyCheckForUpdatesEnabled) BOOL automaticallyCheckForUpdatesEnabled;
+@property (nonatomic, getter=isStatusBarIconVisible) BOOL statusBarIconVisible;
 
 @property (nonatomic, nullable) HTKHapticFeedback *hapticFeedback;
 @property (nonatomic, nullable) HTKLoginItem *mainBundleLoginItem;
 
 @property (nonatomic, nullable) NSStatusItem *statusItem;
+// See `observeValueForKeyPath:ofObject:change:context:`.
+@property (nonatomic) BOOL lastStatusItemVisible;
 
 @property (nonatomic, nullable) NSMenuItem *disabledMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useFunctionKeyEventMenuItem;
@@ -77,6 +83,7 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 @property (nonatomic, nullable) NSMenuItem *automaticallyCheckForUpdatesMenuItem;
 
 @property (nonatomic, nullable) NSMenuItem *startOnLoginMenuItem;
+@property (nonatomic, nullable) NSMenuItem *showStatusBarIconMenuItem;
 
 @end
 
@@ -89,6 +96,15 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     }
     return self;
 }
+
+- (void)dealloc
+{
+    if (self.statusItem) {
+        [self.statusItem removeObserver:self forKeyPath:kStatusItemVisibleKeyPath context:(void *)&kStatusItemVisibleKeyObservingTag];
+    }
+}
+
+// MARK: - Properties
 
 - (void)setListeningEventType:(HTKAppDelegateListeningEventType)listeningEventType
 {
@@ -169,6 +185,31 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     }
 }
 
+- (void)setStatusBarIconVisible:(BOOL)statusBarIconVisible
+{
+    if (_statusBarIconVisible != statusBarIconVisible) {
+        _statusBarIconVisible = statusBarIconVisible;
+
+        [self _htk_main_updateStatusItem];
+
+        if (!_statusBarIconVisible) {
+            [self _htk_main_alertHidingStatusBarIcon];
+        }
+    }
+}
+
+- (void)_htk_main_alertHidingStatusBarIcon
+{
+    NSAlert * const alert = [[NSAlert alloc] init];
+    alert.alertStyle = NSAlertStyleCritical;
+    alert.messageText = NSLocalizedString(@"ALERT_HIDING_STATUS_BAR_ICON_MESSAGE_TEXT", @"A title text for warning about hiding icon in menu bar.");;
+    alert.informativeText = NSLocalizedString(@"ALERT_HIDING_STATUS_BAR_ICON_INFORMATIVE_TEXT", @"A body text for warning about hiding icon in menu bar.");
+
+    // Workaround to avoid potentail application crash.
+    // See `_htk_action_didSelectCheckForUpdates:` for the details.
+    [alert performSelectorOnMainThread:@selector(runModal) withObject:nil waitUntilDone:NO];
+}
+
 - (void)_htk_main_updateStatusItem
 {
     if (!self.finishedLaunching) {
@@ -192,6 +233,9 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     self.automaticallyCheckForUpdatesMenuItem.state = (self.automaticallyCheckForUpdatesEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
 
     self.startOnLoginMenuItem.state = (self.loginItemEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.showStatusBarIconMenuItem.state = (self.statusBarIconVisible) ? NSControlStateValueOn : NSControlStateValueOff;
+
+    self.statusItem.visible = self.statusBarIconVisible;
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
@@ -303,6 +347,15 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     self.mainBundleLoginItem.enabled = self.loginItemEnabled;
 }
 
+- (void)_htk_main_updateStatusItemVisible
+{
+    if (!self.finishedLaunching) {
+        return;
+    }
+
+    self.statusItem.visible = self.statusBarIconVisible;
+}
+
 - (void)_htk_main_updateUserDefaults
 {
     if (!self.finishedLaunching) {
@@ -383,6 +436,12 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     NSStatusBar * const statusBar = [NSStatusBar systemStatusBar];
     NSStatusItem * const statusItem = [statusBar statusItemWithLength:NSVariableStatusItemLength];
     statusItem.highlightMode = YES;
+    statusItem.behavior = NSStatusItemBehaviorRemovalAllowed;
+
+    // `statusItem.visible` is automatically persistent in user default by `NSStatusItem`.
+    self.statusBarIconVisible = statusItem.visible;
+    // Neither key-value observer nor observable are retained. Should remove the observer on its `dealloc`.
+    [statusItem addObserver:self forKeyPath:kStatusItemVisibleKeyPath options:0 context:(void *)&kStatusItemVisibleKeyObservingTag];
 
     NSImage * const statusItemImage = [NSImage imageNamed:@"StatusItem"];
     statusItemImage.template = YES;
@@ -490,6 +549,13 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
     [statusMenu addItem:startOnLoginMenuItem];
     self.startOnLoginMenuItem = startOnLoginMenuItem;
 
+    NSMenuItem * const showStatusBarIconMenuItem = [[NSMenuItem alloc] init];
+    showStatusBarIconMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_SHOW_STATUS_BAR_ICON_MENU_ITEM", @"A status menu item to show icon in menu bar.");
+    showStatusBarIconMenuItem.action = @selector(_htk_action_didSelectShowStatusBarIconMenuItem:);
+    showStatusBarIconMenuItem.target = self;
+    [statusMenu addItem:showStatusBarIconMenuItem];
+    self.showStatusBarIconMenuItem = showStatusBarIconMenuItem;
+
     NSMenuItem * const quitMenuItem = [[NSMenuItem alloc] init];
     quitMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_QUIT_MENU_ITEM", @"A status menu item to terminate the application.");
     quitMenuItem.keyEquivalent = @"q";
@@ -515,6 +581,27 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
 {
     return NO;
+}
+
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
+{
+    // This callback delegete methods is called when Finder reactivates an already running
+    // application by `rapp` AppleEvent.
+
+    // In case if the user previously hid the status bar icon, restore it.
+    self.statusBarIconVisible = YES;
+
+    return YES;
+}
+
+// MARK: - NSObject (NSKeyValueObserving)
+
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)change context:(nullable void *)context
+{
+    if ([keyPath isEqualToString:kStatusItemVisibleKeyPath] && object == self.statusItem) {
+        // Somehow, Key-Value observing calls observer method twice for the same change.
+        self.statusBarIconVisible = self.statusItem.visible;
+    }
 }
 
 // MARK: - HTKLoginItemDelegate
@@ -587,6 +674,11 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 - (void)_htk_action_didSelectStartOnLoginMenuItem:(id)sender
 {
     self.loginItemEnabled = !self.loginItemEnabled;
+}
+
+- (void)_htk_action_didSelectShowStatusBarIconMenuItem:(id)sender
+{
+    self.statusBarIconVisible = !self.statusBarIconVisible;
 }
 
 @end
