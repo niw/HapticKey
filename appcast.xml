@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
   <channel>
-    <title>Change log</title>
-    <description>The most recent changes.</description>
+    <title>HapticKey Changelog</title>
+    <description>Most recent changes with links to updates.</description>
     <link>https://raw.githubusercontent.com/niw/HapticKey/sparkle/appcast.xml</link>
+    <language>en</language>
     <item>
-      <title>HapticKey 0.4.2 (11)</title>
+      <title>HapticKey 0.4.3 (12)</title>
       <description>
         <![CDATA[<p>Minor updates.</p>
 
 <ul>
-  <li>Support software update.</li>
-  <li>Internal beauty.</li>
+  <li>Add a feature to hide the application icon in the menu bar.</li>
 </ul>
 
 ]]>
       </description>
-      <pubDate>Sat, 10 Feb 2018 09:01:03 -0000</pubDate>
-      <enclosure url="https://github.com/niw/HapticKey/releases/download/0.4.2/HapticKey.app.zip" type="application/octet-stream" length="2871632" sparkle:version="11" sparkle:shortVersionString="0.4.2" sparkle:dsaSignature="MEQCIF9Xm7RcKdFZc1D7zY2annR1hjLMUBgYvqCw3PJiZa9CAiAcoJ7S6eyfn1UXmhxIY8oRzPJpnwBvfKu4rL34PtcUoQ==" sparkle:minimumSystemVersion="10.12"/>
+      <pubDate>Mon, 16 Jul 2018 02:24:12 -0000</pubDate>
+      <enclosure url="https://github.com/niw/HapticKey/releases/download/0.4.3/HapticKey.app.zip" type="application/octet-stream" length="2867668" sparkle:version="12" sparkle:shortVersionString="0.4.3" sparkle:dsaSignature="MEYCIQDaCUTdrimSUBIeIRaRayXA8tp2ZdNrLcwcjGcHDza8hAIhAJ4ZeDz1+lSw+GR3OaVfKK8Rww8O4v5m6zlf7S/8E4bI" sparkle:minimumSystemVersion="10.12"/>
     </item>
   </channel>
 </rss>
