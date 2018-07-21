@@ -67,6 +67,8 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 // See `observeValueForKeyPath:ofObject:change:context:`.
 @property (nonatomic) BOOL lastStatusItemVisible;
 
+@property (nonatomic) NSSet<NSMenuItem *> *feedbackPreferencesMenuItemSet;
+
 @property (nonatomic, nullable) NSMenuItem *disabledMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useFunctionKeyEventMenuItem;
 @property (nonatomic, nullable) NSMenuItem *useTapGestureEventMenuItem;
@@ -93,6 +95,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 {
     if (self = [super init]) {
         _updater = [[SUUpdater alloc] init];
+        _feedbackPreferencesMenuItemSet = [[NSSet alloc] init];
     }
     return self;
 }
@@ -216,19 +219,21 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
         return;
     }
 
-    self.statusItem.button.appearsDisabled = self.listeningEventType == HTKAppDelegateListeningEventTypeNone;
+    const BOOL disabled = self.listeningEventType == HTKAppDelegateListeningEventTypeNone;
+
+    self.statusItem.button.appearsDisabled = disabled;
 
     self.disabledMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeNone) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useFunctionKeyEventMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeFunctionKey) ? NSControlStateValueOn : NSControlStateValueOff;
     self.useTapGestureEventMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeTapGesture) ? NSControlStateValueOn : NSControlStateValueOff;
 
-    self.noFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeNone) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.useWeekFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeWeak) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.useMediumFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeMedium) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.useStrongFeedbackMenuItem.state = (self.feedbackType == HTKAppDelegateFeedbackTypeStrong) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.noFeedbackMenuItem.state = (!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeNone) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.useWeekFeedbackMenuItem.state = (!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeWeak) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.useMediumFeedbackMenuItem.state = (!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeMedium) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.useStrongFeedbackMenuItem.state = (!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeStrong) ? NSControlStateValueOn : NSControlStateValueOff;
 
-    self.useSoundEffectMenuItem.state = (self.soundEffectType == HTKAppDelegateSoundEffectTypeDefault) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.useScreenFlashMenuItem.state = (self.screenFlashEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.useSoundEffectMenuItem.state = (!disabled && self.soundEffectType == HTKAppDelegateSoundEffectTypeDefault) ? NSControlStateValueOn : NSControlStateValueOff;
+    self.useScreenFlashMenuItem.state = (!disabled && self.screenFlashEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
 
     self.automaticallyCheckForUpdatesMenuItem.state = (self.automaticallyCheckForUpdatesEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
 
@@ -240,6 +245,13 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
+    // Disable any menu items for configuration when no events are listened.
+    if ([self.feedbackPreferencesMenuItemSet containsObject:menuItem]) {
+        if (self.listeningEventType == HTKAppDelegateListeningEventTypeNone) {
+            return NO;
+        }
+    }
+
     // Do not allow to have a combination of settings that has no feedback effects.
     // This is a loose guard at user interface level and not really preventing to have such condition.
     if (menuItem == self.noFeedbackMenuItem) {
@@ -449,6 +461,8 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 
     NSMenu * const statusMenu = [[NSMenu alloc] init];
 
+    NSMutableSet<NSMenuItem *> * const feedbackPreferencesMenuItemSet = [[NSMutableSet alloc] init];
+
     NSMenuItem * const disabledMenuItem = [[NSMenuItem alloc] init];
     disabledMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_DISABLED_ITEM", @"A status menu item selected when it is disabled.");
     disabledMenuItem.action = @selector(_htk_action_didSelectListeningEventTypeMenuItem:);
@@ -479,6 +493,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     noFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
     noFeedbackMenuItem.target = self;
     [statusMenu addItem:noFeedbackMenuItem];
+    [feedbackPreferencesMenuItemSet addObject:noFeedbackMenuItem];
     self.noFeedbackMenuItem = noFeedbackMenuItem;
 
     NSMenuItem * const useWeekFeedbackMenuItem = [[NSMenuItem alloc] init];
@@ -488,6 +503,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     useWeekFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
     useWeekFeedbackMenuItem.target = self;
     [statusMenu addItem:useWeekFeedbackMenuItem];
+    [feedbackPreferencesMenuItemSet addObject:useWeekFeedbackMenuItem];
     self.useWeekFeedbackMenuItem = useWeekFeedbackMenuItem;
 
     NSMenuItem * const useMediumFeedbackMenuItem = [[NSMenuItem alloc] init];
@@ -497,6 +513,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     useMediumFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
     useMediumFeedbackMenuItem.target = self;
     [statusMenu addItem:useMediumFeedbackMenuItem];
+    [feedbackPreferencesMenuItemSet addObject:useMediumFeedbackMenuItem];
     self.useMediumFeedbackMenuItem = useMediumFeedbackMenuItem;
 
     NSMenuItem * const useStrongFeedbackMenuItem = [[NSMenuItem alloc] init];
@@ -506,6 +523,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     useStrongFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
     useStrongFeedbackMenuItem.target = self;
     [statusMenu addItem:useStrongFeedbackMenuItem];
+    [feedbackPreferencesMenuItemSet addObject:useStrongFeedbackMenuItem];
     self.useStrongFeedbackMenuItem = useStrongFeedbackMenuItem;
 
     [statusMenu addItem:[NSMenuItem separatorItem]];
@@ -515,6 +533,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     useSoundEffectMenuItem.action = @selector(_htk_action_didSelectSoundEffectTypeMenuItem:);
     useSoundEffectMenuItem.target = self;
     [statusMenu addItem:useSoundEffectMenuItem];
+    [feedbackPreferencesMenuItemSet addObject:useSoundEffectMenuItem];
     self.useSoundEffectMenuItem = useSoundEffectMenuItem;
 
     NSMenuItem * const useScreenFlashMenuItem = [[NSMenuItem alloc] init];
@@ -522,6 +541,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     useScreenFlashMenuItem.action = @selector(_htk_action_didSelectScreenFlashMenuItem:);
     useScreenFlashMenuItem.target = self;
     [statusMenu addItem:useScreenFlashMenuItem];
+    [feedbackPreferencesMenuItemSet addObject:useScreenFlashMenuItem];
     self.useScreenFlashMenuItem = useScreenFlashMenuItem;
 
     [statusMenu addItem:[NSMenuItem separatorItem]];
@@ -566,6 +586,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     statusItem.menu = statusMenu;
 
     self.statusItem = statusItem;
+    self.feedbackPreferencesMenuItemSet = feedbackPreferencesMenuItemSet;
 }
 
 - (void)_htk_main_loadMainBundleLoginItem
