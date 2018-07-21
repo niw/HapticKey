@@ -486,6 +486,11 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 
     [statusMenu addItem:[NSMenuItem separatorItem]];
 
+    NSMenuItem * const feedbackSectionTitleMenuItem = [[NSMenuItem alloc] init];
+    feedbackSectionTitleMenuItem.enabled = NO;
+    feedbackSectionTitleMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_FEEDBACK_SECTION_TITLE_MENU_ITEM", @"A status menu item for feedback section title.");
+    [statusMenu addItem:feedbackSectionTitleMenuItem];
+
     NSMenuItem * const noFeedbackMenuItem = [[NSMenuItem alloc] init];
     noFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_NO_FEEDBACK_MENU_ITEM", @"A status menu item to not use feedback.");
     noFeedbackMenuItem.keyEquivalent = @"0";
