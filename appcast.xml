@@ -6,18 +6,19 @@
     <link>https://raw.githubusercontent.com/niw/HapticKey/sparkle/appcast.xml</link>
     <language>en</language>
     <item>
-      <title>HapticKey 0.4.3 (12)</title>
+      <title>HapticKey 0.4.4 (13)</title>
       <description>
         <![CDATA[<p>Minor updates.</p>
 
 <ul>
-  <li>Add a feature to hide the application icon in the menu bar.</li>
+  <li>Add section title for haptic feedback strength.</li>
+  <li>Update menu item label and translations.</li>
 </ul>
 
 ]]>
       </description>
-      <pubDate>Mon, 16 Jul 2018 02:24:12 -0000</pubDate>
-      <enclosure url="https://github.com/niw/HapticKey/releases/download/0.4.3/HapticKey.app.zip" type="application/octet-stream" length="2867668" sparkle:version="12" sparkle:shortVersionString="0.4.3" sparkle:dsaSignature="MEYCIQDaCUTdrimSUBIeIRaRayXA8tp2ZdNrLcwcjGcHDza8hAIhAJ4ZeDz1+lSw+GR3OaVfKK8Rww8O4v5m6zlf7S/8E4bI" sparkle:minimumSystemVersion="10.12"/>
+      <pubDate>Sun, 22 Jul 2018 05:24:16 -0000</pubDate>
+      <enclosure url="https://github.com/niw/HapticKey/releases/download/0.4.4/HapticKey.app.zip" type="application/octet-stream" length="2868300" sparkle:version="13" sparkle:shortVersionString="0.4.4" sparkle:dsaSignature="MEQCIAdDcTltRYqSftppEaKvEjhObC3mc+k+4VBg4opGZgEPAiB4f2QZlsM2Q6T2mG2U/zyJfTi5SAAczXXjk7PGHijFwg==" sparkle:minimumSystemVersion="10.12"/>
     </item>
   </channel>
 </rss>
