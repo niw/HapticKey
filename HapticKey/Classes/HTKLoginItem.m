@@ -210,12 +210,12 @@ static NSString * const kBackgroundItemsChangeNotification = @"com.apple.private
     NSError *error;
     NSArray * const snapshot = CaptureFileListSnapshot(self.fileList, &seed, &error);
     if (error) {
-        os_log_error(OS_LOG_DEFAULT, "Fail to capture login items snapshot code: %ld", (long)error.code);
+        os_log_error(OS_LOG_DEFAULT, "Fail to capture login items snapshot code: 0x%lx", (long)error.code);
         return;
     }
     id const fileListItem = FindFileListItemAtPathInFileListSnapshot(self.path, snapshot, &error);
     if (error) {
-        os_log_error(OS_LOG_DEFAULT, "Fail to find login item at path: %{public}@ code: %ld", self.path, (long)error.code);
+        os_log_error(OS_LOG_DEFAULT, "Fail to find login item at path: %{public}@ code: 0x%lx", self.path, (long)error.code);
         return;
     }
     [self _htk_main_setFileListItem:fileListItem seed:seed];
@@ -245,14 +245,14 @@ static NSString * const kBackgroundItemsChangeNotification = @"com.apple.private
         if (enabled) {
             AddFileListItemAtPathToLoginItemsFileList(self.path, self.fileList, &error);
             if (error) {
-                os_log_error(OS_LOG_DEFAULT, "Fail to add login item at path: %{public}@ code: %ld", self.path, (long)error.code);
+                os_log_error(OS_LOG_DEFAULT, "Fail to add login item at path: %{public}@ code: 0x%lx", self.path, (long)error.code);
                 return;
             }
             os_log_info(OS_LOG_DEFAULT, "Add login item at path: %{public}@", self.path);
         } else {
             RemoveFileListItemFromLoginItems(self.fileListItem, self.fileList, &error);
             if (error) {
-                os_log_error(OS_LOG_DEFAULT, "Fail to remove login item at path: %{public}@ code: %ld", self.path, (long)error.code);
+                os_log_error(OS_LOG_DEFAULT, "Fail to remove login item at path: %{public}@ code: 0x%lx", self.path, (long)error.code);
                 return;
             }
             os_log_info(OS_LOG_DEFAULT, "Remove login item at path: %{public}@", self.path);

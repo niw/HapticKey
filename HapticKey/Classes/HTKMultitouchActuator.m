@@ -82,7 +82,7 @@ static const UInt64 kAppleMultitouchDeviceMultitouchID = 0x200000001000000;
 
     const IOReturn error = MTActuatorOpen(actuatorRef);
     if (error != kIOReturnSuccess) {
-        os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorOpen: %p error: %d", _actuatorRef, error);
+        os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorOpen: %p error: 0x%x", _actuatorRef, error);
         CFRelease(_actuatorRef);
         _actuatorRef = NULL;
         return;
@@ -97,7 +97,7 @@ static const UInt64 kAppleMultitouchDeviceMultitouchID = 0x200000001000000;
 
     const IOReturn error = MTActuatorClose(_actuatorRef);
     if (error != kIOReturnSuccess) {
-        os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorClose: %p error: %d", _actuatorRef, error);
+        os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorClose: %p error: 0x%x", _actuatorRef, error);
     }
     CFRelease(_actuatorRef);
     _actuatorRef = NULL;
@@ -112,7 +112,7 @@ static const UInt64 kAppleMultitouchDeviceMultitouchID = 0x200000001000000;
 
     const IOReturn error = MTActuatorActuate(_actuatorRef, actuationID, unknown1, unknown2, unknown3);
     if (error != kIOReturnSuccess) {
-        os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorActuate: %p, %d, %d, %f, %f error: %d", _actuatorRef, actuationID, unknown1, unknown2, unknown3, error);
+        os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorActuate: %p, %d, %d, %f, %f error: 0x%x", _actuatorRef, actuationID, unknown1, unknown2, unknown3, error);
         return NO;
     } else {
         return YES;

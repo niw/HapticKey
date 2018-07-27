@@ -38,10 +38,10 @@ static NSString * const kSystemSoundsPath = @"/System/Library/Components/CoreAud
         NSURL *url = [[NSURL alloc] initFileURLWithPath:path];
         OSStatus error = AudioServicesCreateSystemSoundID((__bridge CFURLRef)url, &systemSoundID);
         if (error != noErr) {
-            os_log_error(OS_LOG_DEFAULT, "Fail to create system sound at path: %{public}@ code: %lu", path, (long)error);
+            os_log_error(OS_LOG_DEFAULT, "Fail to create system sound at path: %{public}@ code: 0x%lx", path, (long)error);
             return nil;
         } else {
-            os_log_info(OS_LOG_DEFAULT, "Create system sound at path: %{public}@ id: %lu", path, (long)systemSoundID);
+            os_log_info(OS_LOG_DEFAULT, "Create system sound at path: %{public}@ id: 0x%lx", path, (long)systemSoundID);
         }
         _systemSoundID = systemSoundID;
     }
@@ -58,7 +58,7 @@ static NSString * const kSystemSoundsPath = @"/System/Library/Components/CoreAud
 {
     OSStatus error = AudioServicesDisposeSystemSoundID(self.systemSoundID);
     if (error != noErr) {
-        os_log_error(OS_LOG_DEFAULT, "Fail to dispose system sound id: %lu code: %lu", (long)self.systemSoundID, (long)error);
+        os_log_error(OS_LOG_DEFAULT, "Fail to dispose system sound id: %lu code: 0x%lx", (long)self.systemSoundID, (long)error);
     }
 }
 
