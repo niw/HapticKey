@@ -25,6 +25,8 @@ CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
 
 @interface HTKMultitouchActuator ()
 
+@property (nonatomic) UInt64 lastKnownMultitouchDeviceMultitouchID;
+
 @end
 
 @implementation HTKMultitouchActuator
@@ -62,10 +64,15 @@ CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
     return result;
 }
 
-// By using IORegistoryExploere, which is in Additional Tools for Xcode,
+// By using IORegistryExplorer, which is in Additional Tools for Xcode,
 // Find `AppleMultitouchDevice` which has `Multitouch ID`.
-// Probably this is a fixed value.
-static const UInt64 kAppleMultitouchDeviceMultitouchID = 0x200000001000000;
+// Probably these are fixed value.
+static const UInt64 kKnownAppleMultitouchDeviceMultitouchIDs[] = {
+    // For MacBook Pro 2016, 2017
+    0x200000001000000,
+    // For MacBook Pro 2018
+    0x300000080500000
+};
 
 - (void)_htk_main_openActuator
 {
@@ -73,14 +80,33 @@ static const UInt64 kAppleMultitouchDeviceMultitouchID = 0x200000001000000;
         return;
     }
 
-    const CFTypeRef actuatorRef = MTActuatorCreateFromDeviceID(kAppleMultitouchDeviceMultitouchID);
-    if (!actuatorRef) {
-        os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorCreateFromDeviceID");
-        return;
+    if (self.lastKnownMultitouchDeviceMultitouchID) {
+        const CFTypeRef actuatorRef = MTActuatorCreateFromDeviceID(self.lastKnownMultitouchDeviceMultitouchID);
+        if (!actuatorRef) {
+            os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorCreateFromDeviceID: 0x%llx", self.lastKnownMultitouchDeviceMultitouchID);
+            return;
+        }
+        _actuatorRef = actuatorRef;
+    } else {
+        const size_t count = sizeof(kKnownAppleMultitouchDeviceMultitouchIDs) / sizeof(UInt64);
+        for (size_t index = 0; index < count; index++) {
+            const UInt64 multitouchDeviceMultitouchID = kKnownAppleMultitouchDeviceMultitouchIDs[index];
+            const CFTypeRef actuatorRef = MTActuatorCreateFromDeviceID(multitouchDeviceMultitouchID);
+            if (actuatorRef) {
+                os_log_info(OS_LOG_DEFAULT, "Use MTActuatorCreateFromDeviceID: 0x%llx", multitouchDeviceMultitouchID);
+                _actuatorRef = actuatorRef;
+                self.lastKnownMultitouchDeviceMultitouchID = multitouchDeviceMultitouchID;
+                break;
+            }
+            os_log_info(OS_LOG_DEFAULT, "Fail to test MTActuatorCreateFromDeviceID: 0x%llx", multitouchDeviceMultitouchID);
+        }
+        if (!_actuatorRef) {
+            os_log_info(OS_LOG_DEFAULT, "Fail to MTActuatorCreateFromDeviceID");
+            return;
+        }
     }
-    _actuatorRef = actuatorRef;
 
-    const IOReturn error = MTActuatorOpen(actuatorRef);
+    const IOReturn error = MTActuatorOpen(_actuatorRef);
     if (error != kIOReturnSuccess) {
         os_log_error(OS_LOG_DEFAULT, "Fail to MTActuatorOpen: %p error: 0x%x", _actuatorRef, error);
         CFRelease(_actuatorRef);
