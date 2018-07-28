@@ -6,19 +6,19 @@
     <link>https://raw.githubusercontent.com/niw/HapticKey/sparkle/appcast.xml</link>
     <language>en</language>
     <item>
-      <title>HapticKey 0.4.4 (13)</title>
+      <title>HapticKey 0.4.5 (14)</title>
       <description>
         <![CDATA[<p>Minor updates.</p>
 
 <ul>
-  <li>Add section title for haptic feedback strength.</li>
-  <li>Update menu item label and translations.</li>
+  <li>Support MacBook Pro (2018) (#23).</li>
+  <li>Internal beauty.</li>
 </ul>
 
 ]]>
       </description>
-      <pubDate>Sun, 22 Jul 2018 05:24:16 -0000</pubDate>
-      <enclosure url="https://github.com/niw/HapticKey/releases/download/0.4.4/HapticKey.app.zip" type="application/octet-stream" length="2868300" sparkle:version="13" sparkle:shortVersionString="0.4.4" sparkle:dsaSignature="MEQCIAdDcTltRYqSftppEaKvEjhObC3mc+k+4VBg4opGZgEPAiB4f2QZlsM2Q6T2mG2U/zyJfTi5SAAczXXjk7PGHijFwg==" sparkle:minimumSystemVersion="10.12"/>
+      <pubDate>Sat, 28 Jul 2018 03:18:52 -0000</pubDate>
+      <enclosure url="https://github.com/niw/HapticKey/releases/download/0.4.5/HapticKey.app.zip" type="application/octet-stream" length="2868664" sparkle:version="14" sparkle:shortVersionString="0.4.5" sparkle:dsaSignature="MEQCICYZhwQ31UKDRS3HNsuj31CVUvQCCwIyVMhTcsK3TFY7AiA0eLuzBBNwoic2skoL+lLZF4+oYlGHpqBsrC85RQEMvg==" sparkle:minimumSystemVersion="10.12"/>
     </item>
   </channel>
 </rss>
