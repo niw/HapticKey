@@ -7,10 +7,13 @@ Since Touch Bar is just a flat panel, there is no feedback other than a visual c
 
 By adding a haptic feedback, which is vibrating a trackpad not Touch Bar itself, it helps to improve the usage of Touch Bar. It is also optionally playing a sound effect or flashing the screen like a visual bell on a terminal.
 
-Usage
------
+Installation
+----
 
-Download the latest pre-built application binary from [Releases](https://github.com/niw/HapticKey/releases) page. Note that these pre-built application binaries are not signed so you need to allow to execute it on Security & Privacy settings pane in System Preferences.
+- Via Homebrew: `brew cask install haptickey`
+- Manually: Download the latest pre-built application binary from [Releases](https://github.com/niw/HapticKey/releases) page.
+
+**NOTE:** These pre-built application binaries are not signed so you need to allow to execute it on Security & Privacy settings pane in System Preferences.
 
 Also, the application may ask a permission to use Accessibility, as like the other applications that are listening system events.
 
