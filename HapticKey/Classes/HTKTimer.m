@@ -26,14 +26,21 @@ NS_ASSUME_NONNULL_BEGIN
     abort();
 }
 
-- (instancetype)initWithInterval:(NSTimeInterval)interval target:(id)target selector:(SEL)selector
+- (instancetype)initWithTimeInterval:(NSTimeInterval)timeInterval repeats:(BOOL)repeats target:(id)target selector:(SEL)selector
 {
     if (self = [super init]) {
+        _repeats = repeats;
         _target = target;
         _selector = selector;
 
-        // NOTE: `NSTimer` retains `target` and we really need to release `_timer` when we invalidate it.
-        _timer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(_htk_timer_didFire:) userInfo:nil repeats:NO];
+        __weak typeof (self) const weakSelf = self;
+        _timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval repeats:repeats block:^(NSTimer *timer) {
+            typeof (self) const strongSelf = weakSelf;
+            if (!strongSelf) {
+                return;
+            }
+            [strongSelf _htk_timer_didFire:timer];
+        }];
     }
     return self;
 }
@@ -41,6 +48,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)dealloc
 {
     [self invalidate];
+}
+
+- (NSTimeInterval)timeInterval
+{
+    return _timer.timeInterval;
 }
 
 - (void)invalidate
@@ -61,7 +73,9 @@ NS_ASSUME_NONNULL_BEGIN
         msgSend(target, selector, self);
     }
 
-    [self invalidate];
+    if (!self.repeats) {
+        [self invalidate];
+    }
 }
 
 @end

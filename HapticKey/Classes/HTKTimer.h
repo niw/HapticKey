@@ -12,13 +12,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HTKTimer : NSObject
 
+@property (nonatomic, readonly) NSTimeInterval timeInterval;
+@property (nonatomic, readonly) BOOL repeats;
 @property (nonatomic, readonly, weak) id target;
 @property (nonatomic, readonly) SEL selector;
 
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 
-- (instancetype)initWithInterval:(NSTimeInterval)interval target:(id)target selector:(SEL)selector NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithTimeInterval:(NSTimeInterval)timeInterval repeats:(BOOL)repeats target:(id)target selector:(SEL)selector NS_DESIGNATED_INITIALIZER;
 
 - (void)invalidate;
 

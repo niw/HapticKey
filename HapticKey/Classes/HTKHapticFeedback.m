@@ -67,7 +67,7 @@ static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
     if (self.timer) {
         return;
     }
-    self.timer = [[HTKTimer alloc] initWithInterval:kMinimumActuationInterval target:self selector:@selector(_htk_timer_didFire:)];
+    self.timer = [[HTKTimer alloc] initWithTimeInterval:kMinimumActuationInterval repeats:NO target:self selector:@selector(_htk_timer_didFire:)];
 
     const SInt32 actuationID = [self _htk_main_actuationID];
     HTKSystemSound * const systemSound = [self _htk_main_systemSound];
