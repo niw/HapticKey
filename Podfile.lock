@@ -1,11 +1,11 @@
 PODS:
-  - Sparkle (1.18.1)
+  - Sparkle (1.21.3)
 
 DEPENDENCIES:
   - Sparkle
 
 SPEC CHECKSUMS:
-  Sparkle: 06ea33170007c5937ee54da481b4481af98fac79
+  Sparkle: 3f75576db8b0265adef36c43249d747f22d0b708
 
 PODFILE CHECKSUM: 7f658bffc16262a1e325f2b4424e1f0feb1d6030
 
