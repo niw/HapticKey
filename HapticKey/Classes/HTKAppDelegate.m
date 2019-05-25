@@ -581,6 +581,11 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     [statusMenu addItem:showStatusBarIconMenuItem];
     self.showStatusBarIconMenuItem = showStatusBarIconMenuItem;
 
+    NSMenuItem * const aboutMenuItem = [[NSMenuItem alloc] init];
+    aboutMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_ABOUT_MENU_ITEM", @"A status menu item to present a window about the application.");
+    aboutMenuItem.action = @selector(_htk_action_didSelectAboutMenuItem:);
+    [statusMenu addItem:aboutMenuItem];
+
     NSMenuItem * const quitMenuItem = [[NSMenuItem alloc] init];
     quitMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_QUIT_MENU_ITEM", @"A status menu item to terminate the application.");
     quitMenuItem.keyEquivalent = @"q";
@@ -705,6 +710,15 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 - (void)_htk_action_didSelectShowStatusBarIconMenuItem:(id)sender
 {
     self.statusBarIconVisible = !self.statusBarIconVisible;
+}
+
+- (void)_htk_action_didSelectAboutMenuItem:(id)sender
+{
+    if ([NSApp activationPolicy] == NSApplicationActivationPolicyAccessory) {
+        [NSApp activateIgnoringOtherApps:YES];
+    }
+
+    [NSApp orderFrontStandardAboutPanel:sender];
 }
 
 @end
