@@ -20,11 +20,14 @@ exec_with_gems() {
   export GEM_PATH="$GEM_HOME"
   mkdir -p "$GEM_HOME"
 
+  # Use 1.x Bundler instead to support rubygems 2.x used by system Ruby.
+  local -r bundler_version="~> 1.17"
+
   # Install or update Bundler, if it's not present or not executable.
   # Since bundler binstubs are installed with `--no-env-shebang` to use system ruby,
   # in case macOS updated its `Ruby.framework`, the binstubs are no longer executable.
   # Use `help` command to test if it's runnable or not.
-  ("$rubygems" list --norc -i bundler -v "~> 1.15" > /dev/null) || {
+  ("$rubygems" list --norc -i bundler -v "$bundler_version" > /dev/null) || {
     echo "No bundler found in $GEM_HOME, install it..."
 
     # Install or update Bundler.
@@ -35,6 +38,7 @@ exec_with_gems() {
       --no-rdoc \
       --no-ri \
       --clear-sources \
+      --version "$bundler_version" \
       bundler || {
       echo "Fail to install bundler." >&2
       exit 1
