@@ -17,7 +17,7 @@ Also, the application may ask a permission to use Accessibility, as like the oth
 Development
 -----------
 
-To build the application from the source code, you need to use the latest Xcode 9.
+To build the application from the source code, you need to use the latest Xcode 10.
 
 ### Install dependencies
 
