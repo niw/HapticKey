@@ -14,16 +14,23 @@ Download the latest pre-built application binary from [Releases](https://github.
 
 Also, the application may ask a permission to use Accessibility, as like the other applications that are listening system events.
 
+Build
+-----
+
+To build the application from the source code, you need to use the latest Xcode 11.
+
+Simply use `make` to install all dependencies, build application binary, then archive it in `build/HapticKey.xcarchive/Products/`.
+
+    $ make
+
 Development
 -----------
 
-To build the application from the source code, you need to use the latest Xcode 10.
+### Dependencies
 
-### Install dependencies
+A `bootstrap` make target installs all dependencies from [CocoaPods](https://cocoapods.org/).
 
-Use `bootstrap` make target to install all dependencies from [CocoaPods](https://cocoapods.org/).
-
-    make bootstrap
+    $ make bootstrap
 
 This target uses a wrapper script `scripts/pod`, which uses system `/usr/bin/ruby` to create an isolated [RubyGems](https://rubygems.org/) environment under project directory, then install [Bundler](http://bundler.io/), install CocoaPods and finally install dependencies.
 
