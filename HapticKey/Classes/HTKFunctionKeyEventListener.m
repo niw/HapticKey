@@ -54,13 +54,18 @@ static const int64_t kTouchbarKeyboardType = 198;
 
 // MARK: - HTKEventTapDelegate
 
-- (void)eventTap:(HTKEventTap *)eventTap didTapEvent:(NSEvent *)event
+- (void)eventTap:(HTKEventTap *)eventTap didTapCGEvent:(CGEventRef)eventRef
 {
-    const int64_t keyboardType = CGEventGetIntegerValueField(event.CGEvent, kCGKeyboardEventKeyboardType);
-    if (keyboardType == kTouchbarKeyboardType && !event.ARepeat) {
+    const CGEventType eventType = CGEventGetType(eventRef);
+
+    const int64_t keyboardType = CGEventGetIntegerValueField(eventRef, kCGKeyboardEventKeyboardType);
+    const int64_t autorepeat = CGEventGetIntegerValueField(eventRef, kCGKeyboardEventAutorepeat);
+    const int64_t keycode = CGEventGetIntegerValueField(eventRef, kCGKeyboardEventKeycode);
+
+    if (keyboardType == kTouchbarKeyboardType && autorepeat == 0) {
         for (NSUInteger index = 0; index < kNumberOfEscAndFunctionKeycodes; index += 1) {
-            if (kEscAndFunctionKeycodes[index] == event.keyCode) {
-                switch (event.type) {
+            if (kEscAndFunctionKeycodes[index] == keycode) {
+                switch (eventType) {
                     case NSEventTypeKeyDown:
                         [self _htk_main_didListenEvent:[[HTKEvent alloc] initWithPhase:HTKEventPhaseBegin]];
                         break;
