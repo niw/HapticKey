@@ -208,7 +208,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     alert.messageText = NSLocalizedString(@"ALERT_HIDING_STATUS_BAR_ICON_MESSAGE_TEXT", @"A title text for warning about hiding icon in menu bar.");;
     alert.informativeText = NSLocalizedString(@"ALERT_HIDING_STATUS_BAR_ICON_INFORMATIVE_TEXT", @"A body text for warning about hiding icon in menu bar.");
 
-    // Workaround to avoid potentail application crash.
+    // Workaround to avoid potential application crash.
     // See `_htk_action_didSelectCheckForUpdates:` for the details.
     [alert performSelectorOnMainThread:@selector(runModal) withObject:nil waitUntilDone:NO];
 }
@@ -616,7 +616,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
 {
-    // This callback delegete methods is called when Finder reactivates an already running
+    // This callback delegate methods is called when Finder reactivates an already running
     // application by `rapp` AppleEvent.
 
     // In case if the user previously hid the status bar icon, restore it.

@@ -17,7 +17,7 @@ CF_EXPORT CFTypeRef MTActuatorCreateFromDeviceID(UInt64 deviceID);
 CF_EXPORT IOReturn MTActuatorOpen(CFTypeRef actuatorRef);
 CF_EXPORT IOReturn MTActuatorClose(CFTypeRef actuatorRef);
 // NOTE: There are unknown arguments.
-// unknown1, unknown2, and unknown 3 are used to calcutate waveform.
+// unknown1, unknown2, and unknown 3 are used to calculate waveform.
 // unknown1 looks like a 32bit bit fields and passed to 4th arguments of MTActuationCalculateWaveform().
 // Give 0 or 0.0 for these arguments should be okay.
 CF_EXPORT IOReturn MTActuatorActuate(CFTypeRef actuatorRef, SInt32 actuationID, UInt32 unknown1, Float32 unknown2, Float32 unknown3);
@@ -132,7 +132,7 @@ static const UInt64 kKnownAppleMultitouchDeviceMultitouchIDs[] = {
 - (BOOL)_htk_main_actuateActuationID:(SInt32)actuationID unknown1:(UInt32)unknown1 unknown2:(Float32)unknown2 unknown3:(Float32)unknown3
 {
     if (!_actuatorRef) {
-        os_log_error(OS_LOG_DEFAULT, "The actuator is not opend yet.");
+        os_log_error(OS_LOG_DEFAULT, "The actuator is not opened yet.");
         return NO;
     }
 

@@ -99,9 +99,9 @@ static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
 
 - (SInt32)_htk_main_actuationID
 {
-    // To find predefiend actuation ID, run next command.
+    // To find predefined actuation ID, run next command.
     // $ otool -s __TEXT __tpad_act_plist /System/Library/PrivateFrameworks/MultitouchSupport.framework/Versions/Current/MultitouchSupport|tail -n +3|awk -F'\t' '{print $2}'|xxd -r -p
-    // This show a embeded property list file in `MultitouchSupport.framework`.
+    // This show a embedded property list file in `MultitouchSupport.framework`.
     // There are default 1, 2, 3, 4, 5, 6, 15, and 16 actuation IDs now.
 
     switch (self.type) {

@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
-static const OSStatus kUnknwonErrorStatus = -1;
+static const OSStatus kUnknownErrorStatus = -1;
 
 static inline NSError *ErrorWithOSStatus(OSStatus status)
 {
@@ -50,7 +50,7 @@ static id _Nullable AddFileListItemAtPathToLoginItemsFileList(NSString *path, id
     id fileListItem = (__bridge_transfer id)LSSharedFileListInsertItemURL((__bridge LSSharedFileListRef)fileList, kLSSharedFileListItemLast, NULL, NULL, (__bridge CFURLRef)url, NULL, NULL);
     if (!fileListItem) {
         if (outError) {
-            *outError = ErrorWithOSStatus(kUnknwonErrorStatus);
+            *outError = ErrorWithOSStatus(kUnknownErrorStatus);
         }
     }
     return fileListItem;
@@ -76,7 +76,7 @@ static NSArray * _Nullable CaptureFileListSnapshot(id fileList, UInt32 * _Nullab
     NSArray * const fileListSnapshot = (__bridge_transfer NSArray *)LSSharedFileListCopySnapshot((__bridge LSSharedFileListRef)fileList, outSeed);
     if (!fileListSnapshot) {
         if (outError) {
-            *outError = ErrorWithOSStatus(kUnknwonErrorStatus);
+            *outError = ErrorWithOSStatus(kUnknownErrorStatus);
         }
     }
     return fileListSnapshot;
