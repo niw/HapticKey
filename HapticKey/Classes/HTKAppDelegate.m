@@ -10,6 +10,7 @@
 #import "HTKFunctionKeyEventListener.h"
 #import "HTKHapticFeedback.h"
 #import "HTKLoginItem.h"
+#import "HTKStatusItemMenuController.h"
 #import "HTKTapGestureEventListener.h"
 
 @import Sparkle;
@@ -46,7 +47,7 @@ static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnable
 static const char kStatusItemVisibleKeyObservingTag;
 static NSString * const kStatusItemVisibleKeyPath = @"visible";
 
-@interface HTKAppDelegate () <NSApplicationDelegate, HTKLoginItemDelegate>
+@interface HTKAppDelegate () <NSApplicationDelegate, HTKLoginItemDelegate, HTKStatusItemMenuControllerDelegate>
 
 @property (nonatomic, readonly) SUUpdater *updater;
 
@@ -67,25 +68,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 // See `observeValueForKeyPath:ofObject:change:context:`.
 @property (nonatomic) BOOL lastStatusItemVisible;
 
-@property (nonatomic) NSSet<NSMenuItem *> *feedbackPreferencesMenuItemSet;
-
-@property (nonatomic, nullable) NSMenuItem *disabledMenuItem;
-@property (nonatomic, nullable) NSMenuItem *useFunctionKeyEventMenuItem;
-@property (nonatomic, nullable) NSMenuItem *useTapGestureEventMenuItem;
-
-@property (nonatomic, nullable) NSMenuItem *noFeedbackMenuItem;
-@property (nonatomic, nullable) NSMenuItem *useWeekFeedbackMenuItem;
-@property (nonatomic, nullable) NSMenuItem *useMediumFeedbackMenuItem;
-@property (nonatomic, nullable) NSMenuItem *useStrongFeedbackMenuItem;
-
-@property (nonatomic, nullable) NSMenuItem *useSoundEffectMenuItem;
-@property (nonatomic, nullable) NSMenuItem *useScreenFlashMenuItem;
-
-@property (nonatomic, nullable) NSMenuItem *checkForUpdatesMenuItem;
-@property (nonatomic, nullable) NSMenuItem *automaticallyCheckForUpdatesMenuItem;
-
-@property (nonatomic, nullable) NSMenuItem *startOnLoginMenuItem;
-@property (nonatomic, nullable) NSMenuItem *showStatusBarIconMenuItem;
+@property (nonatomic, nullable) HTKStatusItemMenuController *statusItemMenuController;
 
 @end
 
@@ -95,7 +78,6 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 {
     if (self = [super init]) {
         _updater = [[SUUpdater alloc] init];
-        _feedbackPreferencesMenuItemSet = [[NSSet alloc] init];
     }
     return self;
 }
@@ -223,53 +205,24 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 
     self.statusItem.button.appearsDisabled = disabled;
 
-    self.disabledMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeNone) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.useFunctionKeyEventMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeFunctionKey) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.useTapGestureEventMenuItem.state = (self.listeningEventType == HTKAppDelegateListeningEventTypeTapGesture) ? NSControlStateValueOn : NSControlStateValueOff;
+    [self.statusItemMenuController setStateValue:(self.listeningEventType == HTKAppDelegateListeningEventTypeNone) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemDisabled];
+    [self.statusItemMenuController setStateValue:(self.listeningEventType == HTKAppDelegateListeningEventTypeFunctionKey) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemUseFunctionKeyEvent];
+    [self.statusItemMenuController setStateValue:(self.listeningEventType == HTKAppDelegateListeningEventTypeTapGesture) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemUseTapGestureEvent];
 
-    self.noFeedbackMenuItem.state = (!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeNone) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.useWeekFeedbackMenuItem.state = (!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeWeak) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.useMediumFeedbackMenuItem.state = (!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeMedium) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.useStrongFeedbackMenuItem.state = (!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeStrong) ? NSControlStateValueOn : NSControlStateValueOff;
+    [self.statusItemMenuController setStateValue:(!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeNone) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemNoFeedback];
+    [self.statusItemMenuController setStateValue:(!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeWeak) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemUseWeekFeedback];
+    [self.statusItemMenuController setStateValue:(!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeMedium) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemUseMediumFeedback];
+    [self.statusItemMenuController setStateValue:(!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeStrong) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemUseStrongFeedback];
 
-    self.useSoundEffectMenuItem.state = (!disabled && self.soundEffectType == HTKAppDelegateSoundEffectTypeDefault) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.useScreenFlashMenuItem.state = (!disabled && self.screenFlashEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
+    [self.statusItemMenuController setStateValue:(!disabled && self.soundEffectType == HTKAppDelegateSoundEffectTypeDefault) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemUseSoundEffect];
+    [self.statusItemMenuController setStateValue:(!disabled && self.screenFlashEnabled) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemUseScreenFlash];
 
-    self.automaticallyCheckForUpdatesMenuItem.state = (self.automaticallyCheckForUpdatesEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
+    [self.statusItemMenuController setStateValue:(self.automaticallyCheckForUpdatesEnabled) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemAutomaticallyCheckForUpdates];
 
-    self.startOnLoginMenuItem.state = (self.loginItemEnabled) ? NSControlStateValueOn : NSControlStateValueOff;
-    self.showStatusBarIconMenuItem.state = (self.statusBarIconVisible) ? NSControlStateValueOn : NSControlStateValueOff;
+    [self.statusItemMenuController setStateValue:(self.loginItemEnabled) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemStartOnLogin];
+    [self.statusItemMenuController setStateValue:(self.statusBarIconVisible) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemShowStatusBarIcon];
 
     self.statusItem.visible = self.statusBarIconVisible;
-}
-
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
-{
-    // Disable any menu items for configuration when no events are listened.
-    if ([self.feedbackPreferencesMenuItemSet containsObject:menuItem]) {
-        if (self.listeningEventType == HTKAppDelegateListeningEventTypeNone) {
-            return NO;
-        }
-    }
-
-    // Do not allow to have a combination of settings that has no feedback effects.
-    // This is a loose guard at user interface level and not really preventing to have such condition.
-    if (menuItem == self.noFeedbackMenuItem) {
-        if ((self.soundEffectType == HTKAppDelegateSoundEffectTypeNone) && !self.screenFlashEnabled) {
-            return (self.feedbackType == HTKAppDelegateFeedbackTypeNone);
-        }
-    } else if (menuItem == self.useSoundEffectMenuItem) {
-        if (self.feedbackType == HTKAppDelegateFeedbackTypeNone && !self.screenFlashEnabled) {
-            return (self.soundEffectType == HTKAppDelegateSoundEffectTypeNone);
-        }
-    } else if (menuItem == self.useScreenFlashMenuItem) {
-        if ((self.feedbackType == HTKAppDelegateFeedbackTypeNone) && (self.soundEffectType == HTKAppDelegateSoundEffectTypeNone)) {
-            return !self.screenFlashEnabled;
-        }
-    } else if (menuItem == self.checkForUpdatesMenuItem) {
-        return [self.updater validateMenuItem:menuItem];
-    }
-    return YES;
 }
 
 - (void)_htk_main_updateHapticFeedback
@@ -459,144 +412,13 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     statusItemImage.template = YES;
     statusItem.image = statusItemImage;
 
-    NSMenu * const statusMenu = [[NSMenu alloc] init];
+    HTKStatusItemMenuController * const statusItemMenuController = [[HTKStatusItemMenuController alloc] init];
+    statusItemMenuController.delegate = self;
+    self.statusItemMenuController = statusItemMenuController;
 
-    NSMutableSet<NSMenuItem *> * const feedbackPreferencesMenuItemSet = [[NSMutableSet alloc] init];
-
-    NSMenuItem * const disabledMenuItem = [[NSMenuItem alloc] init];
-    disabledMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_DISABLED_ITEM", @"A status menu item selected when it is disabled.");
-    disabledMenuItem.action = @selector(_htk_action_didSelectListeningEventTypeMenuItem:);
-    disabledMenuItem.target = self;
-    [statusMenu addItem:disabledMenuItem];
-    self.disabledMenuItem = disabledMenuItem;
-
-    NSMenuItem * const useFunctionKeyEventMenuItem = [[NSMenuItem alloc] init];
-    useFunctionKeyEventMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_FUNCTION_KEY_EVENT_MENU_ITEM", @"A status menu item to use function key events.");
-    useFunctionKeyEventMenuItem.action = @selector(_htk_action_didSelectListeningEventTypeMenuItem:);
-    useFunctionKeyEventMenuItem.target = self;
-    [statusMenu addItem:useFunctionKeyEventMenuItem];
-    self.useFunctionKeyEventMenuItem = useFunctionKeyEventMenuItem;
-
-    NSMenuItem * const useTapGestureEventMenuItem = [[NSMenuItem alloc] init];
-    useTapGestureEventMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_TAP_GESTURE_EVENT_MENU_ITEM", @"A status menu item to use tap gesture events.");
-    useTapGestureEventMenuItem.action = @selector(_htk_action_didSelectListeningEventTypeMenuItem:);
-    useTapGestureEventMenuItem.target = self;
-    [statusMenu addItem:useTapGestureEventMenuItem];
-    self.useTapGestureEventMenuItem = useTapGestureEventMenuItem;
-
-    [statusMenu addItem:[NSMenuItem separatorItem]];
-
-    NSMenuItem * const feedbackSectionTitleMenuItem = [[NSMenuItem alloc] init];
-    feedbackSectionTitleMenuItem.enabled = NO;
-    feedbackSectionTitleMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_FEEDBACK_SECTION_TITLE_MENU_ITEM", @"A status menu item for feedback section title.");
-    [statusMenu addItem:feedbackSectionTitleMenuItem];
-
-    NSMenuItem * const noFeedbackMenuItem = [[NSMenuItem alloc] init];
-    noFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_NO_FEEDBACK_MENU_ITEM", @"A status menu item to not use feedback.");
-    noFeedbackMenuItem.keyEquivalent = @"0";
-    noFeedbackMenuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
-    noFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
-    noFeedbackMenuItem.target = self;
-    [statusMenu addItem:noFeedbackMenuItem];
-    [feedbackPreferencesMenuItemSet addObject:noFeedbackMenuItem];
-    self.noFeedbackMenuItem = noFeedbackMenuItem;
-
-    NSMenuItem * const useWeekFeedbackMenuItem = [[NSMenuItem alloc] init];
-    useWeekFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_WEEK_FEEDBACK_MENU_ITEM", @"A status menu item to use weak feedback.");
-    useWeekFeedbackMenuItem.keyEquivalent = @"1";
-    useWeekFeedbackMenuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
-    useWeekFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
-    useWeekFeedbackMenuItem.target = self;
-    [statusMenu addItem:useWeekFeedbackMenuItem];
-    [feedbackPreferencesMenuItemSet addObject:useWeekFeedbackMenuItem];
-    self.useWeekFeedbackMenuItem = useWeekFeedbackMenuItem;
-
-    NSMenuItem * const useMediumFeedbackMenuItem = [[NSMenuItem alloc] init];
-    useMediumFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_MEDIUM_FEEDBACK_MENU_ITEM", @"A status menu item to use medium feedback.");
-    useMediumFeedbackMenuItem.keyEquivalent = @"2";
-    useMediumFeedbackMenuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
-    useMediumFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
-    useMediumFeedbackMenuItem.target = self;
-    [statusMenu addItem:useMediumFeedbackMenuItem];
-    [feedbackPreferencesMenuItemSet addObject:useMediumFeedbackMenuItem];
-    self.useMediumFeedbackMenuItem = useMediumFeedbackMenuItem;
-
-    NSMenuItem * const useStrongFeedbackMenuItem = [[NSMenuItem alloc] init];
-    useStrongFeedbackMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_STRONG_FEEDBACK_MENU_ITEM", @"A status menu item to use strong feedback.");
-    useStrongFeedbackMenuItem.keyEquivalent = @"3";
-    useStrongFeedbackMenuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
-    useStrongFeedbackMenuItem.action = @selector(_htk_action_didSelectFeedbackTypeMenuItem:);
-    useStrongFeedbackMenuItem.target = self;
-    [statusMenu addItem:useStrongFeedbackMenuItem];
-    [feedbackPreferencesMenuItemSet addObject:useStrongFeedbackMenuItem];
-    self.useStrongFeedbackMenuItem = useStrongFeedbackMenuItem;
-
-    [statusMenu addItem:[NSMenuItem separatorItem]];
-
-    NSMenuItem * const useSoundEffectMenuItem = [[NSMenuItem alloc] init];
-    useSoundEffectMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_SOUND_EFFECT_MENU_ITEM", @"A status menu item to use sound effect.");
-    useSoundEffectMenuItem.action = @selector(_htk_action_didSelectSoundEffectTypeMenuItem:);
-    useSoundEffectMenuItem.target = self;
-    [statusMenu addItem:useSoundEffectMenuItem];
-    [feedbackPreferencesMenuItemSet addObject:useSoundEffectMenuItem];
-    self.useSoundEffectMenuItem = useSoundEffectMenuItem;
-
-    NSMenuItem * const useScreenFlashMenuItem = [[NSMenuItem alloc] init];
-    useScreenFlashMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_SCREEN_FLASH_MENU_ITEM", @"A status menu item to use screen flash.");
-    useScreenFlashMenuItem.action = @selector(_htk_action_didSelectScreenFlashMenuItem:);
-    useScreenFlashMenuItem.target = self;
-    [statusMenu addItem:useScreenFlashMenuItem];
-    [feedbackPreferencesMenuItemSet addObject:useScreenFlashMenuItem];
-    self.useScreenFlashMenuItem = useScreenFlashMenuItem;
-
-    [statusMenu addItem:[NSMenuItem separatorItem]];
-
-    NSMenuItem * const checkForUpdatesMenuItem = [[NSMenuItem alloc] init];
-    checkForUpdatesMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_CHECK_FOR_UPDATES_MENU_ITEM", @"A status menu item to check for updates.");
-    checkForUpdatesMenuItem.action = @selector(_htk_action_didSelectCheckForUpdates:);
-    checkForUpdatesMenuItem.target = self;
-    [statusMenu addItem:checkForUpdatesMenuItem];
-    self.checkForUpdatesMenuItem = checkForUpdatesMenuItem;
-
-    NSMenuItem * const automaticallyCheckForUpdatesMenuItem = [[NSMenuItem alloc] init];
-    automaticallyCheckForUpdatesMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_AUTOMATICALLY_CHECK_FOR_UPDATES_MENU_ITEM", @"A status menu item to set automatically check for updates.");
-    automaticallyCheckForUpdatesMenuItem.action = @selector(_htk_action_didSelectAutomaticallyCheckForUpdateMenuItem:);
-    automaticallyCheckForUpdatesMenuItem.target = self;
-    [statusMenu addItem:automaticallyCheckForUpdatesMenuItem];
-    self.automaticallyCheckForUpdatesMenuItem = automaticallyCheckForUpdatesMenuItem;
-
-    [statusMenu addItem:[NSMenuItem separatorItem]];
-
-    NSMenuItem * const startOnLoginMenuItem = [[NSMenuItem alloc] init];
-    startOnLoginMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_START_ON_LOGIN_MENU_ITEM", @"A status menu item to start application on login.");
-    startOnLoginMenuItem.action = @selector(_htk_action_didSelectStartOnLoginMenuItem:);
-    startOnLoginMenuItem.target = self;
-    [statusMenu addItem:startOnLoginMenuItem];
-    self.startOnLoginMenuItem = startOnLoginMenuItem;
-
-    NSMenuItem * const showStatusBarIconMenuItem = [[NSMenuItem alloc] init];
-    showStatusBarIconMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_SHOW_STATUS_BAR_ICON_MENU_ITEM", @"A status menu item to show icon in menu bar.");
-    showStatusBarIconMenuItem.action = @selector(_htk_action_didSelectShowStatusBarIconMenuItem:);
-    showStatusBarIconMenuItem.target = self;
-    [statusMenu addItem:showStatusBarIconMenuItem];
-    self.showStatusBarIconMenuItem = showStatusBarIconMenuItem;
-
-    NSMenuItem * const aboutMenuItem = [[NSMenuItem alloc] init];
-    aboutMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_ABOUT_MENU_ITEM", @"A status menu item to present a window about the application.");
-    aboutMenuItem.action = @selector(_htk_action_didSelectAboutMenuItem:);
-    [statusMenu addItem:aboutMenuItem];
-
-    NSMenuItem * const quitMenuItem = [[NSMenuItem alloc] init];
-    quitMenuItem.title = NSLocalizedString(@"STATUS_MENU_ITEM_QUIT_MENU_ITEM", @"A status menu item to terminate the application.");
-    quitMenuItem.keyEquivalent = @"q";
-    quitMenuItem.keyEquivalentModifierMask = NSEventModifierFlagCommand;
-    quitMenuItem.action = @selector(terminate:);
-    [statusMenu addItem:quitMenuItem];
-
-    statusItem.menu = statusMenu;
+    statusItem.menu = statusItemMenuController.menu;
 
     self.statusItem = statusItem;
-    self.feedbackPreferencesMenuItemSet = feedbackPreferencesMenuItemSet;
 }
 
 - (void)_htk_main_loadMainBundleLoginItem
@@ -642,83 +464,131 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     self.loginItemEnabled = self.mainBundleLoginItem.enabled;
 }
 
-// MARK: - Actions
+// MARK: - HTKStatusItemMenuControllerDelegate
 
-- (void)_htk_action_didSelectListeningEventTypeMenuItem:(id)sender
+- (BOOL)statusItemMenuController:(HTKStatusItemMenuController *)statusItemMenuController validateMenuItem:(HTKStatusItemMenuControllerMenuItem)menuItem
 {
-    if (sender == self.disabledMenuItem) {
-        self.listeningEventType = HTKAppDelegateListeningEventTypeNone;
-    } else if (sender == self.useFunctionKeyEventMenuItem) {
-        self.listeningEventType = HTKAppDelegateListeningEventTypeFunctionKey;
-    } else if (sender == self.useTapGestureEventMenuItem) {
-        self.listeningEventType = HTKAppDelegateListeningEventTypeTapGesture;
+    // Disable any menu items for configuration when no events are listened.
+    switch (menuItem) {
+        case HTKStatusItemMenuControllerMenuItemNoFeedback:
+        case HTKStatusItemMenuControllerMenuItemUseWeekFeedback:
+        case HTKStatusItemMenuControllerMenuItemUseMediumFeedback:
+        case HTKStatusItemMenuControllerMenuItemUseStrongFeedback:
+        case HTKStatusItemMenuControllerMenuItemUseSoundEffect:
+        case HTKStatusItemMenuControllerMenuItemUseScreenFlash:
+            if (self.listeningEventType == HTKAppDelegateListeningEventTypeNone) {
+                return NO;
+            }
+            break;
+        default:
+            break;
     }
-}
 
-- (void)_htk_action_didSelectFeedbackTypeMenuItem:(id)sender
-{
-    if (sender == self.noFeedbackMenuItem) {
-        self.feedbackType = HTKAppDelegateFeedbackTypeNone;
-    } else if (sender == self.useWeekFeedbackMenuItem) {
-        self.feedbackType = HTKAppDelegateFeedbackTypeWeak;
-    } else if (sender == self.useMediumFeedbackMenuItem) {
-        self.feedbackType = HTKAppDelegateFeedbackTypeMedium;
-    } else if (sender == self.useStrongFeedbackMenuItem) {
-        self.feedbackType = HTKAppDelegateFeedbackTypeStrong;
+    // Do not allow to have a combination of settings that has no feedback effects.
+    // This is a loose guard at user interface level and not really preventing to have such condition.
+    switch (menuItem) {
+        case HTKStatusItemMenuControllerMenuItemNoFeedback:
+            if ((self.soundEffectType == HTKAppDelegateSoundEffectTypeNone) && !self.screenFlashEnabled) {
+                return (self.feedbackType == HTKAppDelegateFeedbackTypeNone);
+            }
+            break;
+        case HTKStatusItemMenuControllerMenuItemUseSoundEffect:
+            if (self.feedbackType == HTKAppDelegateFeedbackTypeNone && !self.screenFlashEnabled) {
+                return (self.soundEffectType == HTKAppDelegateSoundEffectTypeNone);
+            }
+            break;
+        case HTKStatusItemMenuControllerMenuItemUseScreenFlash:
+            if ((self.feedbackType == HTKAppDelegateFeedbackTypeNone) && (self.soundEffectType == HTKAppDelegateSoundEffectTypeNone)) {
+                return !self.screenFlashEnabled;
+            }
+            break;
+        default:
+            break;
     }
-}
 
-- (void)_htk_action_didSelectSoundEffectTypeMenuItem:(id)sender
-{
-    if (sender == self.useSoundEffectMenuItem) {
-        // For now, there is an one sound effect and the menu item works as a boolean.
-        switch (self.soundEffectType) {
-            case HTKAppDelegateSoundEffectTypeNone:
-                self.soundEffectType = HTKAppDelegateSoundEffectTypeDefault;
-                break;
-            case HTKAppDelegateSoundEffectTypeDefault:
-                self.soundEffectType = HTKAppDelegateSoundEffectTypeNone;
-                break;
+    switch (menuItem) {
+        case HTKStatusItemMenuControllerMenuItemCheckForUpdates: {
+            // `-[SUUpdater validateMenuItem:]` takes valid `NSMenuItem` and checks its `action`
+            // for the validation result.
+            NSMenuItem * const checkForUpdateMenuItem = [[NSMenuItem alloc] init];
+            checkForUpdateMenuItem.action = @selector(checkForUpdates:);
+            return [self.updater validateMenuItem:checkForUpdateMenuItem];
+            break;
         }
-    }
-}
-
-- (void)_htk_action_didSelectScreenFlashMenuItem:(id)sender
-{
-    self.screenFlashEnabled = !self.screenFlashEnabled;
-}
-
-- (void)_htk_action_didSelectCheckForUpdates:(id)sender
-{
-    // `checkForUpdates:` _MAY_ present `NSAlert` by calling `runModal`.
-    // However, at this moment `NSMenu` is still appearing and if we use `runModal`,
-    // AppKit seems begin in unexpected state and eventually crashes the app.
-    // To workaround this behavior, simply perform the selector in later run loop in default mode.
-    [self.updater performSelectorOnMainThread:@selector(checkForUpdates:) withObject:nil waitUntilDone:NO];
-}
-
-- (void)_htk_action_didSelectAutomaticallyCheckForUpdateMenuItem:(id)sender
-{
-    self.automaticallyCheckForUpdatesEnabled = !self.automaticallyCheckForUpdatesEnabled;
-}
-
-- (void)_htk_action_didSelectStartOnLoginMenuItem:(id)sender
-{
-    self.loginItemEnabled = !self.loginItemEnabled;
-}
-
-- (void)_htk_action_didSelectShowStatusBarIconMenuItem:(id)sender
-{
-    self.statusBarIconVisible = !self.statusBarIconVisible;
-}
-
-- (void)_htk_action_didSelectAboutMenuItem:(id)sender
-{
-    if ([NSApp activationPolicy] == NSApplicationActivationPolicyAccessory) {
-        [NSApp activateIgnoringOtherApps:YES];
+        default:
+            break;
     }
 
-    [NSApp orderFrontStandardAboutPanel:sender];
+    return YES;
+}
+
+- (void)statusItemMenuController:(HTKStatusItemMenuController *)statusItemMenuController didSelectMenuItem:(HTKStatusItemMenuControllerMenuItem)menuItem
+{
+    switch (menuItem) {
+        case HTKStatusItemMenuControllerMenuItemUnknown:
+            break;
+
+        case HTKStatusItemMenuControllerMenuItemDisabled:
+            self.listeningEventType = HTKAppDelegateListeningEventTypeNone;
+            break;
+        case HTKStatusItemMenuControllerMenuItemUseFunctionKeyEvent:
+            self.listeningEventType = HTKAppDelegateListeningEventTypeFunctionKey;
+            break;
+        case HTKStatusItemMenuControllerMenuItemUseTapGestureEvent:
+            self.listeningEventType = HTKAppDelegateListeningEventTypeTapGesture;
+            break;
+
+        case HTKStatusItemMenuControllerMenuItemNoFeedback:
+            self.feedbackType = HTKAppDelegateFeedbackTypeNone;
+            break;
+        case HTKStatusItemMenuControllerMenuItemUseWeekFeedback:
+            self.feedbackType = HTKAppDelegateFeedbackTypeWeak;
+            break;
+        case HTKStatusItemMenuControllerMenuItemUseMediumFeedback:
+            self.feedbackType = HTKAppDelegateFeedbackTypeMedium;
+            break;
+        case HTKStatusItemMenuControllerMenuItemUseStrongFeedback:
+            self.feedbackType = HTKAppDelegateFeedbackTypeStrong;
+            break;
+
+        case HTKStatusItemMenuControllerMenuItemUseSoundEffect:
+            // For now, there is one sound effect and the menu item works as a boolean.
+            switch (self.soundEffectType) {
+                case HTKAppDelegateSoundEffectTypeNone:
+                    self.soundEffectType = HTKAppDelegateSoundEffectTypeDefault;
+                    break;
+                case HTKAppDelegateSoundEffectTypeDefault:
+                    self.soundEffectType = HTKAppDelegateSoundEffectTypeNone;
+                    break;
+            }
+            break;
+        case HTKStatusItemMenuControllerMenuItemUseScreenFlash:
+            self.screenFlashEnabled = !self.screenFlashEnabled;
+            break;
+
+        case HTKStatusItemMenuControllerMenuItemCheckForUpdates:
+            [self.updater checkForUpdates:nil];
+            break;
+        case HTKStatusItemMenuControllerMenuItemAutomaticallyCheckForUpdates:
+            self.automaticallyCheckForUpdatesEnabled = !self.automaticallyCheckForUpdatesEnabled;
+            break;
+
+        case HTKStatusItemMenuControllerMenuItemStartOnLogin:
+            self.loginItemEnabled = !self.loginItemEnabled;
+            break;
+        case HTKStatusItemMenuControllerMenuItemShowStatusBarIcon:
+            self.statusBarIconVisible = !self.statusBarIconVisible;
+            break;
+        case HTKStatusItemMenuControllerMenuItemAbout:
+            if ([NSApp activationPolicy] == NSApplicationActivationPolicyAccessory) {
+                [NSApp activateIgnoringOtherApps:YES];
+            }
+            [NSApp orderFrontStandardAboutPanel:nil];
+            break;
+        case HTKStatusItemMenuControllerMenuItemQuit:
+            [NSApp terminate:nil];
+            break;
+    }
 }
 
 @end
