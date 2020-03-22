@@ -91,7 +91,7 @@ static CGEventRef EventTapCallback(CGEventTapProxy proxy, CGEventType type,  CGE
         return;
     }
 
-    _eventTap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, 0, self.eventMask, EventTapCallback, (__bridge void *)self);
+    _eventTap = CGEventTapCreate(kCGSessionEventTap, kCGTailAppendEventTap, kCGEventTapOptionListenOnly, self.eventMask, EventTapCallback, (__bridge void *)self);
     if (_eventTap) {
         _runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, _eventTap, 0);
         if (_runLoopSource) {
