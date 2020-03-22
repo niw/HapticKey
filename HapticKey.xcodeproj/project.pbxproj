@@ -109,9 +109,7 @@
 			children = (
 				54CDDBF11FE44F33005F35A1 /* Classes */,
 				548E15411FD00412001C0D4C /* Info.plist */,
-				54E1E0961FE4613F007F2EE0 /* Localizable.strings */,
 				548E15421FD00412001C0D4C /* main.m */,
-				548E153E1FD00412001C0D4C /* MainMenu.xib */,
 				54FBCF2F1FD52469000EB4D3 /* Resources */,
 			);
 			path = HapticKey;
@@ -163,6 +161,8 @@
 			children = (
 				54FBCF301FD52483000EB4D3 /* AppIcon.icns */,
 				54942E872021B149003507D8 /* dsa_pub.pem */,
+				54E1E0961FE4613F007F2EE0 /* Localizable.strings */,
+				548E153E1FD00412001C0D4C /* MainMenu.xib */,
 				54FBCF311FD52483000EB4D3 /* StatusItem.pdf */,
 			);
 			path = Resources;
