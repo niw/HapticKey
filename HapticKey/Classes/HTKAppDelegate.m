@@ -522,6 +522,50 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     return YES;
 }
 
+static NSString * const kBuildTimestampInfoPlistKey = @"HTKBuildTimestamp";
+static NSString * const kBuildGitSHAInfoPlistKey = @"HTKBuildGitSHA";
+
+static NSDictionary * const AboutPanelOptions()
+{
+    NSMutableDictionary * const options = [[NSMutableDictionary alloc] init];
+    if (@available(macOS 10.13, *)) {
+        NSBundle * const mainBundle = NSBundle.mainBundle;
+
+        id const bundleVersion = [mainBundle objectForInfoDictionaryKey:(__bridge id)kCFBundleVersionKey];
+
+        id const bundleBuildTimestamp = [mainBundle objectForInfoDictionaryKey:kBuildTimestampInfoPlistKey];
+        NSString *displayBuildTimestampString;
+        if ([bundleBuildTimestamp isKindOfClass:NSString.class]) {
+            NSString * const bundleBuildTimestampString = (NSString *)bundleBuildTimestamp;
+
+            NSISO8601DateFormatter * const buildTimestampStringDateFormatter = [[NSISO8601DateFormatter alloc] init];
+            NSDate * const buildDate = [buildTimestampStringDateFormatter dateFromString:bundleBuildTimestampString];
+            if (buildDate) {
+                NSDateFormatter * const dateFormatter = [[NSDateFormatter alloc] init];
+                dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+                dateFormatter.timeStyle = NSDateFormatterShortStyle;
+                displayBuildTimestampString = [dateFormatter stringFromDate:buildDate];
+            }
+        }
+
+        id const bundleBuildGitSHA = [mainBundle objectForInfoDictionaryKey:kBuildGitSHAInfoPlistKey];
+        NSString *displayBuildGitSHAString;
+        if ([bundleBuildGitSHA isKindOfClass:NSString.class]) {
+            NSString * const bundleBuildGitSHAString = (NSString *)bundleBuildGitSHA;
+
+            if (bundleBuildGitSHAString.length > 7) {
+                displayBuildGitSHAString = [bundleBuildGitSHAString substringWithRange:NSMakeRange(0, 7)];
+            } else {
+                displayBuildGitSHAString = bundleBuildGitSHAString;
+            }
+        }
+
+        NSString * const versionString = [[NSString alloc] initWithFormat:@"%@, %@, %@", bundleVersion, displayBuildTimestampString, displayBuildGitSHAString];
+        options[NSAboutPanelOptionVersion] = versionString;
+    }
+    return [options copy];
+}
+
 - (void)statusItemMenuController:(HTKStatusItemMenuController *)statusItemMenuController didSelectMenuItem:(HTKStatusItemMenuControllerMenuItem)menuItem
 {
     switch (menuItem) {
@@ -579,12 +623,13 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
         case HTKStatusItemMenuControllerMenuItemShowStatusBarIcon:
             self.statusBarIconVisible = !self.statusBarIconVisible;
             break;
-        case HTKStatusItemMenuControllerMenuItemAbout:
+        case HTKStatusItemMenuControllerMenuItemAbout: {
             if ([NSApp activationPolicy] == NSApplicationActivationPolicyAccessory) {
                 [NSApp activateIgnoringOtherApps:YES];
             }
-            [NSApp orderFrontStandardAboutPanel:nil];
+            [NSApp orderFrontStandardAboutPanelWithOptions:AboutPanelOptions()];
             break;
+        }
         case HTKStatusItemMenuControllerMenuItemQuit:
             [NSApp terminate:nil];
             break;

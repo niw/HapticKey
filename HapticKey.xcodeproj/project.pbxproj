@@ -32,6 +32,7 @@
 /* Begin PBXFileReference section */
 		17DB7DCD200A4F4600947159 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		17DB7DCE200A4F4D00947159 /* zh-Hant */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		54422E232427F407003F8E72 /* BuildPhases */ = {isa = PBXFileReference; lastKnownFileType = folder; path = BuildPhases; sourceTree = "<group>"; };
 		5443CEFA1FE38EA8002D4086 /* HTKEventListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEventListener.h; sourceTree = "<group>"; };
 		5443CEFB1FE38EA8002D4086 /* HTKEventListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKEventListener.m; sourceTree = "<group>"; };
 		5443CEFD1FE38F6C002D4086 /* HTKEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEvent.h; sourceTree = "<group>"; };
@@ -107,6 +108,7 @@
 		548E15381FD00412001C0D4C /* HapticKey */ = {
 			isa = PBXGroup;
 			children = (
+				54422E232427F407003F8E72 /* BuildPhases */,
 				54CDDBF11FE44F33005F35A1 /* Classes */,
 				548E15411FD00412001C0D4C /* Info.plist */,
 				548E15421FD00412001C0D4C /* main.m */,
@@ -185,6 +187,7 @@
 			buildConfigurationList = 548E15471FD00412001C0D4C /* Build configuration list for PBXNativeTarget "HapticKey" */;
 			buildPhases = (
 				196F672AC6E1F8935AC61FB3 /* [CP] Check Pods Manifest.lock */,
+				545A58352427EE3C00E92AE9 /* Update Info.plist Prefix Header */,
 				548E15321FD00412001C0D4C /* Sources */,
 				548E15331FD00412001C0D4C /* Frameworks */,
 				548E15341FD00412001C0D4C /* Resources */,
@@ -266,6 +269,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		545A58352427EE3C00E92AE9 /* Update Info.plist Prefix Header */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				/dev/null,
+			);
+			name = "Update Info.plist Prefix Header";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(INFOPLIST_PREFIX_HEADER)",
+				"$(INFOPLIST_FILE)",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "exec ${PROJECT_DIR}/HapticKey/BuildPhases/UpdateInfoPlistPrefixHeader.sh\n";
 			showEnvVarsInLog = 0;
 		};
 		E322AC885D84983B764EEC09 /* [CP] Embed Pods Frameworks */ = {
@@ -450,6 +475,9 @@
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				INFOPLIST_FILE = HapticKey/Info.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = "$(DERIVED_FILE_DIR)/InfoPlist-Prefix.h";
+				INFOPLIST_PREPROCESS = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = at.niw.HapticKey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -466,6 +494,9 @@
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				INFOPLIST_FILE = HapticKey/Info.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = "$(DERIVED_FILE_DIR)/InfoPlist-Prefix.h";
+				INFOPLIST_PREPROCESS = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = at.niw.HapticKey;
 				PRODUCT_NAME = "$(TARGET_NAME)";

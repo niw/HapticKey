@@ -34,5 +34,9 @@
 	<string>dsa_pub.pem</string>
 	<key>SUFeedURL</key>
 	<string>https://raw.githubusercontent.com/niw/HapticKey/sparkle/appcast.xml</string>
+	<key>HTKBuildTimestamp</key>
+	<string>__HTK_BUILD_TIMESTAMP__</string>
+	<key>HTKBuildGitSHA</key>
+	<string>__HTK_BUILD_GIT_SHA__</string>
 </dict>
 </plist>
