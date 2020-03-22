@@ -9,6 +9,9 @@ XCODE_SCHEME = $(NAME)
 XCODE_ARCHIVE_PATH = $(BUILD_PATH)/$(NAME).xcarchive
 XCODE_ARCHIVE_BUNDLE_PATH = $(XCODE_ARCHIVE_PATH)/Products/Applications/$(NAME).app
 
+XCODE_SOURCE_PATH = $(NAME)
+XCODE_RESOURCES_PATH = $(XCODE_SOURCE_PATH)/Resources
+
 TARGET_PATH = $(XCODE_ARCHIVE_BUNDLE_PATH)
 
 APPCAST_ARCHIVE_PATH = $(BUILD_PATH)/$(NAME).app.zip
@@ -28,6 +31,10 @@ release: $(APPCAST_ARCHIVE_PATH) $(APPCAST_PATH)
 .PHONY: claen
 clean:
 	git clean -dfX
+
+.PHONY: genstring
+genstring:
+	find $(XCODE_SOURCE_PATH) -name '*.m' | xargs genstrings -u -q -o $(XCODE_RESOURCES_PATH)/Base.lproj
 
 $(POD_INSTALL_TAG_PATH): Podfile Podfile.lock
 	scripts/pod install
