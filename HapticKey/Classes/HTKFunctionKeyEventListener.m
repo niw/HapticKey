@@ -77,7 +77,7 @@ static const int64_t kTouchbarKeyboardType = 198;
     }
 }
 
-- (void)eventTapDisabled:(HTKEventTap *)eventTap
+- (void)eventTapDidDisable:(HTKEventTap *)eventTap
 {
     self.eventTap.enabled = YES;
 }

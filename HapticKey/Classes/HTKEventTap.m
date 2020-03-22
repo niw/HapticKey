@@ -25,8 +25,8 @@ static CGEventRef EventTapCallback(CGEventTapProxy proxy, CGEventType type,  CGE
                 os_log_error(OS_LOG_DEFAULT, "Event tap disabled by type: %d", type);
 
                 id<HTKEventTapDelegate> const delegate = eventTap.delegate;
-                if ([delegate respondsToSelector:@selector(eventTapDisabled:)]) {
-                    [delegate eventTapDisabled:eventTap];
+                if ([delegate respondsToSelector:@selector(eventTapDidDisable:)]) {
+                    [delegate eventTapDidDisable:eventTap];
                 }
                 break;
             }

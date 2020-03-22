@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
-- (void)eventTapDisabled:(HTKEventTap *)eventTap
+- (void)eventTapDidDisable:(HTKEventTap *)eventTap
 {
     self.eventTap.enabled = YES;
 }
