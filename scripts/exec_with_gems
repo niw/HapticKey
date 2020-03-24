@@ -4,7 +4,7 @@ exec_with_gems() {
   # Fail to exit.
   set -e
 
-  local -r root_dir="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." >/dev/null 2>&1; pwd)"
+  local -r root_dir="$(cd -P "$(dirname "${BASH_SOURCE[0]}")/.." >/dev/null; pwd)"
 
   # Use system Ruby.
   local -r ruby_bin_path="/System/Library/Frameworks/Ruby.framework/Versions/Current/usr/bin"
