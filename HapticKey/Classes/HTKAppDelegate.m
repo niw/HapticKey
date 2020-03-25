@@ -42,6 +42,8 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
     HTKAppDelegateSoundEffectTypeDefault
 };
 
+static NSString * const kSoundEffectVolumeDefaultsKey = @"SoundEffectVolume";
+
 static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnabled";
 
 static const char kStatusItemVisibleKeyObservingTag;
@@ -56,6 +58,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 @property (nonatomic) HTKAppDelegateListeningEventType listeningEventType;
 @property (nonatomic) HTKAppDelegateFeedbackType feedbackType;
 @property (nonatomic) HTKAppDelegateSoundEffectType soundEffectType;
+@property (nonatomic) float soundEffectVolume;
 @property (nonatomic, getter=isScreenFlashEnabled) BOOL screenFlashEnabled;
 @property (nonatomic, getter=isLoginItemEnabled) BOOL loginItemEnabled;
 @property (nonatomic, getter=isAutomaticallyCheckForUpdatesEnabled) BOOL automaticallyCheckForUpdatesEnabled;
@@ -129,6 +132,17 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 
         [self _htk_main_updateStatusItem];
         [self _htk_main_updateSoundFeedbackType];
+
+        [self _htk_main_updateUserDefaults];
+    }
+}
+
+- (void)setSoundEffectVolume:(float)soundEffectVolume
+{
+    if (_soundEffectVolume != soundEffectVolume) {
+        _soundEffectVolume = soundEffectVolume;
+
+        [self _htk_main_updateSoundFeedbackVolume];
 
         [self _htk_main_updateUserDefaults];
     }
@@ -253,6 +267,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 
     [self _htk_main_updateHapticFeedbackType];
     [self _htk_main_updateSoundFeedbackType];
+    [self _htk_main_updateSoundFeedbackVolume];
     [self _htk_main_updateScreenFlashEnabled];
 }
 
@@ -294,6 +309,15 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     }
 }
 
+- (void)_htk_main_updateSoundFeedbackVolume
+{
+    if (!self.hapticFeedback) {
+        return;
+    }
+
+    self.hapticFeedback.soundVolume = self.soundEffectVolume;
+}
+
 - (void)_htk_main_updateScreenFlashEnabled
 {
     if (!self.hapticFeedback) {
@@ -332,6 +356,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     [defaults setInteger:self.listeningEventType forKey:kListeningEventTypeUserDefaultsKey];
     [defaults setInteger:self.feedbackType forKey:kFeedbackTypeUserDefaultsKey];
     [defaults setInteger:self.soundEffectType forKey:kSoundEffectTypeUserDefaultsKey];
+    [defaults setFloat:self.soundEffectVolume forKey:kSoundEffectVolumeDefaultsKey];
     [defaults setBool:self.screenFlashEnabled forKey:kScreenFlashEnabledUserDefaultsKey];
 }
 
@@ -382,6 +407,13 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
         soundEffectType = HTKAppDelegateSoundEffectTypeNone;
     }
 
+    float soundEffectVolume;
+    if ([defaults objectForKey:kSoundEffectVolumeDefaultsKey]) {
+        soundEffectVolume = [defaults floatForKey:kSoundEffectVolumeDefaultsKey];
+    } else {
+        soundEffectVolume = 0.0;
+    }
+
     BOOL screenFlashEnabled;
     if ([defaults objectForKey:kScreenFlashEnabledUserDefaultsKey]) {
         screenFlashEnabled = [defaults boolForKey:kScreenFlashEnabledUserDefaultsKey];
@@ -393,6 +425,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     self.listeningEventType = listeningEventType;
     self.feedbackType = feedbackType;
     self.soundEffectType = soundEffectType;
+    self.soundEffectVolume = soundEffectVolume;
     self.screenFlashEnabled = screenFlashEnabled;
 }
 

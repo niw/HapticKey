@@ -6,11 +6,11 @@
 //  Copyright © 2017 Yoshimasa Niwa. All rights reserved.
 //
 
+#import "HTKAudioPlayer.h"
 #import "HTKEvent.h"
 #import "HTKEventListener.h"
 #import "HTKHapticFeedback.h"
 #import "HTKMultitouchActuator.h"
-#import "HTKSystemSound.h"
 #import "HTKTimer.h"
 
 @import AudioToolbox;
@@ -25,7 +25,7 @@ static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
 @interface HTKHapticFeedback () <HTKEventListenerDelegate>
 
 @property (nonatomic, nullable) HTKTimer *timer;
-@property (nonatomic, readonly) HTKSystemSound *defaultSystemSound;
+@property (nonatomic, readonly) HTKAudioPlayer *defaultAudioPlayer;
 
 @end
 
@@ -44,7 +44,7 @@ static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
         _eventListener.delegate = self;
         _type = HTKHapticFeedbackTypeMedium;
 
-        _defaultSystemSound = [[HTKSystemSound alloc] initWithSystemSoundsGroup:kDefaultSystemSoundsGroup name:kDefaultSystemSoundsName];
+        _defaultAudioPlayer = [[HTKAudioPlayer alloc] initWithSystemSoundsGroup:kDefaultSystemSoundsGroup name:kDefaultSystemSoundsName];
     }
     return self;
 }
@@ -59,6 +59,16 @@ static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
     return self.eventListener.enabled;
 }
 
+- (void)setSoundVolume:(float)soundVolume
+{
+    self.defaultAudioPlayer.volume = soundVolume;
+}
+
+- (float)soundVolume
+{
+    return self.defaultAudioPlayer.volume;
+}
+
 // MARK: - HTKEventListenerDelegate
 
 - (void)eventListener:(HTKEventListener *)eventListener didListenEvent:(HTKEvent *)event
@@ -70,14 +80,14 @@ static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
     self.timer = [[HTKTimer alloc] initWithTimeInterval:kMinimumActuationInterval repeats:NO target:self selector:@selector(_htk_timer_didFire:)];
 
     const SInt32 actuationID = [self _htk_main_actuationID];
-    HTKSystemSound * const systemSound = [self _htk_main_systemSound];
+    HTKAudioPlayer * const audioPlayer = [self _htk_main_audioPlayer];
     switch (event.phase) {
         case HTKEventPhaseBegin:
             if (actuationID != 0) {
                 [[HTKMultitouchActuator sharedActuator] actuateActuationID:actuationID unknown1:0 unknown2:0.0 unknown3:2.0];
             }
-            if (systemSound) {
-                [systemSound play];
+            if (audioPlayer) {
+                [audioPlayer play];
             }
             if (self.screenFlashEnabled) {
                 AudioServicesPlaySystemSoundWithCompletion(kSystemSoundID_FlashScreen, NULL);
@@ -117,13 +127,13 @@ static NSString * const kDefaultSystemSoundsName = @"InkSoundBecomeMouse.aif";
     return 0;
 }
 
-- (nullable HTKSystemSound *)_htk_main_systemSound
+- (nullable HTKAudioPlayer *)_htk_main_audioPlayer
 {
     switch (self.soundType) {
         case HTKSoundFeedbackTypeNone:
             return nil;
         case HTKSoundFeedbackTypeDefault:
-            return self.defaultSystemSound;
+            return self.defaultAudioPlayer;
     }
     return nil;
 }

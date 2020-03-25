@@ -1,18 +1,19 @@
 //
-//  HTKSystemSound.h
+//  HTKAudioPlayer.h
 //  HapticKey
 //
-//  Created by Yoshimasa Niwa on 1/29/18.
-//  Copyright © 2018 Yoshimasa Niwa. All rights reserved.
+//  Created by Yoshimasa Niwa on 3/24/20.
+//  Copyright © 2020 Yoshimasa Niwa. All rights reserved.
 //
 
 @import Foundation;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HTKSystemSound : NSObject
+@interface HTKAudioPlayer : NSObject
 
 @property (nonatomic, readonly) NSString *path;
+@property (nonatomic) float volume;
 
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;

@@ -16,13 +16,13 @@
 		544C76362017311500FF155C /* HTKLoginItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 544C76352017311500FF155C /* HTKLoginItem.m */; };
 		545E325A2426BC5E00FBF9B9 /* HTKStatusItemMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 545E32592426BC5E00FBF9B9 /* HTKStatusItemMenuController.m */; };
 		546E62F71FE24A1D00F287C9 /* HTKEventTap.m in Sources */ = {isa = PBXBuildFile; fileRef = 546E62F61FE24A1D00F287C9 /* HTKEventTap.m */; };
+		5480AC60242B1BC000344DA5 /* HTKAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5480AC5F242B1BC000344DA5 /* HTKAudioPlayer.m */; };
 		548E153B1FD00412001C0D4C /* HTKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 548E153A1FD00412001C0D4C /* HTKAppDelegate.m */; };
 		548E15401FD00412001C0D4C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 548E153E1FD00412001C0D4C /* MainMenu.xib */; };
 		548E15431FD00412001C0D4C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 548E15421FD00412001C0D4C /* main.m */; };
 		54942E882021B149003507D8 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 54942E872021B149003507D8 /* dsa_pub.pem */; };
 		549F9236200AF543003A8D7B /* HTKTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 549F9235200AF543003A8D7B /* HTKTimer.m */; };
 		54A310B81FD390EB002DE7BC /* MultitouchSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */; };
-		54ACC711201F15F70026CAFD /* HTKSystemSound.m in Sources */ = {isa = PBXBuildFile; fileRef = 54ACC710201F15F70026CAFD /* HTKSystemSound.m */; };
 		54E1E0941FE4613F007F2EE0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 54E1E0961FE4613F007F2EE0 /* Localizable.strings */; };
 		54FBCF291FD4CDE0000EB4D3 /* HTKMultitouchActuator.m in Sources */ = {isa = PBXBuildFile; fileRef = 54FBCF281FD4CDE0000EB4D3 /* HTKMultitouchActuator.m */; };
 		54FBCF321FD52483000EB4D3 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 54FBCF301FD52483000EB4D3 /* AppIcon.icns */; };
@@ -50,6 +50,8 @@
 		546E62F41FE2449600F287C9 /* NSTouchDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSTouchDevice.h; sourceTree = "<group>"; };
 		546E62F51FE24A1D00F287C9 /* HTKEventTap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEventTap.h; sourceTree = "<group>"; };
 		546E62F61FE24A1D00F287C9 /* HTKEventTap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKEventTap.m; sourceTree = "<group>"; };
+		5480AC5E242B1BC000344DA5 /* HTKAudioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKAudioPlayer.h; sourceTree = "<group>"; };
+		5480AC5F242B1BC000344DA5 /* HTKAudioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKAudioPlayer.m; sourceTree = "<group>"; };
 		548E15361FD00412001C0D4C /* HapticKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HapticKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		548E15391FD00412001C0D4C /* HTKAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKAppDelegate.h; sourceTree = "<group>"; };
 		548E153A1FD00412001C0D4C /* HTKAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKAppDelegate.m; sourceTree = "<group>"; };
@@ -60,8 +62,6 @@
 		549F9234200AF543003A8D7B /* HTKTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKTimer.h; sourceTree = "<group>"; };
 		549F9235200AF543003A8D7B /* HTKTimer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKTimer.m; sourceTree = "<group>"; };
 		54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultitouchSupport.framework; path = ../../../../../../../System/Library/PrivateFrameworks/MultitouchSupport.framework; sourceTree = "<group>"; };
-		54ACC70F201F15F70026CAFD /* HTKSystemSound.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKSystemSound.h; sourceTree = "<group>"; };
-		54ACC710201F15F70026CAFD /* HTKSystemSound.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKSystemSound.m; sourceTree = "<group>"; };
 		54E1E0951FE4613F007F2EE0 /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54E1E0971FE4614F007F2EE0 /* Base */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54E1E0981FE4621E007F2EE0 /* ja */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -131,6 +131,8 @@
 			children = (
 				548E15391FD00412001C0D4C /* HTKAppDelegate.h */,
 				548E153A1FD00412001C0D4C /* HTKAppDelegate.m */,
+				5480AC5E242B1BC000344DA5 /* HTKAudioPlayer.h */,
+				5480AC5F242B1BC000344DA5 /* HTKAudioPlayer.m */,
 				5443CEFD1FE38F6C002D4086 /* HTKEvent.h */,
 				5443CEFE1FE38F6C002D4086 /* HTKEvent.m */,
 				5443CEFA1FE38EA8002D4086 /* HTKEventListener.h */,
@@ -147,8 +149,6 @@
 				54FBCF281FD4CDE0000EB4D3 /* HTKMultitouchActuator.m */,
 				545E32582426BC5E00FBF9B9 /* HTKStatusItemMenuController.h */,
 				545E32592426BC5E00FBF9B9 /* HTKStatusItemMenuController.m */,
-				54ACC70F201F15F70026CAFD /* HTKSystemSound.h */,
-				54ACC710201F15F70026CAFD /* HTKSystemSound.m */,
 				5443CF061FE39293002D4086 /* HTKTapGestureEventListener.h */,
 				5443CF071FE39293002D4086 /* HTKTapGestureEventListener.m */,
 				549F9234200AF543003A8D7B /* HTKTimer.h */,
@@ -321,6 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5443CF0D1FE394BB002D4086 /* HTKHapticFeedback.m in Sources */,
+				5480AC60242B1BC000344DA5 /* HTKAudioPlayer.m in Sources */,
 				549F9236200AF543003A8D7B /* HTKTimer.m in Sources */,
 				5443CEFF1FE38F6C002D4086 /* HTKEvent.m in Sources */,
 				548E15431FD00412001C0D4C /* main.m in Sources */,
@@ -328,7 +329,6 @@
 				5443CF081FE39293002D4086 /* HTKTapGestureEventListener.m in Sources */,
 				548E153B1FD00412001C0D4C /* HTKAppDelegate.m in Sources */,
 				5443CEFC1FE38EA8002D4086 /* HTKEventListener.m in Sources */,
-				54ACC711201F15F70026CAFD /* HTKSystemSound.m in Sources */,
 				546E62F71FE24A1D00F287C9 /* HTKEventTap.m in Sources */,
 				5443CF051FE39049002D4086 /* HTKFunctionKeyEventListener.m in Sources */,
 				54FBCF291FD4CDE0000EB4D3 /* HTKMultitouchActuator.m in Sources */,
