@@ -2,9 +2,7 @@ NAME = HapticKey
 
 BUILD_PATH = build
 
-POD_INSTALL_TAG_PATH = Pods/Manifest.lock
-
-XCODE_WORKSPACE_PATH = $(NAME).xcworkspace
+XCODE_PROJECT_PATH = $(NAME).xcodeproj
 XCODE_SCHEME = $(NAME)
 XCODE_ARCHIVE_PATH = $(BUILD_PATH)/$(NAME).xcarchive
 XCODE_ARCHIVE_BUNDLE_PATH = $(XCODE_ARCHIVE_PATH)/Products/Applications/$(NAME).app
@@ -22,9 +20,6 @@ APPCAST_ARCHIVE_URL = "https://github.com/niw/$(NAME)/releases/download/{{bundle
 .PHONY: all
 all: $(TARGET_PATH)
 
-.PHONY: bootstrap
-bootstrap: $(POD_INSTALL_TAG_PATH)
-
 .PHONY: release
 release: $(APPCAST_ARCHIVE_PATH) $(APPCAST_PATH)
 
@@ -36,12 +31,9 @@ clean:
 genstring:
 	find $(XCODE_SOURCE_PATH) -name '*.m' | xargs genstrings -u -q -o $(XCODE_RESOURCES_PATH)/Base.lproj
 
-$(POD_INSTALL_TAG_PATH): Podfile Podfile.lock
-	scripts/pod install
-
-$(XCODE_ARCHIVE_BUNDLE_PATH): $(POD_INSTALL_TAG_PATH)
+$(XCODE_ARCHIVE_BUNDLE_PATH):
 	xcodebuild \
-		-workspace "$(XCODE_WORKSPACE_PATH)" \
+		-project "$(XCODE_PROJECT_PATH)" \
 		-scheme "$(XCODE_SCHEME)" \
 		-derivedDataPath "$(BUILD_PATH)" \
 		-archivePath "$(XCODE_ARCHIVE_PATH)" \
