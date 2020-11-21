@@ -17,7 +17,7 @@ Also, the application may ask a permission to use Accessibility, as like the oth
 Build
 -----
 
-To build the application from the source code, you need to use the latest Xcode 11.
+To build the application from the source code, you need to use the latest version of Xcode.
 
 Simply use `make` to install all dependencies, build application binary, then archive it in `build/HapticKey.xcarchive/Products/`.
 
@@ -26,15 +26,7 @@ Simply use `make` to install all dependencies, build application binary, then ar
 Development
 -----------
 
-### Dependencies
-
-A `bootstrap` make target installs all dependencies from [CocoaPods](https://cocoapods.org/).
-
-    $ make bootstrap
-
-This target uses a wrapper script `scripts/pod`, which uses system `/usr/bin/ruby` to create an isolated [RubyGems](https://rubygems.org/) environment under project directory, then install [Bundler](http://bundler.io/), install CocoaPods and finally install dependencies.
-
-Once it’s ready, you can open `HapticKey.xcworkspace` to build the application.
+You can simply open `HapticKey.xcodeproj` to start development of the application.
 
 ### Overviews
 
