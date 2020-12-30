@@ -71,7 +71,9 @@ static const UInt64 kKnownAppleMultitouchDeviceMultitouchIDs[] = {
     // For MacBook Pro 2016, 2017
     0x200000001000000,
     // For MacBook Pro 2018
-    0x300000080500000
+    0x300000080500000,
+    // For MacBook Pro (M1, 2020)
+    0x200000000000024
 };
 
 - (void)_htk_main_openActuator
