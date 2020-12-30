@@ -30,6 +30,7 @@ typedef NS_ENUM(NSUInteger, HTKSoundFeedbackType) {
 @property (nonatomic, getter=isEnabled) BOOL enabled;
 @property (nonatomic) HTKHapticFeedbackType type;
 @property (nonatomic) HTKSoundFeedbackType soundType;
+@property (nonatomic) float soundVolume;
 @property (nonatomic, getter=isScreenFlashEnabled) BOOL screenFlashEnabled;
 
 + (instancetype)new NS_UNAVAILABLE;
