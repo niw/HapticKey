@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    kramdown (2.3.0)
+    kramdown (2.3.1)
       rexml
     mustache (1.1.1)
     plist (3.5.0)
