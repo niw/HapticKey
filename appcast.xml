@@ -6,22 +6,21 @@
     <link>https://raw.githubusercontent.com/niw/HapticKey/sparkle/appcast.xml</link>
     <language>en</language>
     <item>
-      <title>HapticKey 0.5.0 (16)</title>
+      <title>HapticKey 0.6.0 (17)</title>
       <description>
-        <![CDATA[<p>Bug fixes and improvements.</p>
+        <![CDATA[<p>Support Apple Silicon Mac and macOS Big Sur.</p>
 
 <ul>
-  <li>Bug fix: Notification center swipe gesture stops working. (#36)</li>
-  <li>Update Japanese localization format. (#32)</li>
-  <li>Update traditional Chinese localization.</li>
-  <li>Add “About” panel.</li>
-  <li>Internal beauty.</li>
+  <li>Support Apple Silicon Mac and macOS Big Sur.</li>
+  <li>Update icon.</li>
+  <li>Add Korean localization.</li>
+  <li>Update dependencies.</li>
 </ul>
 
 ]]>
       </description>
-      <pubDate>Mon, 23 Mar 2020 05:53:31 -0000</pubDate>
-      <enclosure url="https://github.com/niw/HapticKey/releases/download/0.5.0/HapticKey.app.zip" type="application/octet-stream" length="3132229" sparkle:version="16" sparkle:shortVersionString="0.5.0" sparkle:dsaSignature="MEQCIAH2dsoXLJDKUTO3j2MwxTz1hBQhnwDRIO8NwCiGLAPYAiAauU/Y7hyWjmGSdSes4DJloye06yYHqzHn8ivEsFIKbg==" sparkle:minimumSystemVersion="10.12"/>
+      <pubDate>Sun, 22 Aug 2021 09:34:45 -0000</pubDate>
+      <enclosure url="https://github.com/niw/HapticKey/releases/download/0.6.0/HapticKey.app.zip" type="application/octet-stream" length="1883518" sparkle:version="17" sparkle:shortVersionString="0.6.0" sparkle:dsaSignature="MEQCIBy+59/dE2jIWpHpFhHxa4FfFU4JPviVEVPw8iWdSIxgAiBl/Ff7EF8GSuKXFzLcNtoMLj2gVYS+VI2AB3pszYnR7w==" sparkle:minimumSystemVersion="10.12"/>
     </item>
   </channel>
 </rss>
