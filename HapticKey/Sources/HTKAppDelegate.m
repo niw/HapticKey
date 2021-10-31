@@ -47,7 +47,10 @@ typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
     HTKAppDelegateSoundEffectTypeDefault = 1
 };
 
-static NSString * const kSoundEffectVolumeDefaultsKey = @"SoundEffectVolume";
+// There was `SoundEffectVolume` with a default value `0.0`, which mute sound effects always
+// and no way to make it enable again without using `defaults` command.
+// To workaround the bug, the user defaults key name is changed.
+static NSString * const kSoundEffectVolumeDefaultsKey = @"SoundEffectPlayerVolume";
 
 static NSString * const kScreenFlashEnabledUserDefaultsKey = @"ScreenFlashEnabled";
 
@@ -419,7 +422,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     if ([defaults objectForKey:kSoundEffectVolumeDefaultsKey]) {
         soundEffectVolume = [defaults floatForKey:kSoundEffectVolumeDefaultsKey];
     } else {
-        soundEffectVolume = 0.0;
+        soundEffectVolume = 1.0;
     }
 
     BOOL screenFlashEnabled;
