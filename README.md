@@ -9,8 +9,6 @@ Since Touch Bar is just a flat panel, there is no feedback other than a visual c
 
 By adding a haptic feedback, which is vibrating a trackpad not Touch Bar itself, it helps to improve the usage of Touch Bar. It is also optionally playing a sound effect or flashing the screen like a visual bell on a terminal.
 
-![screenshot](screenshot.png)
-
 Usage
 -----
 
