@@ -3,6 +3,8 @@ HapticKey
 
 HapticKey is a simple utility application for MacBook with Touch Bar that triggers a haptic feedback when tapping Touch Bar.
 
+![HapticKey](Resources/HapticKey.png)
+
 Since Touch Bar is just a flat panel, there is no feedback other than a visual change of the key displayed, it is terribly uncomfortable especially when tapping ESC key, like while using Vim.
 
 By adding a haptic feedback, which is vibrating a trackpad not Touch Bar itself, it helps to improve the usage of Touch Bar. It is also optionally playing a sound effect or flashing the screen like a visual bell on a terminal.
