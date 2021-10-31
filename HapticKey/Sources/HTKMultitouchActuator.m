@@ -64,18 +64,6 @@ CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
     return result;
 }
 
-// By using IORegistryExplorer, which is in Additional Tools for Xcode,
-// Find `AppleMultitouchDevice` which has `Multitouch ID`.
-// Probably these are fixed value.
-static const UInt64 kKnownAppleMultitouchDeviceMultitouchIDs[] = {
-    // For MacBook Pro 2016, 2017
-    0x200000001000000,
-    // For MacBook Pro 2018
-    0x300000080500000,
-    // For MacBook Pro (M1, 2020)
-    0x200000000000024
-};
-
 - (void)_htk_main_openActuator
 {
     if (_actuatorRef) {
@@ -90,20 +78,57 @@ static const UInt64 kKnownAppleMultitouchDeviceMultitouchIDs[] = {
         }
         _actuatorRef = actuatorRef;
     } else {
-        const size_t count = sizeof(kKnownAppleMultitouchDeviceMultitouchIDs) / sizeof(UInt64);
-        for (size_t index = 0; index < count; index++) {
-            const UInt64 multitouchDeviceMultitouchID = kKnownAppleMultitouchDeviceMultitouchIDs[index];
-            const CFTypeRef actuatorRef = MTActuatorCreateFromDeviceID(multitouchDeviceMultitouchID);
-            if (actuatorRef) {
-                os_log_info(OS_LOG_DEFAULT, "Use MTActuatorCreateFromDeviceID: 0x%llx", multitouchDeviceMultitouchID);
-                _actuatorRef = actuatorRef;
-                self.lastKnownMultitouchDeviceMultitouchID = multitouchDeviceMultitouchID;
-                break;
-            }
-            os_log_info(OS_LOG_DEFAULT, "Fail to test MTActuatorCreateFromDeviceID: 0x%llx", multitouchDeviceMultitouchID);
+        io_iterator_t itreator = IO_OBJECT_NULL;
+        // NOTE: `IOServiceGetMatchingServices` will take ownership of `matchingRef`. Do not release it.
+        const CFMutableDictionaryRef matchingRef = IOServiceMatching("AppleMultitouchDevice");
+        const kern_return_t result = IOServiceGetMatchingServices(kIOMasterPortDefault, matchingRef, &itreator);
+        if (result != KERN_SUCCESS) {
+            os_log_info(OS_LOG_DEFAULT, "Failed to get matching services: 0x%x", result);
+            return;
         }
+
+        io_service_t service = IO_OBJECT_NULL;
+        while ((service = IOIteratorNext(itreator)) != IO_OBJECT_NULL) {
+            CFMutableDictionaryRef propertiesRef = NULL;
+            const kern_return_t result = IORegistryEntryCreateCFProperties(service, &propertiesRef, CFAllocatorGetDefault(), 0);
+            if (result != KERN_SUCCESS) {
+                IOObjectRetain(service);
+                continue;
+            }
+
+            NSMutableDictionary * const properties = (__bridge_transfer NSMutableDictionary *)propertiesRef;
+            os_log_debug(OS_LOG_DEFAULT, "Found multitouch device: %{public}@", properties);
+
+            // Use first actuation supported build-in, multitouch device, which should be a track pad.
+            NSString * const productProperty = (NSString *)properties[@"Product"];
+            NSNumber * const acutuationSupportedProperty = (NSNumber *)properties[@"ActuationSupported"];
+            NSNumber * const mtBuildInProperty = (NSNumber *)properties[@"MT Built-In"];
+            if (!(acutuationSupportedProperty.boolValue && mtBuildInProperty.boolValue)) {
+                os_log_info(OS_LOG_DEFAULT, "Found not applicable multitouch device: %{public}@", productProperty);
+                IOObjectRetain(service);
+                continue;
+            }
+
+            NSNumber * const multitouchIDProperty = (NSNumber *)properties[@"Multitouch ID"];
+            const UInt64 multitouchDeviceMultitouchID = multitouchIDProperty.longLongValue;
+            const CFTypeRef actuatorRef = MTActuatorCreateFromDeviceID(multitouchDeviceMultitouchID);
+            if (!actuatorRef) {
+                os_log_info(OS_LOG_DEFAULT, "Fail to MTActuatorCreateFromDeviceID: 0x%llx multitouich device: %{public}@", multitouchDeviceMultitouchID, productProperty);
+                IOObjectRetain(service);
+                continue;
+            }
+
+            os_log_info(OS_LOG_DEFAULT, "Use MTActuatorCreateFromDeviceID: 0x%llx multitouich device: %{public}@", multitouchDeviceMultitouchID, productProperty);
+            _actuatorRef = actuatorRef;
+            self.lastKnownMultitouchDeviceMultitouchID = multitouchDeviceMultitouchID;
+
+            IOObjectRelease(service);
+            break;
+        }
+        IOObjectRelease(itreator);
+
         if (!_actuatorRef) {
-            os_log_info(OS_LOG_DEFAULT, "Fail to MTActuatorCreateFromDeviceID");
+            os_log_info(OS_LOG_DEFAULT, "Fail to any MTActuatorCreateFromDeviceID");
             return;
         }
     }
