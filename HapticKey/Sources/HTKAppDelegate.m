@@ -22,8 +22,10 @@ static NSString * const kListeningEventTypeUserDefaultsKey = @"ListeningEventTyp
 // Each value is serialized in user defaults, _MUST NOT_ be changed.
 typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
     HTKAppDelegateListeningEventTypeNone = 0,
-    HTKAppDelegateListeningEventTypeFunctionKey = 1,
-    HTKAppDelegateListeningEventTypeTapGesture = 2
+    HTKAppDelegateListeningEventTypeTouchBarFunctionKey = 1,
+    HTKAppDelegateListeningEventTypeTapGesture = 2,
+    // NOTE: This is for development only and not available in user interface.
+    HTKAppDelegateListeningEventTypeAnyFunctionKey = 3,
 };
 
 static NSString * const kFeedbackTypeUserDefaultsKey = @"FeedbackType";
@@ -223,7 +225,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     self.statusItem.button.appearsDisabled = disabled;
 
     [self.statusItemMenuController setStateValue:(self.listeningEventType == HTKAppDelegateListeningEventTypeNone) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemDisabled];
-    [self.statusItemMenuController setStateValue:(self.listeningEventType == HTKAppDelegateListeningEventTypeFunctionKey) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemUseFunctionKeyEvent];
+    [self.statusItemMenuController setStateValue:(self.listeningEventType == HTKAppDelegateListeningEventTypeTouchBarFunctionKey) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemUseFunctionKeyEvent];
     [self.statusItemMenuController setStateValue:(self.listeningEventType == HTKAppDelegateListeningEventTypeTapGesture) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemUseTapGestureEvent];
 
     [self.statusItemMenuController setStateValue:(!disabled && self.feedbackType == HTKAppDelegateFeedbackTypeNone) ? NSControlStateValueOn : NSControlStateValueOff forMenuItem:HTKStatusItemMenuControllerMenuItemNoFeedback];
@@ -252,11 +254,14 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
     switch (self.listeningEventType) {
         case HTKAppDelegateListeningEventTypeNone:
             break;
-        case HTKAppDelegateListeningEventTypeFunctionKey:
-            eventListener = [[HTKFunctionKeyEventListener alloc] init];
+        case HTKAppDelegateListeningEventTypeTouchBarFunctionKey:
+            eventListener = [[HTKFunctionKeyEventListener alloc] initWithKeyboardType:HTKFunctionKeyEventListenerKeyboardTypeTouchBar];
             break;
         case HTKAppDelegateListeningEventTypeTapGesture:
             eventListener = [[HTKTapGestureEventListener alloc] init];
+            break;
+        case HTKAppDelegateListeningEventTypeAnyFunctionKey:
+            eventListener = [[HTKFunctionKeyEventListener alloc] initWithKeyboardType:HTKFunctionKeyEventListenerKeyboardTypeAny];
             break;
     }
 
@@ -391,7 +396,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
         listeningEventType = [defaults integerForKey:kListeningEventTypeUserDefaultsKey];
     } else {
         // Default to function key event.
-        listeningEventType = HTKAppDelegateListeningEventTypeFunctionKey;
+        listeningEventType = HTKAppDelegateListeningEventTypeTouchBarFunctionKey;
     }
 
     HTKAppDelegateFeedbackType feedbackType;
@@ -612,7 +617,7 @@ static NSDictionary * const AboutPanelOptions()
             self.listeningEventType = HTKAppDelegateListeningEventTypeNone;
             break;
         case HTKStatusItemMenuControllerMenuItemUseFunctionKeyEvent:
-            self.listeningEventType = HTKAppDelegateListeningEventTypeFunctionKey;
+            self.listeningEventType = HTKAppDelegateListeningEventTypeTouchBarFunctionKey;
             break;
         case HTKStatusItemMenuControllerMenuItemUseTapGestureEvent:
             self.listeningEventType = HTKAppDelegateListeningEventTypeTapGesture;

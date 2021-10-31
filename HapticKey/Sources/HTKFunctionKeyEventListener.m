@@ -24,6 +24,7 @@ static const int64_t kTouchbarKeyboardType = 198;
 
 @interface HTKFunctionKeyEventListener () <HTKEventTapDelegate>
 
+@property (nonatomic, readonly) HTKFunctionKeyEventListenerKeyboardType keyboardType;
 @property (nonatomic, readonly) HTKEventTap *eventTap;
 
 @end
@@ -32,7 +33,13 @@ static const int64_t kTouchbarKeyboardType = 198;
 
 - (instancetype)init
 {
+    return [self initWithKeyboardType:HTKFunctionKeyEventListenerKeyboardTypeAny];
+}
+
+- (instancetype)initWithKeyboardType:(HTKFunctionKeyEventListenerKeyboardType)keyboardType
+{
     if (self = [super init]) {
+        _keyboardType = keyboardType;
         const CGEventMask eventMask = CGEventMaskBit(kCGEventKeyDown) | CGEventMaskBit(kCGEventKeyUp);
         _eventTap = [[HTKEventTap alloc] initWithEventMask:eventMask];
         _eventTap.delegate = self;
@@ -56,23 +63,35 @@ static const int64_t kTouchbarKeyboardType = 198;
 
 - (void)eventTap:(HTKEventTap *)eventTap didTapEvent:(NSEvent *)event
 {
+    if (event.ARepeat) {
+        return;
+    }
+
     const int64_t keyboardType = CGEventGetIntegerValueField(event.CGEvent, kCGKeyboardEventKeyboardType);
-    if (keyboardType == kTouchbarKeyboardType && !event.ARepeat) {
-        for (NSUInteger index = 0; index < kNumberOfEscAndFunctionKeycodes; index += 1) {
-            if (kEscAndFunctionKeycodes[index] == event.keyCode) {
-                switch (event.type) {
-                    case NSEventTypeKeyDown:
-                        [self _htk_main_didListenEvent:[[HTKEvent alloc] initWithPhase:HTKEventPhaseBegin]];
-                        break;
-                    case NSEventTypeKeyUp:
-                        [self _htk_main_didListenEvent:[[HTKEvent alloc] initWithPhase:HTKEventPhaseEnd]];
-                        break;
-                    default:
-                        // Should not reach here.
-                        break;
-                }
-                break;
+    switch (self.keyboardType) {
+        case HTKFunctionKeyEventListenerKeyboardTypeTouchBar:
+            if (keyboardType != kTouchbarKeyboardType) {
+                return;
             }
+            break;
+        case HTKFunctionKeyEventListenerKeyboardTypeAny:
+            break;
+    }
+
+    for (NSUInteger index = 0; index < kNumberOfEscAndFunctionKeycodes; index += 1) {
+        if (kEscAndFunctionKeycodes[index] == event.keyCode) {
+            switch (event.type) {
+                case NSEventTypeKeyDown:
+                    [self _htk_main_didListenEvent:[[HTKEvent alloc] initWithPhase:HTKEventPhaseBegin]];
+                    break;
+                case NSEventTypeKeyUp:
+                    [self _htk_main_didListenEvent:[[HTKEvent alloc] initWithPhase:HTKEventPhaseEnd]];
+                    break;
+                default:
+                    // Should not reach here.
+                    break;
+            }
+            break;
         }
     }
 }
