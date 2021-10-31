@@ -6,19 +6,20 @@
     <link>https://raw.githubusercontent.com/niw/HapticKey/sparkle/appcast.xml</link>
     <language>en</language>
     <item>
-      <title>HapticKey 0.6.1 (18)</title>
+      <title>HapticKey 0.7.0 (19)</title>
       <description>
-        <![CDATA[<p>Minor updates.</p>
+        <![CDATA[<p>Support macOS Monterey and bug fixes.</p>
 
 <ul>
-  <li>Fix application icons.</li>
-  <li>Fix copyright year.</li>
+  <li>Support macOS Monterey.</li>
+  <li>Bug fix: Sounds Effect feedback was no longer working.</li>
+  <li>Minor internal changes.</li>
 </ul>
 
 ]]>
       </description>
-      <pubDate>Mon, 23 Aug 2021 06:34:11 -0000</pubDate>
-      <enclosure url="https://github.com/niw/HapticKey/releases/download/0.6.1/HapticKey.app.zip" type="application/octet-stream" length="2010512" sparkle:version="18" sparkle:shortVersionString="0.6.1" sparkle:dsaSignature="MEQCID/1OR50YQG41eKlfo2/XSjD+jLPz+eWZnfq8dsqGtrkAiBucKWvMgNKaT73emA9D0jpwSNQNkU/PNkQnQhxNofK9g==" sparkle:minimumSystemVersion="10.12"/>
+      <pubDate>Sun, 31 Oct 2021 18:01:51 -0000</pubDate>
+      <enclosure url="https://github.com/niw/HapticKey/releases/download/0.7.0/HapticKey.app.zip" type="application/octet-stream" length="2873374" sparkle:version="19" sparkle:shortVersionString="0.7.0" sparkle:dsaSignature="MEUCIQDLPlcMf5r4gwRbR1mtiuxcApDV/p7Y+xHNL/qEu2oRhwIgRS+lGMSZb1QWk5OWdm/eQdIEHQ6AnbugJV4I1vG21Hc=" sparkle:minimumSystemVersion="10.12"/>
     </item>
   </channel>
 </rss>
