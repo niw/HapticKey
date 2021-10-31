@@ -19,27 +19,30 @@ NS_ASSUME_NONNULL_BEGIN
 
 static NSString * const kListeningEventTypeUserDefaultsKey = @"ListeningEventType";
 
+// Each value is serialized in user defaults, _MUST NOT_ be changed.
 typedef NS_ENUM(NSUInteger, HTKAppDelegateListeningEventType) {
     HTKAppDelegateListeningEventTypeNone = 0,
-    HTKAppDelegateListeningEventTypeFunctionKey,
-    HTKAppDelegateListeningEventTypeTapGesture
+    HTKAppDelegateListeningEventTypeFunctionKey = 1,
+    HTKAppDelegateListeningEventTypeTapGesture = 2
 };
 
 static NSString * const kFeedbackTypeUserDefaultsKey = @"FeedbackType";
 
+// Each value is serialized in user defaults, _MUST NOT_ be changed.
 typedef NS_ENUM(NSUInteger, HTKAppDelegateFeedbackType) {
     HTKAppDelegateFeedbackTypeWeak = 0,
-    HTKAppDelegateFeedbackTypeMedium,
-    HTKAppDelegateFeedbackTypeStrong,
+    HTKAppDelegateFeedbackTypeMedium = 1,
+    HTKAppDelegateFeedbackTypeStrong = 2,
     // NOTE: Due to backward compatibility, this enum value is intentionally not zero.
-    HTKAppDelegateFeedbackTypeNone
+    HTKAppDelegateFeedbackTypeNone = 3
 };
 
 static NSString * const kSoundEffectTypeUserDefaultsKey = @"SoundEffectType";
 
+// Each value is serialized in user defaults, _MUST NOT_ be changed.
 typedef NS_ENUM(NSUInteger, HTKAppDelegateSoundEffectType) {
     HTKAppDelegateSoundEffectTypeNone = 0,
-    HTKAppDelegateSoundEffectTypeDefault
+    HTKAppDelegateSoundEffectTypeDefault = 1
 };
 
 static NSString * const kSoundEffectVolumeDefaultsKey = @"SoundEffectVolume";
