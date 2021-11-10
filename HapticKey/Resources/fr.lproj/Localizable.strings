@@ -1,1 +1,54 @@
+/* A body text for warning about hiding icon in menu bar. */
+"ALERT_HIDING_STATUS_BAR_ICON_INFORMATIVE_TEXT" = "HapticKey s'exécute en tâche de fond. Pour afficher HapticKey dans la barre des menus, relancez-le.";
+
+/* A title text for warning about hiding icon in menu bar. */
+"ALERT_HIDING_STATUS_BAR_ICON_MESSAGE_TEXT" = "HapticKey a été supprimé de la barre des menus";
+
+/* A status menu item to present a window about the application. */
+"STATUS_MENU_ITEM_ABOUT_MENU_ITEM" = "À propos de HapticKey";
+
+/* A status menu item to set automatically checks for updates. */
+"STATUS_MENU_ITEM_AUTOMATICALLY_CHECK_FOR_UPDATES_MENU_ITEM" = "Recherche automatique de mises à jour";
+
+/* A status menu item to check for updates. */
+"STATUS_MENU_ITEM_CHECK_FOR_UPDATES_MENU_ITEM" = "Rechercher des mises à jour…";
+
+/* A status menu item selected when it is disabled. */
+"STATUS_MENU_ITEM_DISABLED_ITEM" = "Désactiver";
+
+/* A status menu item for feedback section title. */
+"STATUS_MENU_ITEM_FEEDBACK_SECTION_TITLE_MENU_ITEM" = "Retour haptique";
+
+/* A status menu item to use function key events. */
+"STATUS_MENU_ITEM_FUNCTION_KEY_EVENT_MENU_ITEM" = "Touches ESC et F1, F2, etc.";
+
+/* A status menu item to use medium feedback. */
+"STATUS_MENU_ITEM_MEDIUM_FEEDBACK_MENU_ITEM" = "Moyen";
+
+/* A status menu item to not use feedback. */
+"STATUS_MENU_ITEM_NO_FEEDBACK_MENU_ITEM" = "Aucun";
+
+/* A status menu item to terminate the application. */
+"STATUS_MENU_ITEM_QUIT_MENU_ITEM" = "Quitter HapticKey";
+
+/* A status menu item to use screen flash. */
+"STATUS_MENU_ITEM_SCREEN_FLASH_MENU_ITEM" = "Effet visuel";
+
+/* A status menu item to show icon in menu bar. */
+"STATUS_MENU_ITEM_SHOW_STATUS_BAR_ICON_MENU_ITEM" = "Afficher dans la barre des menus";
+
+/* A status menu item to use sound effect. */
+"STATUS_MENU_ITEM_SOUND_EFFECT_MENU_ITEM" = "Effet sonore";
+
+/* A status menu item to start application on login. */
+"STATUS_MENU_ITEM_START_ON_LOGIN_MENU_ITEM" = "Ouvrir avec la session";
+
+/* A status menu item to use strong feedback. */
+"STATUS_MENU_ITEM_STRONG_FEEDBACK_MENU_ITEM" = "Fort";
+
+/* A status menu item to use tap gesture events. */
+"STATUS_MENU_ITEM_TAP_GESTURE_EVENT_MENU_ITEM" = "Tout appui sur la Touch Bar";
+
+/* A status menu item to use weak feedback. */
+"STATUS_MENU_ITEM_WEEK_FEEDBACK_MENU_ITEM" = "Faible";
 
