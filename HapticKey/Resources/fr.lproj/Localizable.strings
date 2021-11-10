@@ -47,7 +47,7 @@
 "STATUS_MENU_ITEM_STRONG_FEEDBACK_MENU_ITEM" = "Fort";
 
 /* A status menu item to use tap gesture events. */
-"STATUS_MENU_ITEM_TAP_GESTURE_EVENT_MENU_ITEM" = "Tout appui sur la Touch Bar";
+"STATUS_MENU_ITEM_TAP_GESTURE_EVENT_MENU_ITEM" = "Tous les appuis sur la Touch Bar";
 
 /* A status menu item to use weak feedback. */
 "STATUS_MENU_ITEM_WEEK_FEEDBACK_MENU_ITEM" = "Faible";
