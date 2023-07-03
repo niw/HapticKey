@@ -569,7 +569,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 static NSString * const kBuildTimestampInfoPlistKey = @"HTKBuildTimestamp";
 static NSString * const kBuildGitSHAInfoPlistKey = @"HTKBuildGitSHA";
 
-static NSDictionary * const AboutPanelOptions()
+static NSDictionary * const AboutPanelOptions(void)
 {
     NSMutableDictionary * const options = [[NSMutableDictionary alloc] init];
     if (@available(macOS 10.13, *)) {

@@ -28,7 +28,7 @@ static inline NSError *ErrorWithOSStatus(OSStatus status)
     return [[NSError alloc] initWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
 }
 
-static inline id _Nullable CreateLoginItemsFileList()
+static inline id _Nullable CreateLoginItemsFileList(void)
 {
     return (__bridge_transfer id)LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
 }
