@@ -5,12 +5,14 @@ GEM
       rexml
     mustache (1.1.1)
     plist (3.6.0)
-    rexml (3.2.5)
+    rexml (3.2.8)
+      strscan (>= 3.0.9)
     sparkle_appcast (0.1.2)
       kramdown
       mustache
       plist
       thor
+    strscan (3.1.0)
     thor (1.1.0)
 
 PLATFORMS
