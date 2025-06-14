@@ -3,73 +3,38 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5443CEFC1FE38EA8002D4086 /* HTKEventListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CEFB1FE38EA8002D4086 /* HTKEventListener.m */; };
-		5443CEFF1FE38F6C002D4086 /* HTKEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CEFE1FE38F6C002D4086 /* HTKEvent.m */; };
-		5443CF051FE39049002D4086 /* HTKFunctionKeyEventListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CF041FE39049002D4086 /* HTKFunctionKeyEventListener.m */; };
-		5443CF081FE39293002D4086 /* HTKTapGestureEventListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CF071FE39293002D4086 /* HTKTapGestureEventListener.m */; };
-		5443CF0D1FE394BB002D4086 /* HTKHapticFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 5443CF0C1FE394BB002D4086 /* HTKHapticFeedback.m */; };
-		544C76362017311500FF155C /* HTKLoginItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 544C76352017311500FF155C /* HTKLoginItem.m */; };
 		5451D76C2569093000758615 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 5451D76B2569093000758615 /* Sparkle */; };
-		545E325A2426BC5E00FBF9B9 /* HTKStatusItemMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 545E32592426BC5E00FBF9B9 /* HTKStatusItemMenuController.m */; };
-		546E62F71FE24A1D00F287C9 /* HTKEventTap.m in Sources */ = {isa = PBXBuildFile; fileRef = 546E62F61FE24A1D00F287C9 /* HTKEventTap.m */; };
-		5480AC60242B1BC000344DA5 /* HTKAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5480AC5F242B1BC000344DA5 /* HTKAudioPlayer.m */; };
-		548E153B1FD00412001C0D4C /* HTKAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 548E153A1FD00412001C0D4C /* HTKAppDelegate.m */; };
-		548E15401FD00412001C0D4C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 548E153E1FD00412001C0D4C /* MainMenu.xib */; };
-		548E15431FD00412001C0D4C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 548E15421FD00412001C0D4C /* main.m */; };
-		54942E882021B149003507D8 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 54942E872021B149003507D8 /* dsa_pub.pem */; };
-		549F9236200AF543003A8D7B /* HTKTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 549F9235200AF543003A8D7B /* HTKTimer.m */; };
 		54A310B81FD390EB002DE7BC /* MultitouchSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */; };
-		54B3F7722604728C0020432E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54B3F7712604728C0020432E /* Assets.xcassets */; };
-		54E1E0941FE4613F007F2EE0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 54E1E0961FE4613F007F2EE0 /* Localizable.strings */; };
-		54FBCF291FD4CDE0000EB4D3 /* HTKMultitouchActuator.m in Sources */ = {isa = PBXBuildFile; fileRef = 54FBCF281FD4CDE0000EB4D3 /* HTKMultitouchActuator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		17DB7DCD200A4F4600947159 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		17DB7DCE200A4F4D00947159 /* zh-Hant */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		54422E232427F407003F8E72 /* BuildPhases */ = {isa = PBXFileReference; lastKnownFileType = folder; path = BuildPhases; sourceTree = "<group>"; };
-		5443CEFA1FE38EA8002D4086 /* HTKEventListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEventListener.h; sourceTree = "<group>"; };
-		5443CEFB1FE38EA8002D4086 /* HTKEventListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKEventListener.m; sourceTree = "<group>"; };
-		5443CEFD1FE38F6C002D4086 /* HTKEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEvent.h; sourceTree = "<group>"; };
-		5443CEFE1FE38F6C002D4086 /* HTKEvent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKEvent.m; sourceTree = "<group>"; };
-		5443CF031FE39049002D4086 /* HTKFunctionKeyEventListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKFunctionKeyEventListener.h; sourceTree = "<group>"; };
-		5443CF041FE39049002D4086 /* HTKFunctionKeyEventListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKFunctionKeyEventListener.m; sourceTree = "<group>"; };
-		5443CF061FE39293002D4086 /* HTKTapGestureEventListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKTapGestureEventListener.h; sourceTree = "<group>"; };
-		5443CF071FE39293002D4086 /* HTKTapGestureEventListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKTapGestureEventListener.m; sourceTree = "<group>"; };
-		5443CF0B1FE394BB002D4086 /* HTKHapticFeedback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKHapticFeedback.h; sourceTree = "<group>"; };
-		5443CF0C1FE394BB002D4086 /* HTKHapticFeedback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKHapticFeedback.m; sourceTree = "<group>"; };
-		544C76342017311500FF155C /* HTKLoginItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKLoginItem.h; sourceTree = "<group>"; };
-		544C76352017311500FF155C /* HTKLoginItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKLoginItem.m; sourceTree = "<group>"; };
-		545E32582426BC5E00FBF9B9 /* HTKStatusItemMenuController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKStatusItemMenuController.h; sourceTree = "<group>"; };
-		545E32592426BC5E00FBF9B9 /* HTKStatusItemMenuController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKStatusItemMenuController.m; sourceTree = "<group>"; };
-		546E62F41FE2449600F287C9 /* NSTouchDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSTouchDevice.h; sourceTree = "<group>"; };
-		546E62F51FE24A1D00F287C9 /* HTKEventTap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKEventTap.h; sourceTree = "<group>"; };
-		546E62F61FE24A1D00F287C9 /* HTKEventTap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKEventTap.m; sourceTree = "<group>"; };
-		5480AC5E242B1BC000344DA5 /* HTKAudioPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKAudioPlayer.h; sourceTree = "<group>"; };
-		5480AC5F242B1BC000344DA5 /* HTKAudioPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKAudioPlayer.m; sourceTree = "<group>"; };
-		548E15361FD00412001C0D4C /* HapticKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HapticKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		548E15391FD00412001C0D4C /* HTKAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKAppDelegate.h; sourceTree = "<group>"; };
-		548E153A1FD00412001C0D4C /* HTKAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKAppDelegate.m; sourceTree = "<group>"; };
-		548E153F1FD00412001C0D4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		548E15411FD00412001C0D4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		548E15421FD00412001C0D4C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		54942E872021B149003507D8 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
-		549F9234200AF543003A8D7B /* HTKTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKTimer.h; sourceTree = "<group>"; };
-		549F9235200AF543003A8D7B /* HTKTimer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKTimer.m; sourceTree = "<group>"; };
-		54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultitouchSupport.framework; path = ../../../../../../../System/Library/PrivateFrameworks/MultitouchSupport.framework; sourceTree = "<group>"; };
-		54B3F7712604728C0020432E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		54E1E0951FE4613F007F2EE0 /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		54E1E0971FE4614F007F2EE0 /* Base */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
-		54E1E0981FE4621E007F2EE0 /* ja */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		54FBCF271FD4CDE0000EB4D3 /* HTKMultitouchActuator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTKMultitouchActuator.h; sourceTree = "<group>"; };
-		54FBCF281FD4CDE0000EB4D3 /* HTKMultitouchActuator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTKMultitouchActuator.m; sourceTree = "<group>"; };
-		86CF8F652615CBFA00BBE416 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
-		A9B8E4652729626B007CE783 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultitouchSupport.framework; path = /System/Library/PrivateFrameworks/MultitouchSupport.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		54E1D0482DFE15BA007D4A66 /* Exceptions for "HapticKey" folder in "HapticKey" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 548E15351FD00412001C0D4C /* HapticKey */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		54E1D0332DFE1542007D4A66 /* HapticKey */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				54E1D0482DFE15BA007D4A66 /* Exceptions for "HapticKey" folder in "HapticKey" target */,
+			);
+			path = HapticKey;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		548E15331FD00412001C0D4C /* Frameworks */ = {
@@ -87,29 +52,9 @@
 		548E152D1FD00412001C0D4C = {
 			isa = PBXGroup;
 			children = (
-				548E15381FD00412001C0D4C /* HapticKey */,
-				548E15371FD00412001C0D4C /* Products */,
+				54E1D0332DFE1542007D4A66 /* HapticKey */,
 				54A310B61FD390EA002DE7BC /* Frameworks */,
 			);
-			sourceTree = "<group>";
-		};
-		548E15371FD00412001C0D4C /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				548E15361FD00412001C0D4C /* HapticKey.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		548E15381FD00412001C0D4C /* HapticKey */ = {
-			isa = PBXGroup;
-			children = (
-				54422E232427F407003F8E72 /* BuildPhases */,
-				548E15411FD00412001C0D4C /* Info.plist */,
-				54FBCF2F1FD52469000EB4D3 /* Resources */,
-				54CDDBF11FE44F33005F35A1 /* Sources */,
-			);
-			path = HapticKey;
 			sourceTree = "<group>";
 		};
 		54A310B61FD390EA002DE7BC /* Frameworks */ = {
@@ -118,50 +63,6 @@
 				54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		54CDDBF11FE44F33005F35A1 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				548E15391FD00412001C0D4C /* HTKAppDelegate.h */,
-				548E153A1FD00412001C0D4C /* HTKAppDelegate.m */,
-				5480AC5E242B1BC000344DA5 /* HTKAudioPlayer.h */,
-				5480AC5F242B1BC000344DA5 /* HTKAudioPlayer.m */,
-				5443CEFD1FE38F6C002D4086 /* HTKEvent.h */,
-				5443CEFE1FE38F6C002D4086 /* HTKEvent.m */,
-				5443CEFA1FE38EA8002D4086 /* HTKEventListener.h */,
-				5443CEFB1FE38EA8002D4086 /* HTKEventListener.m */,
-				546E62F51FE24A1D00F287C9 /* HTKEventTap.h */,
-				546E62F61FE24A1D00F287C9 /* HTKEventTap.m */,
-				5443CF031FE39049002D4086 /* HTKFunctionKeyEventListener.h */,
-				5443CF041FE39049002D4086 /* HTKFunctionKeyEventListener.m */,
-				5443CF0B1FE394BB002D4086 /* HTKHapticFeedback.h */,
-				5443CF0C1FE394BB002D4086 /* HTKHapticFeedback.m */,
-				544C76342017311500FF155C /* HTKLoginItem.h */,
-				544C76352017311500FF155C /* HTKLoginItem.m */,
-				54FBCF271FD4CDE0000EB4D3 /* HTKMultitouchActuator.h */,
-				54FBCF281FD4CDE0000EB4D3 /* HTKMultitouchActuator.m */,
-				545E32582426BC5E00FBF9B9 /* HTKStatusItemMenuController.h */,
-				545E32592426BC5E00FBF9B9 /* HTKStatusItemMenuController.m */,
-				5443CF061FE39293002D4086 /* HTKTapGestureEventListener.h */,
-				5443CF071FE39293002D4086 /* HTKTapGestureEventListener.m */,
-				549F9234200AF543003A8D7B /* HTKTimer.h */,
-				549F9235200AF543003A8D7B /* HTKTimer.m */,
-				548E15421FD00412001C0D4C /* main.m */,
-				546E62F41FE2449600F287C9 /* NSTouchDevice.h */,
-			);
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		54FBCF2F1FD52469000EB4D3 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				54B3F7712604728C0020432E /* Assets.xcassets */,
-				54942E872021B149003507D8 /* dsa_pub.pem */,
-				54E1E0961FE4613F007F2EE0 /* Localizable.strings */,
-				548E153E1FD00412001C0D4C /* MainMenu.xib */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,12 +81,14 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				54E1D0332DFE1542007D4A66 /* HapticKey */,
+			);
 			name = HapticKey;
 			packageProductDependencies = (
 				5451D76B2569093000758615 /* Sparkle */,
 			);
 			productName = HapticKey;
-			productReference = 548E15361FD00412001C0D4C /* HapticKey.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -204,7 +107,6 @@
 				};
 			};
 			buildConfigurationList = 548E15311FD00412001C0D4C /* Build configuration list for PBXProject "HapticKey" */;
-			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -220,7 +122,8 @@
 			packageReferences = (
 				5451D76A2569093000758615 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
-			productRefGroup = 548E15371FD00412001C0D4C /* Products */;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 548E152D1FD00412001C0D4C;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -234,10 +137,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54B3F7722604728C0020432E /* Assets.xcassets in Resources */,
-				54942E882021B149003507D8 /* dsa_pub.pem in Resources */,
-				54E1E0941FE4613F007F2EE0 /* Localizable.strings in Resources */,
-				548E15401FD00412001C0D4C /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,7 +162,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "exec ${PROJECT_DIR}/HapticKey/BuildPhases/UpdateInfoPlistPrefixHeader.sh\n";
+			shellScript = "exec ${PROJECT_DIR}/BuildPhases/UpdateInfoPlistPrefixHeader.sh\n\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -273,48 +172,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5443CF0D1FE394BB002D4086 /* HTKHapticFeedback.m in Sources */,
-				5480AC60242B1BC000344DA5 /* HTKAudioPlayer.m in Sources */,
-				549F9236200AF543003A8D7B /* HTKTimer.m in Sources */,
-				5443CEFF1FE38F6C002D4086 /* HTKEvent.m in Sources */,
-				548E15431FD00412001C0D4C /* main.m in Sources */,
-				544C76362017311500FF155C /* HTKLoginItem.m in Sources */,
-				5443CF081FE39293002D4086 /* HTKTapGestureEventListener.m in Sources */,
-				548E153B1FD00412001C0D4C /* HTKAppDelegate.m in Sources */,
-				5443CEFC1FE38EA8002D4086 /* HTKEventListener.m in Sources */,
-				546E62F71FE24A1D00F287C9 /* HTKEventTap.m in Sources */,
-				5443CF051FE39049002D4086 /* HTKFunctionKeyEventListener.m in Sources */,
-				54FBCF291FD4CDE0000EB4D3 /* HTKMultitouchActuator.m in Sources */,
-				545E325A2426BC5E00FBF9B9 /* HTKStatusItemMenuController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		548E153E1FD00412001C0D4C /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				548E153F1FD00412001C0D4C /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		54E1E0961FE4613F007F2EE0 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				54E1E0951FE4613F007F2EE0 /* en */,
-				54E1E0971FE4614F007F2EE0 /* Base */,
-				54E1E0981FE4621E007F2EE0 /* ja */,
-				17DB7DCD200A4F4600947159 /* zh-Hans */,
-				17DB7DCE200A4F4D00947159 /* zh-Hant */,
-				86CF8F652615CBFA00BBE416 /* ko */,
-				A9B8E4652729626B007CE783 /* pl */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		548E15451FD00412001C0D4C /* Debug */ = {
