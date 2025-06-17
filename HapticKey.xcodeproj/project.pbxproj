@@ -12,6 +12,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		548E15361FD00412001C0D4C /* HapticKey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HapticKey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54A310B71FD390EB002DE7BC /* MultitouchSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultitouchSupport.framework; path = /System/Library/PrivateFrameworks/MultitouchSupport.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -54,7 +55,16 @@
 			children = (
 				54E1D0332DFE1542007D4A66 /* HapticKey */,
 				54A310B61FD390EA002DE7BC /* Frameworks */,
+				548E15371FD00412001C0D4C /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		548E15371FD00412001C0D4C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				548E15361FD00412001C0D4C /* HapticKey.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		54A310B61FD390EA002DE7BC /* Frameworks */ = {
@@ -89,6 +99,7 @@
 				5451D76B2569093000758615 /* Sparkle */,
 			);
 			productName = HapticKey;
+			productReference = 548E15361FD00412001C0D4C /* HapticKey.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -124,7 +135,7 @@
 				5451D76A2569093000758615 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 548E152D1FD00412001C0D4C;
+			productRefGroup = 548E15371FD00412001C0D4C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
