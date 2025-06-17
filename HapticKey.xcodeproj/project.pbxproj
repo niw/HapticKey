@@ -86,6 +86,7 @@
 				548E15321FD00412001C0D4C /* Sources */,
 				548E15331FD00412001C0D4C /* Frameworks */,
 				548E15341FD00412001C0D4C /* Resources */,
+				54271A992E01491100152567 /* Reset Accessibility Trusted Process */,
 			);
 			buildRules = (
 			);
@@ -155,6 +156,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		54271A992E01491100152567 /* Reset Accessibility Trusted Process */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Reset Accessibility Trusted Process";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "exec ${PROJECT_DIR}/BuildPhases/ResetAccessibilityTrustedProcess.sh\n";
+		};
 		545A58352427EE3C00E92AE9 /* Update Info.plist Prefix Header */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -174,7 +194,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "exec ${PROJECT_DIR}/BuildPhases/UpdateInfoPlistPrefixHeader.sh\n\n";
+			shellScript = "exec ${PROJECT_DIR}/BuildPhases/UpdateInfoPlistPrefixHeader.sh\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
