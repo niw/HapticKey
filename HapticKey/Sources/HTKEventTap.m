@@ -116,7 +116,7 @@ static CGEventRef EventTapCallback(CGEventTapProxy proxy, CGEventType type, CGEv
     }
 
     // `_htk_thread_stop` is called on the background thread while its run loop runs.
-    [self performSelector:@selector(_htk_thread_stop) onThread:self.thread withObject:nil waitUntilDone:YES];
+    [self performSelector:@selector(_htk_thread_stop) onThread:self.thread withObject:nil waitUntilDone:NO];
 
     self.thread = nil;
 }
