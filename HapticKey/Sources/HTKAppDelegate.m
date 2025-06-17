@@ -444,7 +444,10 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 {
     NSStatusBar * const statusBar = [NSStatusBar systemStatusBar];
     NSStatusItem * const statusItem = [statusBar statusItemWithLength:NSVariableStatusItemLength];
-    statusItem.highlightMode = YES;
+    // NOTE: This `highlightsBy` that is alternative to the deprecated
+    // `statusItem.highlightMode = YES` may be not necessary anymore.
+    NSButtonCell * const statusItemButtonCell = (NSButtonCell *)statusItem.button.cell;
+    statusItemButtonCell.highlightsBy = NSContentsCellMask | NSChangeBackgroundCellMask;
     statusItem.behavior = NSStatusItemBehaviorRemovalAllowed;
 
     // `statusItem.visible` is automatically persistent in user default by `NSStatusItem`.
@@ -454,7 +457,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 
     NSImage * const statusItemImage = [NSImage imageNamed:@"StatusItem"];
     statusItemImage.template = YES;
-    statusItem.image = statusItemImage;
+    statusItem.button.image = statusItemImage;
 
     HTKStatusItemMenuController * const statusItemMenuController = [[HTKStatusItemMenuController alloc] init];
     statusItemMenuController.delegate = self;

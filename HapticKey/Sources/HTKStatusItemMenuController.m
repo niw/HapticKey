@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HTKStatusItemMenuController ()
+@interface HTKStatusItemMenuController () <NSMenuItemValidation>
 
 @property (nonatomic, nullable) NSArray<NSMenuItem *> *menuItems;
 
@@ -220,7 +220,7 @@ NS_ASSUME_NONNULL_BEGIN
     return menuItem.state;
 }
 
-// MARK: - NSObject (NSMenuValidation)
+// MARK: - NSMenuItemValidation
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {

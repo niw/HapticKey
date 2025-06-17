@@ -81,7 +81,7 @@ CF_EXPORT bool MTActuatorIsOpen(CFTypeRef actuatorRef);
         io_iterator_t itreator = IO_OBJECT_NULL;
         // NOTE: `IOServiceGetMatchingServices` will take ownership of `matchingRef`. Do not release it.
         const CFMutableDictionaryRef matchingRef = IOServiceMatching("AppleMultitouchDevice");
-        const kern_return_t result = IOServiceGetMatchingServices(kIOMasterPortDefault, matchingRef, &itreator);
+        const kern_return_t result = IOServiceGetMatchingServices(kIOMainPortDefault, matchingRef, &itreator);
         if (result != KERN_SUCCESS) {
             os_log_info(OS_LOG_DEFAULT, "Failed to get matching services: 0x%x", result);
             return;
