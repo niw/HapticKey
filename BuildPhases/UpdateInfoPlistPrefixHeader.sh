@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 if [[ -z $INFOPLIST_PREFIX_HEADER ]]; then
     echo "error: INFOPLIST_PREFIX_HEADER must be defined." >&2
