@@ -209,7 +209,7 @@ static NSString * const kStatusItemVisibleKeyPath = @"visible";
 {
     NSAlert * const alert = [[NSAlert alloc] init];
     alert.alertStyle = NSAlertStyleCritical;
-    alert.messageText = NSLocalizedString(@"ALERT_HIDING_STATUS_BAR_ICON_MESSAGE_TEXT", @"A title text for warning about hiding icon in menu bar.");;
+    alert.messageText = NSLocalizedString(@"ALERT_HIDING_STATUS_BAR_ICON_MESSAGE_TEXT", @"A title text for warning about hiding icon in menu bar.");
     alert.informativeText = NSLocalizedString(@"ALERT_HIDING_STATUS_BAR_ICON_INFORMATIVE_TEXT", @"A body text for warning about hiding icon in menu bar.");
 
     // Workaround to avoid potential application crash.
