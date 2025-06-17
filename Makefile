@@ -27,10 +27,6 @@ release: $(APPCAST_ARCHIVE_PATH) $(APPCAST_PATH)
 clean:
 	git clean -dfX
 
-.PHONY: genstring
-genstring:
-	find $(XCODE_SOURCE_PATH) -name '*.m' | xargs genstrings -u -q -o $(XCODE_RESOURCES_PATH)/Base.lproj
-
 $(XCODE_ARCHIVE_BUNDLE_PATH):
 	xcodebuild \
 		-project "$(XCODE_PROJECT_PATH)" \
